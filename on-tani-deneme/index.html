@@ -167,7 +167,7 @@ function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {"&":"&am
 function durum(el,metin,tur){el.textContent=metin;el.className="durum"+(tur?" "+tur:"")}
 
 function gonder(veri){
-  return fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(veri),cache:"no-store",credentials:"omit"})
+  return fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(veri),cache:"no-store",credentials:"same-origin"})
    .then(function(r){return r.json().catch(function(){return {hata:"Sunucu yanıtı okunamadı ("+r.status+")."}}).then(function(j){j._durum=r.status;return j})});
 }
 
@@ -179,7 +179,7 @@ $("girisForm").addEventListener("submit",function(e){
   gonder({parola:p,kontrol:true}).then(function(j){
     if(j.tamam){parola=p;$("parola").value="";$("adim1").classList.add("bos");$("icerik").classList.remove("bos");}
     else durum($("girisDurum"),j.hata||"Giriş yapılamadı.","hata");
-  }).catch(function(){durum($("girisDurum"),"Sunucuya ulaşılamadı.","hata")});
+  }).catch(function(){durum($("girisDurum"),"Sunucuya ulaşılamadı. Sayfayı yenileyip tekrar deneyin.","hata")});
 });
 
 $("onay").addEventListener("change",function(){

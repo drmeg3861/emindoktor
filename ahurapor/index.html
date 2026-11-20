@@ -135,7 +135,7 @@ kbd{border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;paddi
   </div>
 </div>
 <div class="top">
-  <div class="brand"><b>AHU Rapor · Etken Madde</b><span>Rev. 17.03.2026 · s.20.11b</span></div>
+  <div class="brand"><b>AHU Rapor · Etken Madde</b><span>Rev. 17.03.2026 · s.20.11c</span></div>
   <div class="sbox">
     <input id="q" type="search" inputmode="search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Etken madde veya ticari ad… (örn. atorv, kolestor)" autofocus>
     <button id="clr" aria-label="Temizle">×</button>
@@ -503,7 +503,7 @@ D.forEach((e,i)=>{e.i=i;e.d=e.d||[];e.kub=e.kub||[];e.x=e.x||[];e.f=e.f||[];e.a=
 
 const q=document.getElementById("q"),out=document.getElementById("out"),cnt=document.getElementById("cnt"),modeEl=document.getElementById("mode"),chips=document.getElementById("chips");
 let scope="ad"; // "ad" = ad+grup, "tani" = tanıda da ara
-let cur=[],act=0,pinned=null;
+let cur=[],curB=[],act=0,pinned=null;
 
 const SC=[["ad","Etken madde"],["tani","+ Tanıda ara"]];
 SC.forEach(([k,l])=>{const b=document.createElement("button");b.className="chip"+(k===scope?" on":"");b.textContent=l;b.onclick=()=>{scope=k;[...chips.children].forEach(c=>c.classList.toggle("on",c===b));modeEl.textContent=k==="ad"?"ad + grup":"ad + grup + tanı";pinned=null;run();q.focus()};chips.appendChild(b)});
@@ -657,8 +657,8 @@ function renderList(t){
     const who=e.s!=="ok"?`<div class="gp" style="margin-top:5px;color:var(${e.s==="no"?"--no":"--warn"})">${esc(e.w)}</div>`:"";
     return `<div class="tags rdx">${d}${k}${none}</div>${who}`;
   };
-  out.innerHTML=`<div class="list">${cur.slice(0,max).map((e,k)=>`<div class="row${tx?" rowx":""}${k===act?" act":""}" data-k="${k}"><span class="dot ${ST[e.s][2]}"></span><div class="grow"><div class="nm">${brandHit(e,t)?`<span class="bh">🏷 ${hl(brandHit(e,t),t)}</span> → `:""}${hl(e.n,t)}</div><div class="gp">${esc(e.g)}</div>${dxBlock(e)}</div></div>`).join("")}</div>${cur.length>max?`<div class="more">+${cur.length-max} sonuç daha — yazmaya devam edin</div>`:""}`;
-  out.querySelectorAll(".row").forEach(r=>r.onclick=()=>choose(cur[+r.dataset.k]));
+  out.innerHTML=`<div class="list">${cur.slice(0,max).map((e,k)=>`<div class="row${tx?" rowx":""}${k===act?" act":""}" data-k="${k}"><span class="dot ${ST[e.s][2]}"></span><div class="grow"><div class="nm">${curB[k]?`<span class="bh">🏷 ${hl(curB[k].ad,t)}</span>${curB[k].a?"":` <span class="st st-p">pasif</span>`} → `:""}${curB[k]?esc(e.n):hl(e.n,t)}</div><div class="gp">${esc(e.g)}</div>${dxBlock(e)}</div></div>`).join("")}</div>${cur.length>max?`<div class="more">+${cur.length-max} sonuç daha — yazmaya devam edin</div>`:""}`;
+  out.querySelectorAll(".row").forEach(r=>r.onclick=()=>choose(cur[+r.dataset.k],curB[+r.dataset.k]));
 }
 
 function show(e,t){
@@ -686,29 +686,44 @@ function home(){
 
 function run(){
   const t=norm(q.value);
-  if(!t){cur=[];home();return}
-  cur=D.map(e=>({e,s:score(e,t)})).filter(o=>o.s>0).sort((a,b)=>b.s-a.s||a.e.n.localeCompare(b.e.n,"tr")).map(o=>o.e);
+  if(!t){cur=[];curB=[];home();return}
+  const sc=D.map(e=>({e,s:score(e,t)})).filter(o=>o.s>0).sort((a,b)=>b.s-a.s||a.e.n.localeCompare(b.e.n,"tr")).map(o=>o.e);
+  /* Ticari ad eşleşmeleri: her marka ayrı satır (Ayra, Ayra Plus…) — kullanıcı seçer */
+  const ws=t.split(" ").filter(Boolean),bh=[],seen=new Set();
+  if(SKRS_OK) D.forEach(e=>(e._br||[]).forEach(b=>{
+    const bw=b.n.split(" ");
+    if(ws.every(w=>bw.some(p=>p.startsWith(w))||(w.length>=4&&b.n.includes(w)))&&!seen.has(b.ad+"|"+e.n)){seen.add(b.ad+"|"+e.n);bh.push({e,b})}
+  }));
+  bh.sort((x,y)=>((y.b.n===t)-(x.b.n===t))||((y.b.a?1:0)-(x.b.a?1:0))||x.b.ad.localeCompare(y.b.ad,"tr")||x.e.n.length-y.e.n.length);
+  const inB=new Set(bh.map(x=>x.e));
+  const nm=e=>ws.every(w=>e._n.split(/[ +\/]/).some(p=>p.startsWith(w)));
+  const rest=sc.filter(e=>!inB.has(e)||nm(e));
+  /* sıra: birebir marka > etken madde adı eşleşmesi > marka başı eşleşmesi > marka içinde geçen > diğer */
+  const rk=x=>x.b?(x.b.n===t?0:ws.every(w=>x.b.n.split(" ").some(p=>p.startsWith(w)))?2:3):(nm(x.e)?1:4);
+  const all=bh.map(x=>({e:x.e,b:x.b})).concat(rest.map(e=>({e,b:null})));
+  all.forEach((x,i)=>x.i=i); all.sort((a,b)=>rk(a)-rk(b)||a.i-b.i);
+  cur=all.map(x=>x.e); curB=all.map(x=>x.b);
   act=0;
   cnt.textContent=cur.length?cur.length+" sonuç":"Sonuç yok";
   if(!cur.length){out.innerHTML=`<div class="empty">“${esc(q.value)}” bulunamadı.${scope==="ad"?"<br>Tanı adıysa “+ Tanıda ara”yı açın.":""}<br><span style="font-size:13px">Listede yoksa AH uzmanı raporu bu notta tanımlı değildir — SUT'tan kontrol edin.</span></div>`;return}
-  if(cur.length===1){show(cur[0],t);return}
+  if(cur.length===1){show(cur[0],curB[0]?norm(curB[0].ad):t);return}
   renderList(t);
 }
 
 let REC=[];try{REC=JSON.parse(localStorage.getItem("ahu_rec")||"[]")}catch(_){}
 function remember(n){REC=[n].concat(REC.filter(x=>x!==n)).slice(0,10);try{localStorage.setItem("ahu_rec",JSON.stringify(REC))}catch(_){}}
-function choose(e){
+function choose(e,b){
   remember(e.n);
-  q.value=e.n;
-  cur=[e];act=0;
+  q.value=b?b.ad:e.n;
+  cur=[e];curB=[b||null];act=0;
   cnt.textContent="1 sonuç";
-  show(e,norm(e.n));
+  show(e,norm(b?b.ad:e.n));
   q.focus();q.select();
 }
 
 q.addEventListener("input",run);
 q.addEventListener("keydown",ev=>{
-  if(ev.key==="Enter"){ev.preventDefault();if(cur.length){choose(cur[act]||cur[0])}else{q.select()}return}
+  if(ev.key==="Enter"){ev.preventDefault();if(cur.length){choose(cur[act]?cur[act]:cur[0],cur[act]?curB[act]:curB[0])}else{q.select()}return}
   if(ev.key==="Escape"){q.value="";run();return}
   if(cur.length>1&&(ev.key==="ArrowDown"||ev.key==="ArrowUp")){
     ev.preventDefault();act=(act+(ev.key==="ArrowDown"?1:-1)+Math.min(cur.length,60))%Math.min(cur.length,60);

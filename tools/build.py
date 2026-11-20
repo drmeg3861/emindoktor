@@ -1,7 +1,13 @@
-import json,re
-exec(open('/home/claude/map.py').read())
-rows=json.load(open('/home/claude/in/rows.json'))
-names=json.load(open('/home/claude/in/names.json'))
+import json,re,argparse
+from pathlib import Path
+# Yollar betiğin konumuna göre çözülür; girdi/çıktı klasörü --girdi ile değiştirilebilir.
+TOOLS=Path(__file__).resolve().parent
+ap=argparse.ArgumentParser(description="SKRS satırlarından ticari preparat listesi (tp.json) ve barkod listesi (bar.json) üretir.")
+ap.add_argument('--girdi',type=Path,default=TOOLS/'in',help="rows.json, names.json, etkin.json klasörü; çıktılar da buraya yazılır (varsayılan: tools/in)")
+IN=ap.parse_args().girdi
+exec((TOOLS/'map.py').read_text(encoding='utf-8'))
+rows=json.load(open(IN/'rows.json',encoding='utf-8'))
+names=json.load(open(IN/'names.json',encoding='utf-8'))
 FORM=[('NEBUL','nebül'),('INHAL','inhaler'),('AEROSOL','inhaler'),('DISKUS','inhaler'),('ENJEK','enjeksiyon'),('AMPUL','enjeksiyon'),('FLAKON','enjeksiyon'),('INFUZ','enjeksiyon'),('KALEM','enjeksiyon'),
  ('SURUP','şurup'),('SUSP','süspansiyon'),('DAMLA','damla'),('SPREY','sprey'),('KREM','krem'),('MERHEM','merhem'),('POMAD','merhem'),('JEL','jel'),('SUPP','supp.'),('FITIL','supp.'),('TRANSDERMAL','flaster'),('FLASTER','flaster'),
  ('EFERVESAN','efervesan'),('SASE','şase'),('GRANUL','granül'),('ORAL COZ','oral çözelti'),('ORAL SOL','oral çözelti')]
@@ -33,7 +39,7 @@ def mgnum(s):
 def match(code,atc):
     return atc.startswith(code[:-1]) if code.endswith('*') else (atc==code or (len(code)<7 and atc.startswith(code)))
 out={}; stats={}; BAR={}
-ETK=json.load(open('/home/claude/in/etkin.json'))
+ETK=json.load(open(IN/'etkin.json',encoding='utf-8'))
 for n in names:
     if n not in M: continue
     codes,combo=M[n]
@@ -71,10 +77,10 @@ for n in names:
         cmb=[{"ad":b,"w":v['w'],"s":sorted(v['s'])} for b,v in sorted(cb.items())]
     out[n]={"l":l,"c":cmb}
     stats[n]=(sum(x['a'] for x in l),len(l),len(cmb))
-json.dump(out,open('/home/claude/in/tp.json','w'),ensure_ascii=False,separators=(',',':'))
+json.dump(out,open(IN/'tp.json','w',encoding='utf-8'),ensure_ascii=False,separators=(',',':'))
 low=[(n,v) for n,v in stats.items() if v[0]<2]
 print("toplam aktif marka:",sum(v[0] for v in stats.values()),"| kombine:",sum(v[2] for v in stats.values()))
 print("aktif <2:",len(low)); print(low)
-import os;print(os.path.getsize('/home/claude/in/tp.json'))
+import os;print(os.path.getsize(IN/'tp.json'))
 
-json.dump({k:sorted(v) for k,v in BAR.items()},open('/home/claude/in/bar.json','w'))
+json.dump({k:sorted(v) for k,v in BAR.items()},open(IN/'bar.json','w',encoding='utf-8'))

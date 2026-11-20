@@ -35,6 +35,9 @@ Cloudflare Pages GitHub uygulaması yalnızca bu depoya yetkili.
 
 ## Güncelleme akışı
 1. Yeni SKRS e-reçete listesi (xlsx) gelince `tools/build.py` ile `ahurapor/skrs.json` yeniden üret.
+   - Girdiler (`rows.json`, `names.json`, `etkin.json`) varsayılan olarak `tools/in/` klasöründe aranır; başka klasör için `--girdi YOL`.
+   - `python3 tools/build.py` → `tp.json` + `bar.json`; `python3 tools/ent_build.py` → `ent.json` (aynı klasöre yazılır).
+   - Yollar betiğin konumuna göre çözülür, hangi klasörden çalıştırıldığı fark etmez.
 2. `index.html` / `skrs.json` değiştir → commit → `git push origin main`.
 3. https://emindoktor.com/ahurapor/ açıp kontrol et.
 

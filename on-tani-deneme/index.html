@@ -181,7 +181,7 @@ $("girisForm").addEventListener("submit",function(e){
   if(!p)return;
   durum($("girisDurum"),"Kontrol ediliyor","yukleniyor");
   gonder({parola:p,kontrol:true}).then(function(j){
-    if(j.tamam){parola=p;$("parola").value="";$("adim1").classList.add("bos");$("icerik").classList.remove("bos");}
+    if(j.tamam){parola=p;$("parola").value="";$("adim1").classList.add("bos");$("icerik").classList.remove("bos");if(j.anahtar===false&&j.uyari)durum($("durum"),j.uyari,"hata");}
     else durum($("girisDurum"),j.hata||"Giriş yapılamadı.","hata");
   }).catch(function(){durum($("girisDurum"),"Sunucuya ulaşılamadı. Sayfayı yenileyip tekrar deneyin.","hata")});
 });

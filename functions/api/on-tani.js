@@ -109,6 +109,26 @@ async function parolaDogru(girilen, gercek) {
 
 const bekle = (ms) => new Promise((r) => setTimeout(r, ms));
 
+// Anahtarı bul: ad ya da değer başında/sonunda boşluk kalmışsa da tanı
+function anahtarBul(env) {
+  for (const [ad, deger] of Object.entries(env)) {
+    if (typeof deger === "string" && ad.trim() === "ANTHROPIC_API_KEY" && deger.trim()) return deger.trim();
+  }
+  return "";
+}
+// Teşhis: bu dağıtımda görünen, anahtara benzeyen değişken ADLARI (değerler asla gösterilmez)
+function benzerAdlar(env) {
+  return Object.entries(env)
+    .filter(([ad, d]) => typeof d === "string" && ad !== "DENEME_PAROLA" && /ANT|API|KEY/i.test(ad))
+    .map(([ad, d]) => JSON.stringify(ad) + (d.trim() ? "" : " (değeri boş)"))
+    .slice(0, 10);
+}
+function anahtarYokMesaji(env) {
+  const adlar = benzerAdlar(env);
+  return "Yapay zekâ anahtarı bu dağıtımda görünmüyor (ANTHROPIC_API_KEY). " +
+    (adlar.length ? "Görünen benzer değişken adları: " + adlar.join(", ") + "." : "Benzer adlı bir değişken de yok; anahtar bu dağıtıma ulaşmamış.");
+}
+
 export async function onRequestPost({ request, env }) {
   if (!env.DENEME_PAROLA) {
     return hata("Deneme sayfası henüz açılmadı: DENEME_PAROLA tanımlı değil.", 503);
@@ -125,11 +145,12 @@ export async function onRequestPost({ request, env }) {
     await bekle(800); // deneme-yanılmayı yavaşlat
     return hata("Parola yanlış.", 401);
   }
-  if (govde.kontrol === true) return yanit({ tamam: true });
-
-  if (!env.ANTHROPIC_API_KEY) {
-    return hata("Yapay zekâ anahtarı tanımlı değil (ANTHROPIC_API_KEY). Analiz şu an çalışmaz.", 503);
+  const anahtar = anahtarBul(env);
+  if (govde.kontrol === true) {
+    return yanit(anahtar ? { tamam: true, anahtar: true } : { tamam: true, anahtar: false, uyari: anahtarYokMesaji(env) });
   }
+
+  if (!anahtar) return hata(anahtarYokMesaji(env), 503);
 
   const gorsel = govde.gorsel;
   if (typeof gorsel !== "string" || !gorsel.startsWith("/9j/") || !/^[A-Za-z0-9+/=]+$/.test(gorsel)) {
@@ -168,7 +189,7 @@ export async function onRequestPost({ request, env }) {
   };
   const basliklar = {
     "Content-Type": "application/json",
-    "x-api-key": env.ANTHROPIC_API_KEY,
+    "x-api-key": anahtar,
     "anthropic-version": "2026-10-21",
   };
   if (env.AI_FALLBACK !== "0") {

@@ -1,6 +1,7 @@
 // Gizli deneme: deri lezyonu fotoğrafından ön tanı önerisi (Cloudflare Pages Function)
 // POST /api/on-tani
-// Kapsam: aile hekimliği polikliniğine sık başvuran deri lezyonları + Döküntülü Hastalıklar Rehberi'ndeki 21 hastalık.
+// Kapsam: aile hekimliği polikliniğine sık başvuran deri lezyonları (Türkiye ve birinci basamak sıklık verilerine göre seçildi)
+// + Döküntülü Hastalıklar Rehberi'ndeki 21 hastalık.
 // Gizli bilgiler YALNIZ Cloudflare ortam değişkenlerinde durur (repoya yazılmaz):
 //   ANTHROPIC_API_KEY  – Anthropic API anahtarı (Secret)
 //   DENEME_PAROLA      – deneme sayfasının erişim parolası (Secret)
@@ -24,12 +25,12 @@ const GRUPLAR = {
   parazit: "Böcek, kene ve parazit",
   egzama: "Egzamalar ve dermatitler",
   skuam: "Papüloskuamöz hastalıklar",
-  akne: "Akne ve benzerleri",
+  akne: "Akne ve folliküler hastalıklar",
   reaktif: "Reaktif lezyonlar",
   pigment: "Pigment bozuklukları",
   benign: "İyi huylu deri tümörleri",
   malign: "Premalign ve malign şüphesi",
-  ek: "Saç, tırnak, bacak",
+  ek: "Saç, tırnak, ayak, ağız, bacak",
 };
 
 const GRUP_RENK = {
@@ -69,7 +70,7 @@ const LISTE = [
     "Sınırları belirsiz (selülit) ya da keskin ve kabarık sınırlı (erizipel), sıcak, ödemli, ağrılı eritem; çoğunlukla tek taraflı alt ekstremite; ateş olabilir",
     "Staz dermatiti (çoğu kez iki taraflı), DVT, kontakt dermatit, gut.",
     "Sınırı kalemle işaretleyin; streptokok ve stafilokoku kapsayan oral antibiyotik, elevasyon; giriş kapısını (tinea pedis, yara) tedavi edin; 48–72 saatte yeniden değerlendirin.",
-    "Sistemik toksisite, hızlı yayılım, bül/nekroz, orantısız ağrı (nekrotizan fasiit), göz çevresi, immünsüpresyon ya da oral tedaviye yanıtsızlık → acil/hastane."),
+    "Nekrotizan fasiit uyarıcıları: bulguyla orantısız ağrı, hemorajik bül, deri nekrozu, işaretlenen sınırı aşan hızlı yayılım, hipotansiyon, bilinç değişikliği, yakın zamanda cerrahi; ayrıca göz çevresi, immünsüpresyon ya da oral tedaviye yanıtsızlık → acil/hastane."),
   L("follikulit", "Follikülit / fronkül / karbonkül", "bakteri",
     "Kıl folikülü merkezli püstül ve papüller; fronkülde ağrılı, fluktuan nodül; karbonkülde birleşen, çok ağızlı apse",
     "Akne, tıraşa bağlı psödofollikülit, Pityrosporum follikülit, hidradenitis süpürativa.",
@@ -147,6 +148,11 @@ const LISTE = [
     "Tanı kliniktir, seroloji gerekmez; yaşa ve gebeliğe uygun oral antibiyotikle tedavi; keneyi doğru çıkarma eğitimi.",
     "Çoklu lezyon, nörolojik (yüz felci, menenjit), kardiyak (AV blok) ya da eklem bulguları. Kene ısırığı sonrası ateş, kanama, peteşi, halsizlik varsa KKKA açısından ACİL."),
 
+  L("pedikuloz", "Pediküloz (baş biti)", "parazit",
+    "Saçlı deride, özellikle ense ve kulak arkasında kaşıntı, ekskoriasyon; kıl köküne yapışık, kolay kaymayan sirke (yumurta) ve canlı bit; ensede ekskoriye papüller, bölgesel LAP",
+    "Seboreik dermatit ve kepek (pul kolayca düşer), saç dökümü ürünü kalıntısı, impetigo, atopik dermatit.",
+    "Tanı canlı bit görmekle konur, yalnız sirke aktif enfestasyon göstermez; ince dişli tarakla ıslak tarama; yaşa uygun pedikülisit (permetrin ilk seçenek, direnç varsa dimetikon gibi alternatifler) 7–10 gün sonra tekrar; aile ve yakın temaslıları kontrol edin.",
+    "Uygun ve doğru uygulanan iki tedaviye yanıtsızlık, yaygın sekonder enfeksiyon; kasık bitinde cinsel yolla bulaşan enfeksiyon taraması."),
   // Egzamalar
   L("atopik", "Atopik dermatit", "egzama",
     "Kuru deri zemininde kaşıntılı, sınırları belirsiz, eritemli, pullu plaklar; bebekte yanak ve ekstansör yüzler, çocukta fleksural bölgeler; kronikte likenifikasyon",
@@ -184,6 +190,16 @@ const LISTE = [
     "Arteriyel yetmezlik dışlandıktan sonra kompresyon; elevasyon, nemlendirme; alevlenmede kısa süre orta potent topikal steroid; çok sayıda topikal ürüne bağlı kontakt dermatite dikkat.",
     "Ülserleşme, selülit şüphesi, venöz cerrahi değerlendirme ihtiyacı."),
 
+  L("liken-simpleks", "Liken simpleks kronikus", "egzama",
+    "Tekrarlayan kaşıma-ovma sonucu kalınlaşmış, deri çizgileri belirginleşmiş (likenifiye), sınırları belirgin, hiperpigmente plak; ense, ayak bileği, el bileği, genital bölge",
+    "Psoriazis, kronik kontakt dermatit, liken planus, tinea, liken amiloidozu.",
+    "Kaşıma-kaşıntı döngüsünü kırmak esastır; potent topikal steroid (gerekirse kapatma ile), nemlendirici, gece kaşıntısına sedatif antihistaminik; stres ve altta yatan kaşıntı nedenlerini değerlendirin.",
+    "Tedaviye dirençli olgu, genital ya da atipik yerleşim (biyopsi), altta yatan sistemik kaşıntı nedeni şüphesi."),
+  L("asteatotik", "Kserozis / asteatotik egzama", "egzama",
+    "Özellikle yaşlıda bacak ön yüzünde kuru, ince pullu deri; kırık porselen ya da kurumuş dere yatağı görünümünde ince çatlaklar ve eritem; kışın artar",
+    "Staz dermatiti, numuler egzama, iktiyozis, ilaçla ilişkili kuruluk.",
+    "Sık banyo ve sabunu azaltma, ılık su; banyodan hemen sonra yoğun nemlendirici; aktif egzamada kısa süre orta potent topikal steroid; yaygın kaşıntıda sistemik nedenleri (böbrek, karaciğer, tiroid, demir eksikliği) düşünün.",
+    "Nemlendirme ve topikal tedaviye yanıtsızlık, yaygın kaşıntıda açıklanamayan sistemik bulgu."),
   // Papüloskuamöz
   L("psoriazis", "Psoriazis", "skuam",
     "Keskin sınırlı, kalın gümüşi-beyaz pullu eritemli plaklar; diz, dirsek, saçlı deri, sakral bölge; tırnakta pitting; guttat tipte damla biçimli küçük plaklar",
@@ -196,7 +212,7 @@ const LISTE = [
     "Kaşıntıya yüksek potent topikal steroid ve antihistaminik; ilaç öyküsünü ve hepatit C'yi değerlendirmeyi düşünün.",
     "Erozif ağız ya da genital tutulum, yaygın hastalık, saçlı deride skatrisyel alopesi, tanı belirsizliği (biyopsi)."),
 
-  // Akne ve benzerleri
+  // Akne ve folliküler hastalıklar
   L("akne", "Akne vulgaris", "akne",
     "Yüz, sırt ve göğüste açık/kapalı komedonlar, papül, püstül; ağır formda nodül-kist ve skar",
     "Rozasea (komedon yok), perioral dermatit, follikülit, steroid aknesi.",
@@ -213,6 +229,11 @@ const LISTE = [
     "Topikal steroidleri ve ağır kozmetikleri bırakma; topikal metronidazol ya da azelaik asit; dirençli olguda oral tetrasiklin grubu (çocukta yaşa uygun alternatif).",
     "Tedaviye yanıtsızlık, tanı belirsizliği."),
 
+  L("hidradenitis", "Hidradenitis süpürativa", "akne",
+    "Koltuk altı, kasık, meme altı ve gluteal bölgede tekrarlayan, ağrılı derin nodül ve apseler; sinüs traktları, köprü skarları, çift başlı komedonlar",
+    "Fronkül ve karbonkül (tek ve tekrar etmeyen), enfekte epidermal kist, pilonidal sinüs, Crohn hastalığının deri tutulumu.",
+    "Erken tanı önemlidir; kilo verme, sigarayı bırakma, sürtünmeyi azaltma; hafif hastalıkta topikal klindamisin ve antiseptik yıkama; ağrı kontrolü; tekrarlayan apselere tekrar tekrar yalnız drenaj yeterli değildir.",
+    "Orta-ağır hastalık (sinüs traktları, skar, çok bölge), topikal tedaviye yanıtsızlık, sistemik ve biyolojik tedavi ya da cerrahi ihtiyacı → dermatoloji."),
   // Reaktif
   L("eritema-nodozum", "Eritema nodozum", "reaktif",
     "Pretibial bölgede simetrik, ağrılı, sıcak, kırmızı-mor deri altı nodüller; ülserleşmez; iz bırakmadan geriler",
@@ -220,6 +241,16 @@ const LISTE = [
     "Altta yatan nedeni araştırın (streptokok enfeksiyonu, ilaç/oral kontraseptif, gebelik, sarkoidoz, tüberküloz, inflamatuvar bağırsak hastalığı); istirahat, elevasyon, kontrendikasyon yoksa NSAİİ.",
     "Sistemik bulgular, altta yatan hastalık şüphesi (anormal akciğer grafisi ya da laboratuvar), ülserleşen ya da atipik nodül."),
 
+  L("urtiker-kronik", "Kronik ürtiker / dermografizm", "reaktif",
+    "6 haftadan uzun süren, gün içinde yer değiştiren, tek tek lezyonları 24 saatten kısa süren kaşıntılı kabarık plaklar (ürtiker); dermografizmde çizilen yerde çizgisel kabarıklık",
+    "Ürtikeryal vaskülit (lezyon >24 saat, ağrı/yanma, iz bırakır), eritema multiforme, böcek ısırığı, mastositoz.",
+    "Tetikleyicileri (NSAİİ, fiziksel uyaranlar, enfeksiyon) sorgulayın; ikinci kuşak sedatif olmayan antihistaminik düzenli kullanım, yanıtsızlıkta dozu kademeli artırma; rutin geniş laboratuvar gereksizdir, öykü yönlendirsin.",
+    "Anjiyoödemde dil ya da gırtlak tutulumu, nefes darlığı (acil), ürtikeryal vaskülit şüphesi, yüksek doz antihistaminiğe yanıtsızlık → dermatoloji ya da alerji."),
+  L("miliaria", "Miliaria (isilik)", "reaktif",
+    "Sıcak ve terlemeyle ortaya çıkan, gövde, boyun ve kıvrımlarda 1–2 mm çok sayıda yüzeyel vezikül (kristalina) ya da kaşıntılı kırmızı papül (rubra); bebek ve çocukta sık",
+    "Follikülit, kandidal intertrigo, suçiçeği ve viral döküntüler, neonatal akne.",
+    "Serin ortam, hafif ve pamuklu giysi, aşırı sarmalamayı önleme; birkaç günde kendiliğinden geçer; kaşıntıda kalamin, gerekirse kısa süre düşük potent steroid.",
+    "Ateş, kötü genel durum ya da püstüllerin yaygınlaşması (enfeksiyon), birkaç günde geçmeyen döküntü."),
   // Pigment
   L("vitiligo", "Vitiligo", "pigment",
     "Keskin sınırlı, süt beyazı, pulsuz depigmente maküller; el, yüz, orifis çevresi, kemik çıkıntıları; simetrik; Köbner",
@@ -237,6 +268,16 @@ const LISTE = [
     "Nemlendirme, güneş koruma, gerekirse kısa süre düşük potent topikal steroid; rengin aylar içinde düzeleceğini anlatın.",
     "Genellikle gerekmez; tanı belirsizliği."),
 
+  L("solar-lentigo", "Solar lentigo", "pigment",
+    "Güneş gören bölgelerde (el sırtı, yüz, omuz) keskin sınırlı, homojen açık-koyu kahverengi, düz maküller; orta-ileri yaş",
+    "Seboreik keratoz (kabarık, mumsu), melazma, lentigo maligna (düzensiz, çok renkli, büyüyen), efelid.",
+    "İyi huyludur; güneş koruma; kozmetik tedavi dermatolojide.",
+    "Düzensiz kenar, renk çeşitliliği, büyüme ya da yüzde tek ve değişen lezyon (lentigo maligna şüphesi) → dermatoloji."),
+  L("akantozis", "Akantozis nigrikans", "pigment",
+    "Ense, koltuk altı ve kasıkta simetrik, kadifemsi, kirli görünümlü kahverengi-siyah kalınlaşma; sıklıkla akrokordonlarla birlikte",
+    "Terra firma-forme dermatoz (alkollü bezle silinir), postinflamatuvar hiperpigmentasyon, Addison hastalığı.",
+    "İnsülin direnci, obezite, prediyabet ve diyabet, PKOS ve ilaçlar açısından değerlendirin (açlık glukozu, HbA1c, lipidler); kilo verme ve yaşam tarzı değişikliği; keratolitik kremler kozmetik amaçla.",
+    "Ani başlangıç, hızlı yayılım, avuç içi ve mukoza tutulumu ya da zayıf hastada ortaya çıkış (malign akantozis; iç malignite araştırması)."),
   // İyi huylu tümörler
   L("seboreik-keratoz", "Seboreik keratoz", "benign",
     "Deriye yapıştırılmış gibi (stuck-on), mumsu, verrüköz yüzeyli, açık-koyu kahverengi, keskin sınırlı papül/plak; yüzeyde boynuz kistleri; orta-ileri yaş",
@@ -274,6 +315,16 @@ const LISTE = [
     "Kanamayı bası ile durdurun; tedavi çıkarılması ve histopatolojik incelemedir.",
     "Çıkarılması ve histopatoloji için sevk (amelanotik melanom dışlanmalı).", "sevk"),
 
+  L("lipom", "Lipom", "benign",
+    "Deri altında yumuşak, hamur kıvamında, ağrısız, hareketli, yuvarlak kitle; üzerindeki deri normal; gövde, ense, kol",
+    "Epidermal kist (punktum), liposarkom, lenf nodu, fıtık.",
+    "İyi huyludur; küçük ve tipik lipomda izlem; kozmetik ya da semptomatik olanda eksizyon.",
+    "5 cm'den büyük, hızla büyüyen, sert, fiks, ağrılı ya da derin yerleşimli kitle (yumuşak doku sarkomu açısından görüntüleme ve sevk)."),
+  L("keloid", "Keloid / hipertrofik skar", "benign",
+    "Travma, akne, piercing ya da cerrahi sonrası parlak, sert, kabarık, pembe-kahve skar; keloid yara sınırlarını aşar, hipertrofik skar aşmaz; göğüs, omuz, kulak memesi",
+    "Dermatofibrom, dermatofibrosarkoma protuberans (yavaş büyüyen, nedensiz plak), sarkoidoz.",
+    "Yeni girişimden kaçınma; silikon jel/levha ve basınç; intralezyonel steroid seçeneği; tek başına eksizyon nüksü artırır.",
+    "Hızla büyüyen, ağrılı ya da işlevi bozan lezyon, tedavi ihtiyacı (intralezyonel, kombine tedavi), travma öyküsü olmadan gelişen kabarık plak."),
   // Premalign / malign şüphesi
   L("aktinik", "Aktinik keratoz", "malign",
     "Güneş gören bölgelerde (yüz, kulak, saçsız saçlı deri, el sırtı) pürüzlü, zımpara kâğıdı gibi, sarı-kahve pullu eritemli makül/papüller; açık tenli ileri yaş",
@@ -291,12 +342,12 @@ const LISTE = [
     "Kesin tanı ve tedavi histopatoloji gerektirir.",
     "Hızlı sevk (2 hafta içinde); dudak, kulak, immünsüpresyon, hızlı büyüme ya da bölgesel lenf nodu varsa daha da öncelikli.", "sevk"),
   L("melanom", "Melanom (şüphe)", "malign",
-    "ABCDE: asimetri, düzensiz sınır, renk çeşitliliği (siyah, kahve, mavi, kırmızı, beyaz), çap >6 mm, değişim; ‘çirkin ördek yavrusu’; kanama/kaşıntı; nodüler tipte hızla büyüyen koyu ya da renksiz nodül",
+    "ABCDE: asimetri, düzensiz sınır, renk çeşitliliği (siyah, kahve, mavi, kırmızı, beyaz), çap >6 mm, değişim; ‘çirkin ördek yavrusu’; kanama/kaşıntı; nodüler tipte hızla büyüyen koyu ya da renksiz nodül. 7 nokta kontrol listesi: büyük ölçütler boyut, şekil ve renk değişikliği; küçük ölçütler çap ≥7 mm, inflamasyon, sızıntı/kanama, his değişikliği",
     "Atipik nevüs, seboreik keratoz, pigmente BCC, dermatofibrom, subungual hematom.",
     "Tanı ve tedavi histopatoloji gerektirir; lezyonu kısmen ya da kozmetik amaçla almayın, tıraş biyopsisi yapmayın.",
-    "Hızlı sevk (2 hafta içinde) dermatolojiye; şüpheyi sevk notuna açıkça yazın.", "sevk"),
+    "Ağırlıklı 7 nokta kontrol listesinde ≥3 puan (büyük ölçüt 2, küçük ölçüt 1 puan) ya da ABCDE ile şüphe → hızlı sevk (2 hafta içinde) dermatolojiye; şüpheyi sevk notuna açıkça yazın.", "sevk"),
 
-  // Saç, tırnak, bacak
+  // Saç, tırnak, ayak, ağız, bacak
   L("alopesi-areata", "Alopesi areata", "ek",
     "Saçlı deri ya da sakalda keskin sınırlı, pürüzsüz, pulsuz, yuvarlak saçsız alanlar; kenarda ünlem işareti kıllar; tırnakta pitting olabilir",
     "Tinea kapitis (pul, kırık kıl, LAP), trikotillomani (düzensiz, farklı uzunlukta kıllar), skatrisyel alopesi, sekonder sifiliz.",
@@ -312,12 +363,48 @@ const LISTE = [
     "Akne, follikülit, liken spinulozus, atopik dermatit.",
     "İyi huyludur; nemlendirici, üre ya da laktik asit içeren keratolitik kremler; sert ovmaktan kaçının.",
     "Genellikle gerekmez."),
+  L("nasir", "Nasır / kallus", "ek",
+    "Basınç ve sürtünme alanlarında (ayak tabanı, parmak üstü) sarımsı, kalınlaşmış keratotik deri; nasırda (klavus) ortası saydam ve ağrılı çekirdek; deri çizgileri korunur",
+    "Plantar siğil (deri çizgilerini keser, noktasal kanama), poroma, diyabetik ayakta ülser öncesi kallus.",
+    "Basıncı azaltma (uygun ayakkabı, ped, ortez); keratolitik (salisilik asit, üre) ve sıyırma; diyabette kendi kendine kesmekten kaçınma.",
+    "Diyabet ya da periferik arter hastalığında kallus altında kanama, ülser, enfeksiyon (diyabetik ayak ekibi), yapısal ayak deformitesi."),
+  L("aft", "Rekürren aftöz stomatit", "ek",
+    "Ağız mukozasında (dudak içi, yanak, dil kenarı) yuvarlak-oval, sarı-gri tabanlı, kırmızı haleli, ağrılı, sığ ülserler; 1–2 haftada iz bırakmadan iyileşir; tekrarlar",
+    "Herpes stomatiti (gruplaşmış vezikül, diş eti), el-ayak-ağız hastalığı, travmatik ülser, Behçet hastalığı, çölyak ve inflamatuvar bağırsak hastalığı, oral SCC (iyileşmeyen, sert ülser).",
+    "Travma ve tetikleyicilerden kaçınma; topikal steroid ya da antiseptik/anestezik gargara; sık tekrarda demir, B12, folat ve çölyak açısından değerlendirme.",
+    "3 haftada iyileşmeyen, sert kenarlı ülser (oral kanser şüphesi, sevk), genital ülser ve göz tutulumu (Behçet), ağır, büyük ya da yılda çok sık tekrar."),
   L("bacak-ulseri", "Kronik bacak ülseri (venöz/arteriyel/diyabetik)", "ek",
     "Venöz: iç malleol üstünde yüzeyel, düzensiz kenarlı, eksüdatif ülser, çevrede ödem ve hemosiderin pigmentasyonu. Arteriyel: distal, zımbalanmış gibi, soluk tabanlı, ağrılı. Diyabetik: basınç noktasında, nasırla çevrili, ağrısız",
     "Piyoderma gangrenozum, vaskülit, kronik yarada malignleşme (Marjolin ülseri), bası yarası.",
     "Ayak bileği-kol indeksiyle arteriyel yetmezliği dışlamadan kompresyon uygulamayın; venöz ülserde kompresyon ve elevasyon; diyabetik ayakta yük kaldırma ve glisemi kontrolü; yara bakımı ve enfeksiyon izlemi.",
     "Arteriyel yetmezlik ya da kritik iskemi (acil vasküler), diyabetik ayakta derin enfeksiyon, osteomiyelit, gangren; 6–12 haftada iyileşmeyen ya da atipik ülser (biyopsi)."),
 ];
+
+// ---- Kaynaklar (kısa künye + DOI) ------------------------------------------
+// Poliklinik notlarındaki kırmızı bayrak ve sevk ölçütlerinin dayandığı yayınlar.
+const KAYNAKLAR = {
+  bostan25: ["Bostan & Uçar 2025, Eurasian J Med (Türkiye'de aile hekimlerinin en sık gördüğü dermatozlar)", "10.5152/eurasianjmed.2025.25778"],
+  aktura26: ["Aktura ve ark. 2026, Healthcare (dermatoloji başvurularının %51,5'i birinci basamakta yönetilebilir)", "10.3390/healthcare14111596"],
+  bilgili13: ["Bilgili ve ark. 2013, J Dermatol Case Rep (Türkiye'de dermatoloji polikliniği sıklıkları)", "10.3315/jdcr.2013.1156"],
+  salava21: ["Salava ve ark. 2021, Skin Health Dis (birinci basamakta deri başvuruları)", "10.1002/ski2.53"],
+  walter13: ["Walter ve ark. 2013, Br J Gen Pract (7 nokta kontrol listesi birinci basamak doğrulaması)", "10.3399/bjgp13x667213"],
+  garbe24: ["Garbe ve ark. 2024, Eur J Cancer (EADO melanom tanı kılavuzu)", "10.1016/j.ejca.2024.115152"],
+  barlow24: ["Barlow ve ark. 2024, BMJ (birinci basamakta pigmente lezyonlar)", "10.1136/bmj-2023-077845"],
+  alayed15: ["Al Alayed ve ark. 2015, Int J Infect Dis (nekrotizan fasiit kırmızı bayrakları)", "10.1016/j.ijid.2015.04.021"],
+  goh13: ["Goh ve ark. 2013, Br J Surg (nekrotizan fasiitin erken tanısı)", "10.1002/bjs.9371"],
+  uzun24: ["Uzun ve ark. 2024, Int J Dermatol (skabiyes tanı ve tedavi kılavuzu, Türkiye)", "10.1111/ijd.17327"],
+  salavastru17: ["Sălăvăstru ve ark. 2017, JEADV (Avrupa skabiyes kılavuzu)", "10.1111/jdv.14351"],
+  leung22: ["Leung ve ark. 2022, Drugs Context (pediküloz kapitis yönetimi)", "10.7573/dic.2021-11-3"],
+  reynolds24: ["Reynolds ve ark. 2024, J Am Acad Dermatol (akne kılavuzu)", "10.1016/j.jaad.2023.12.017"],
+  wollenberg20: ["Wollenberg ve ark. 2020, JEADV (ETFAD/EADV atopik dermatit)", "10.1111/jdv.16892"],
+  sidbury23: ["Sidbury ve ark. 2023, J Am Acad Dermatol (atopik dermatitte topikal tedavi)", "10.1016/j.jaad.2022.12.029"],
+};
+const TABLO_KAYNAK = {
+  selulit: ["alayed15", "goh13"],
+  melanom: ["walter13", "garbe24", "barlow24"], nevus: ["walter13", "barlow24"], "seboreik-keratoz": ["barlow24"], "solar-lentigo": ["barlow24"],
+  skabiyes: ["uzun24", "salavastru17"], pedikuloz: ["leung22"],
+  akne: ["reynolds24"], atopik: ["wollenberg20", "sidbury23"],
+};
 
 const IDS = LISTE.map((h) => h.id);
 const KAYIT = Object.fromEntries(LISTE.map((h) => [h.id, h]));
@@ -453,7 +540,7 @@ export async function onRequestPost({ request, env }) {
   }
   const anahtar = anahtarBul(env);
   if (govde.kontrol === true) {
-    const temel = { tamam: true, liste: LISTE_OZET, sayi: LISTE.length };
+    const temel = { tamam: true, liste: LISTE_OZET, sayi: LISTE.length, kaynak: ["bostan25", "aktura26", "bilgili13", "salava21"].map((x) => ({ kunye: KAYNAKLAR[x][0], doi: KAYNAKLAR[x][1] })) };
     return yanit(anahtar ? { ...temel, anahtar: true } : { ...temel, anahtar: false, uyari: anahtarYokMesaji(env) });
   }
 
@@ -554,6 +641,7 @@ export async function onRequestPost({ request, env }) {
         rehber: k.rehber ? `/dokuntulu-hastaliklar/#${k.id}` : null,
         not: k.not || null,
         isaret: k.isaret || null,
+        kaynak: (TABLO_KAYNAK[k.id] || []).map((x) => ({ kunye: KAYNAKLAR[x][0], doi: KAYNAKLAR[x][1] })),
         guven: ["yüksek", "orta", "düşük"].includes(o.guven) ? o.guven : "düşük",
         gerekce: String(o.gerekce || "").slice(0, 600),
       };

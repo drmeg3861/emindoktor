@@ -98,6 +98,8 @@ details.liste p.l{margin:0;font-size:14.5px;line-height:1.5}
 .oneri dl{margin:8px 0 0;font-size:15px}
 .oneri dt{font-weight:600;font-size:13.5px;font-variant-caps:all-small-caps;letter-spacing:.08em;color:var(--c);margin-top:6px}
 .oneri dd{margin:0}
+.kaynak{font-size:13px;color:var(--mute);margin:8px 0 0;line-height:1.45}
+.kaynak a{color:inherit}
 footer{margin:40px 0 0;padding:12px 0 0;border-top:3px double var(--ink);font-size:14px;color:var(--mute)}
 footer p{margin:0 0 6px}
 </style>
@@ -200,9 +202,18 @@ $("girisForm").addEventListener("submit",function(e){
   }).catch(function(){durum($("girisDurum"),"Sunucuya ulaşılamadı. Sayfayı yenileyip tekrar deneyin.","hata")});
 });
 
+function kaynakHtml(k){
+  if(!Array.isArray(k)||!k.length)return "";
+  return '<p class="kaynak">Kaynak: '+k.map(function(x){
+    var d=String(x&&x.doi||"");
+    var ad=esc(x&&x.kunye||"");
+    return /^10\.\d{4,9}\/[-._;()\/:A-Za-z0-9]+$/.test(d)?'<a href="https://doi.org/'+d+'" target="_blank" rel="noopener">'+ad+'</a>':ad;
+  }).join("; ")+'</p>';
+}
 function liste(j){
   if(!j.liste||!j.liste.length)return;
   var h="";j.liste.forEach(function(g){if(!g.adlar.length)return;h+="<h5>"+esc(g.grup)+"</h5><p class=\"l\">"+g.adlar.map(esc).join(" · ")+"</p>"});
+  h+=kaynakHtml(j.kaynak).replace("Kaynak:","Listenin dayandığı sıklık verileri:");
   $("listeIcerik").innerHTML=h;$("listeSayi").textContent=(j.sayi||"")+" tablo";$("listeKutu").hidden=false;
 }
 
@@ -305,6 +316,7 @@ function goster(j){
       }else if(o.not){
         h+='<dl><dt>Ayırıcı tanı</dt><dd>'+esc(o.not.a)+'</dd><dt>İlk basamak</dt><dd>'+esc(o.not.i)+'</dd><dt>Sevk</dt><dd>'+esc(o.not.s)+'</dd></dl>';
       }
+      h+=kaynakHtml(o.kaynak);
       h+='</div></article>';
     });
     if(j.not)h+='<p class="not">'+esc(j.not)+'</p>';

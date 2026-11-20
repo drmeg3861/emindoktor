@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="referrer" content="no-referrer">
+<title>Lezyondan ön tanı – deneme</title>
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#fffdf9">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Display&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:light;--paper:#fffdf9;--paper2:#f6f2ea;--ink:#1c1d22;--mute:#5f6170;--rule:#c9c3b8;--hair:#e8e3da;--c:#7048e8;
+--red:#e03131;--redbg:#fff0ef;--amb:#d97706;--ambt:#9a4f00;--ambbg:#fff6e3;--grn:#2b8a3e;
+--disp:"Libre Caslon Display","Iowan Old Style","Palatino Linotype",Georgia,serif;--text:Literata,"Iowan Old Style",Georgia,serif}
+*{box-sizing:border-box;--ct:color-mix(in srgb,var(--c) 9%,#fff)}
+html{-webkit-text-size-adjust:100%;background:var(--paper)}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 17px/1.6 var(--text);font-variant-numeric:oldstyle-nums proportional-nums}
+a{color:var(--c);text-underline-offset:2px}
+button,input,select{font:inherit;color:inherit}
+.page{max-width:760px;margin:0 auto;padding:0 20px 40px}
+.kicker{display:flex;flex-wrap:wrap;gap:4px 18px;justify-content:space-between;border-bottom:1px solid var(--ink);padding:24px 0 8px;font-size:14px;color:var(--mute);font-variant-caps:all-small-caps;letter-spacing:.08em}
+.kicker .tag{color:#fff;background:var(--c);padding:0 8px 1px;letter-spacing:.08em}
+h1{font:400 clamp(36px,7vw,64px)/1.04 var(--disp);margin:28px 0 0;letter-spacing:-.01em;text-wrap:balance}
+h1 .w{color:var(--c)}
+.spectrum{height:10px;margin:20px 0 0;background:linear-gradient(90deg,#d0442b 0 14%,#e8590c 14% 28%,#b8860b 28% 42%,#2f9e44 42% 56%,#0c8599 56% 70%,#1971c2 70% 84%,#7048e8 84% 100%)}
+.deck{font-size:clamp(18px,2.3vw,21px);line-height:1.42;font-style:italic;margin:16px 0 0}
+.step{margin:30px 0 0}
+.step>h2{display:flex;gap:12px;align-items:baseline;margin:0 0 12px;padding-top:8px;border-top:2px solid var(--c);font-weight:600;font-size:15px;color:var(--c);font-variant-caps:all-small-caps;letter-spacing:.1em}
+.step>h2 b{font:400 26px/1 var(--disp);color:var(--c);font-variant-caps:normal}
+.box{padding:14px 18px 16px}
+.amber{background:var(--ambbg);border-top:5px solid var(--amb)}
+.amber h3{margin:0 0 6px;color:var(--ambt);font-size:15px;font-variant-caps:all-small-caps;letter-spacing:.1em}
+.red{background:var(--redbg);border-top:5px solid var(--red)}
+.red h3{margin:0 0 4px;color:var(--red);font-size:15px;font-variant-caps:all-small-caps;letter-spacing:.1em}
+ul.kural{list-style:none;margin:0;padding:0}
+ul.kural li{position:relative;padding-left:1.3em;margin:0 0 6px;font-size:15.5px}
+ul.kural li::before{content:"–";position:absolute;left:0;color:var(--amb)}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.inp{border:0;border-bottom:1px solid var(--ink);background:none;padding:6px 2px;min-width:0;flex:1;outline:none;font-size:17px}
+.inp:focus{border-bottom-color:var(--c);border-bottom-width:2px}
+.btn{border:1px solid var(--ink);background:var(--ink);color:#fff;padding:8px 18px;cursor:pointer;font-size:16px}
+.btn:hover{background:var(--c);border-color:var(--c)}
+.btn[disabled]{opacity:.4;cursor:not-allowed;background:var(--ink)}
+.btn.ghost{background:none;color:var(--ink)}
+.btn.ghost:hover{color:#fff}
+label.onay{display:flex;gap:12px;align-items:flex-start;margin:14px 0 0;font-size:15.5px;cursor:pointer}
+label.onay input{width:20px;height:20px;margin-top:3px;accent-color:var(--c);flex:none}
+.drop{display:block;border:2px dashed var(--rule);padding:22px 16px;text-align:center;cursor:pointer;background:#fff}
+.drop:hover,.drop.on{border-color:var(--c);background:var(--ct)}
+.drop b{display:block;font:400 22px/1.2 var(--disp);color:var(--c)}
+.drop small{color:var(--mute)}
+.drop[aria-disabled="true"]{opacity:.45;pointer-events:none}
+#dosya{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+.onizle{display:none;margin:14px 0 0;gap:16px;align-items:flex-start}
+.onizle.on{display:flex;flex-wrap:wrap}
+.onizle img{max-width:240px;max-height:240px;border:1px solid var(--ink);display:block}
+.onizle p{margin:0;font-size:14.5px;color:var(--mute);flex:1;min-width:180px}
+.alanlar{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 18px;margin:16px 0 0}
+@media (min-width:640px){.alanlar{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.alanlar label{display:flex;flex-direction:column;font-size:13.5px;color:var(--mute);font-variant-caps:all-small-caps;letter-spacing:.08em}
+.alanlar select{margin-top:2px;border:0;border-bottom:1px solid var(--ink);background:none;padding:5px 0;font-size:16px;font-variant-caps:normal;letter-spacing:0;color:var(--ink)}
+.durum{margin:12px 0 0;font-size:15.5px;min-height:1.5em}
+.durum.hata{color:var(--red)}
+.durum.ok{color:var(--grn)}
+.yukleniyor::after{content:"";display:inline-block;width:.9em;height:.9em;margin-left:8px;border:2px solid var(--c);border-right-color:transparent;border-radius:50%;animation:d 1s linear infinite;vertical-align:-1px}
+@keyframes d{to{transform:rotate(360deg)}}
+.tarif{font-size:17.5px;line-height:1.55;margin:0 0 16px;font-style:italic}
+.oneri{--c:#1c1d22;display:grid;grid-template-columns:auto 1fr;gap:0 16px;background:var(--ct);border-top:6px solid var(--c);padding:12px 16px 14px;margin:0 0 14px}
+.oneri .s{font:400 34px/1 var(--disp);color:var(--c);grid-row:span 3}
+.oneri h4{margin:0;font:400 clamp(22px,3.4vw,28px)/1.15 var(--disp)}
+.oneri .g{margin:4px 0 0;font-size:13.5px;font-variant-caps:all-small-caps;letter-spacing:.09em;color:var(--mute)}
+.oneri .g i{font-style:normal;color:#fff;background:var(--c);padding:0 7px 1px;margin-left:6px;letter-spacing:.06em}
+.oneri p{margin:6px 0 0;font-size:15.5px}
+.oneri a{display:inline-block;margin-top:8px;font-size:15px;font-weight:600;color:var(--c)}
+.not{font-size:15px;color:var(--mute);margin:6px 0 0}
+.bos{display:none}
+footer{margin:40px 0 0;padding:12px 0 0;border-top:3px double var(--ink);font-size:14px;color:var(--mute)}
+footer p{margin:0 0 6px}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="kicker"><span>emindoktor.com · Döküntülü Hastalıklar Rehberi</span><span class="tag">Deneme · Yalnız hekimler</span></div>
+  <h1>Lezyondan <span class="w">ön tanı</span></h1>
+  <div class="spectrum" aria-hidden="true"></div>
+  <p class="deck">Lezyonun fotoğrafını yükleyin; yapay zekâ rehberdeki 21 hastalık arasından en olası ön tanıları önersin ve ilgili bölüme götürsün.</p>
+
+  <section class="step" id="adim1">
+    <h2><b>1</b> Erişim</h2>
+    <form class="row" id="girisForm" autocomplete="off">
+      <input class="inp" id="parola" type="password" placeholder="Deneme parolası" aria-label="Deneme parolası" autocomplete="current-password" required>
+      <button class="btn" type="submit">Giriş</button>
+    </form>
+    <p class="durum" id="girisDurum" role="status"></p>
+  </section>
+
+  <div id="icerik" class="bos">
+    <section class="step">
+      <h2><b>2</b> Yüklemeden önce</h2>
+      <div class="box amber">
+        <h3>KVKK ve sınırlar</h3>
+        <ul class="kural">
+          <li>Yalnız lezyonu çekin: yüz, dövme, doğum lekesi gibi ayırt edici iz, kimlik, bileklik, yazı ya da arka plan görünmesin.</li>
+          <li>Fotoğraf tarayıcınızda küçültülür ve konum, cihaz, tarih gibi gömülü bilgileri (EXIF) silinir.</li>
+          <li>Fotoğraf bu sitede saklanmaz, kaydedilmez; yalnız analiz için yapay zekâ sağlayıcısına (Anthropic, ABD) iletilir. Bu bir yurt dışı aktarımdır.</li>
+          <li>Hekimlere yönelik eğitim amaçlı karar desteğidir, tanı değildir. Karar her zaman muayeneye ve klinik değerlendirmeye dayanır.</li>
+        </ul>
+      </div>
+      <label class="onay"><input type="checkbox" id="onay"> <span>Fotoğrafta yalnız lezyon var, kimliği belirleyen hiçbir şey yok. Hastadan ya da velisinden açık rıza aldım ve bunun eğitim amaçlı bir deneme olduğunu biliyorum.</span></label>
+    </section>
+
+    <section class="step">
+      <h2><b>3</b> Fotoğraf ve kısa bilgi</h2>
+      <label class="drop" id="drop" for="dosya" aria-disabled="true">
+        <b>Fotoğraf seçin ya da çekin</b>
+        <small>Önce yukarıdaki onay kutusunu işaretleyin</small>
+      </label>
+      <input type="file" id="dosya" accept="image/*" capture="environment" disabled>
+      <div class="onizle" id="onizle">
+        <img id="onizleImg" alt="Yüklenecek lezyon fotoğrafının küçültülmüş hâli">
+        <p id="onizleBilgi"></p>
+      </div>
+      <div class="alanlar">
+        <label>Yaş grubu<select id="yas"><option value="">belirtilmedi</option><option value="0-2">0–2 yaş</option><option value="2-5">2–5 yaş</option><option value="6-12">6–12 yaş</option><option value="13-18">13–18 yaş</option><option value="yetiskin">yetişkin</option></select></label>
+        <label>Ateş<select id="ates"><option value="">bilinmiyor</option><option value="var">var</option><option value="yok">yok</option></select></label>
+        <label>Döküntü süresi<select id="sure"><option value="">bilinmiyor</option><option value="0-2">0–2 gün</option><option value="3-7">3–7 gün</option><option value="8+">7 günden uzun</option></select></label>
+        <label>Kaşıntı<select id="kasinti"><option value="">bilinmiyor</option><option value="var">var</option><option value="yok">yok</option></select></label>
+      </div>
+      <div class="row" style="margin-top:18px">
+        <button class="btn" id="analiz" type="button" disabled>Ön tanı öner</button>
+        <button class="btn ghost" id="temizle" type="button">Temizle</button>
+      </div>
+      <p class="durum" id="durum" role="status" aria-live="polite"></p>
+    </section>
+
+    <section class="step bos" id="sonucBolum">
+      <h2><b>4</b> Ön tanı önerileri</h2>
+      <div id="sonuc"></div>
+    </section>
+  </div>
+
+  <footer>
+    <p>Hekimlere yönelik eğitim amaçlı karar desteğidir, tanı değildir. Öneriler yalnız rehberdeki 21 hastalıkla sınırlıdır; listede olmayan bir hastalık gözden kaçabilir.</p>
+    <p>Acil bulgu (basmakla solmayan peteşi/purpura, yaygın bül/soyulma, mukoza tutulumu, kötü genel durum) varsa beklemeden değerlendirin ve sevk edin.</p>
+  </footer>
+</div>
+
+<script>
+(function(){
+"use strict";
+var H={
+ "kizamik":["Kızamık","#d0442b"],"kizamikcik":["Kızamıkçık","#c2255c"],"kizil":["Kızıl","#e8590c"],"sucicegi":["Suçiçeği","#b8860b"],
+ "eritema":["Eritema infeksiyozum","#e64980"],"roseola":["Roseola infantum","#9c36b5"],"meningokoksemi":["Meningokoksemi","#c92a2a"],
+ "kawasaki":["Kawasaki hastalığı","#e03131"],"misc":["MIS-C","#a61e4d"],"iga-vaskulit":["IgA vasküliti (HSP)","#862e9c"],
+ "ssss":["Stafilokokal haşlanmış deri sendromu","#d9480f"],"ilac":["İlaç erüpsiyonları","#b02525"],"rickettsia":["Akdeniz benekli ateşi","#9a3412"],
+ "elayakagiz":["El-ayak-ağız hastalığı","#0c8599"],"mononukleoz":["Enfeksiyöz mononükleoz","#1971c2"],"gianotti":["Gianotti-Crosti sendromu","#2f9e44"],
+ "pitiriazis":["Pitiriazis rosea","#5f3dc4"],"impetigo":["İmpetigo","#c26a00"],"urtiker-em":["Ürtiker ve eritema multiforme","#3b5bdb"],
+ "mpox":["Mpox","#087f5b"],"skabiyes":["Uyuz (skabiyes)","#5c940d"]
+};
+var API="/api/on-tani", MAKS=1024;
+var parola="", gorsel="", onizleUrl="";
+function $(id){return document.getElementById(id)}
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]})}
+function durum(el,metin,tur){el.textContent=metin;el.className="durum"+(tur?" "+tur:"")}
+
+function gonder(veri){
+  return fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(veri),cache:"no-store",credentials:"same-origin"})
+   .then(function(r){return r.json().catch(function(){return {hata:"Sunucu yanıtı okunamadı ("+r.status+")."}}).then(function(j){j._durum=r.status;return j})});
+}
+
+$("girisForm").addEventListener("submit",function(e){
+  e.preventDefault();
+  var p=$("parola").value;
+  if(!p)return;
+  durum($("girisDurum"),"Kontrol ediliyor","yukleniyor");
+  gonder({parola:p,kontrol:true}).then(function(j){
+    if(j.tamam){parola=p;$("parola").value="";$("adim1").classList.add("bos");$("icerik").classList.remove("bos");}
+    else durum($("girisDurum"),j.hata||"Giriş yapılamadı.","hata");
+  }).catch(function(){durum($("girisDurum"),"Sunucuya ulaşılamadı. Sayfayı yenileyip tekrar deneyin.","hata")});
+});
+
+$("onay").addEventListener("change",function(){
+  var on=this.checked;
+  $("dosya").disabled=!on;
+  $("drop").setAttribute("aria-disabled",on?"false":"true");
+  $("drop").querySelector("small").textContent=on?"JPEG, PNG ya da telefon kamerası · en uzun kenar 1024 px'e küçültülür":"Önce yukarıdaki onay kutusunu işaretleyin";
+  hazir();
+});
+function hazir(){$("analiz").disabled=!($("onay").checked&&gorsel)}
+
+function kucult(dosya){
+  return new Promise(function(coz,red){
+    var url=URL.createObjectURL(dosya), img=new Image();
+    img.onload=function(){
+      var w=img.naturalWidth,h=img.naturalHeight,k=Math.min(1,MAKS/Math.max(w,h));
+      var cw=Math.max(1,Math.round(w*k)),ch=Math.max(1,Math.round(h*k));
+      var cv=document.createElement("canvas");cv.width=cw;cv.height=ch;
+      var cx=cv.getContext("2d");cx.fillStyle="#fff";cx.fillRect(0,0,cw,ch);cx.drawImage(img,0,0,cw,ch);
+      URL.revokeObjectURL(url);
+      // Tuvalden yeniden kodlanan JPEG'de EXIF (konum, cihaz, tarih) bulunmaz
+      var du=cv.toDataURL("image/jpeg",0.86);
+      cv.width=cv.height=0;
+      coz({b64:du.slice(du.indexOf(",")+1),w:cw,h:ch,url:du});
+    };
+    img.onerror=function(){URL.revokeObjectURL(url);red(new Error("okunamadı"))};
+    img.src=url;
+  });
+}
+
+$("dosya").addEventListener("change",function(){
+  var f=this.files&&this.files[0];
+  this.value="";
+  if(!f)return;
+  if(!/^image\//.test(f.type)&&!/\.(jpe?g|png|webp|heic|heif)$/i.test(f.name)){durum($("durum"),"Bu bir görüntü dosyası değil.","hata");return}
+  durum($("durum"),"Fotoğraf hazırlanıyor","yukleniyor");
+  kucult(f).then(function(s){
+    gorsel=s.b64;onizleUrl=s.url;
+    $("onizleImg").src=s.url;
+    $("onizleBilgi").textContent=s.w+"×"+s.h+" px · yaklaşık "+Math.round(s.b64.length*0.75/1024)+" KB · gömülü bilgiler silindi. Gönderilecek görüntü yalnız budur.";
+    $("onizle").classList.add("on");
+    durum($("durum"),"");hazir();
+  }).catch(function(){durum($("durum"),"Fotoğraf açılamadı. HEIC ise telefonda JPEG olarak paylaşmayı deneyin.","hata")});
+});
+
+$("temizle").addEventListener("click",function(){
+  gorsel="";onizleUrl="";$("onizleImg").removeAttribute("src");$("onizle").classList.remove("on");
+  $("sonuc").innerHTML="";$("sonucBolum").classList.add("bos");durum($("durum"),"");hazir();
+});
+
+$("analiz").addEventListener("click",function(){
+  if(!gorsel||!$("onay").checked)return;
+  var b=this;b.disabled=true;
+  durum($("durum"),"Değerlendiriliyor","yukleniyor");
+  gonder({parola:parola,gorsel:gorsel,yas:$("yas").value,ates:$("ates").value,sure:$("sure").value,kasinti:$("kasinti").value})
+  .then(function(j){
+    if(j.hata){
+      durum($("durum"),j.hata,"hata");
+      if(j._durum===401){parola="";$("icerik").classList.add("bos");$("adim1").classList.remove("bos");durum($("girisDurum"),"Parola artık geçerli değil, yeniden girin.","hata")}
+      return;
+    }
+    durum($("durum"),"");goster(j);
+  }).catch(function(){durum($("durum"),"Sunucuya ulaşılamadı.","hata")})
+  .then(function(){hazir()});
+});
+
+function goster(j){
+  var h="";
+  if(j.lezyon_tarifi)h+='<p class="tarif">'+esc(j.lezyon_tarifi)+'</p>';
+  if(j.uyari)h+='<div class="box red" style="margin:0 0 16px"><h3>⚠ Dikkat</h3><p style="margin:0">'+esc(j.uyari)+'</p></div>';
+  if(!j.uygun_mu){
+    h+='<div class="box amber"><h3>Değerlendirilemedi</h3><p style="margin:0">'+esc(j.not||"Fotoğraf değerlendirmeye uygun değil.")+'</p></div>';
+  }else if(!j.oneriler||!j.oneriler.length){
+    h+='<div class="box amber"><h3>Listede uygun hastalık yok</h3><p style="margin:0">'+esc(j.not||"Görüntü rehberdeki 21 hastalıktan birine uymuyor.")+'</p></div>';
+  }else{
+    j.oneriler.forEach(function(o,i){
+      var d=H[o.id];if(!d)return;
+      h+='<article class="oneri" style="--c:'+d[1]+'"><span class="s">'+(i+1)+'</span>'+
+        '<h4>'+esc(d[0])+'</h4>'+
+        '<p class="g">Güven<i>'+esc(o.guven)+'</i></p>'+
+        '<p>'+esc(o.gerekce)+'</p>'+
+        '<a href="/dokuntulu-hastaliklar/#'+encodeURIComponent(o.id)+'" target="_blank" rel="noopener">Rehberde aç →</a></article>';
+    });
+    if(j.not)h+='<p class="not">'+esc(j.not)+'</p>';
+  }
+  h+='<p class="not">Bu öneriler eğitim amaçlıdır, tanı değildir.</p>';
+  $("sonuc").innerHTML=h;
+  $("sonucBolum").classList.remove("bos");
+  $("sonucBolum").scrollIntoView({behavior:"smooth",block:"start"});
+}
+})();
+</script>
+</body>
+</html>

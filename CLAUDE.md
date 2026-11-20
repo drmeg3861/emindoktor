@@ -42,6 +42,6 @@ Cloudflare Pages GitHub uygulaması yalnızca bu depoya yetkili.
 3. https://emindoktor.com/ahurapor/ açıp kontrol et.
 
 ## Bekleyenler
-- YouTube Music "hipnoz-podcast arabada" linki ve YouTube kanal adresi siteye eklenecek (kullanıcıdan alınacak).
+- YouTube kanal adresi siteye eklenecek (kullanıcıdan alınacak). Hipnoz video ve podcast listeleri sitede, YouTube bağlantılarıyla (20.11.2026 doğrulandı; YouTube Music değil).
 - Mümessil formu linki hazır olunca QR + uygulama içi "Eksik preparat mı var?" bağlantısı.
 - APK sürümü (aynı dosyalardan).

@@ -16,12 +16,55 @@ a.card{display:block;background:var(--card);border:1px solid var(--line);border-
 a.card:hover{border-color:var(--acc)}a.card b{font-size:18px;color:var(--acc)}a.card p{margin:4px 0 0;color:var(--mut);font-size:14px}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}a.card.sm{padding:12px 14px}a.card.sm b{font-size:15.5px}
 footer{margin-top:40px;font-size:12.5px;color:var(--mut)}
+/* Ben kimim */
+.who-btn{display:inline-flex;align-items:center;gap:8px;margin-top:14px;padding:6px 14px 6px 6px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--ink);font:inherit;font-size:14px;cursor:pointer}
+.who-btn:hover{border-color:var(--acc)}.who-btn img{width:26px;height:26px;border-radius:50%;object-fit:cover}
+dialog.who{width:min(560px,calc(100vw - 24px));max-height:calc(100dvh - 24px);padding:0;border:1px solid var(--line);border-radius:20px;background:var(--card);color:var(--ink);box-shadow:0 24px 60px rgba(0,0,0,.22);overflow:auto;overscroll-behavior:contain}
+dialog.who[open]{animation:whoIn .35s ease-out}
+dialog.who::backdrop{background:rgba(15,18,22,.45);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+dialog.who[open]::backdrop{animation:whoFade .35s ease-out}
+@keyframes whoIn{from{opacity:0;transform:translateY(10px) scale(.98)}to{opacity:1;transform:none}}
+@keyframes whoFade{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){dialog.who[open],dialog.who[open]::backdrop{animation:none}}
+body:has(dialog.who[open]){overflow:hidden}
+.who-x{position:sticky;top:10px;float:right;margin:10px 10px 0 0;width:36px;height:36px;border:0;border-radius:50%;background:var(--bg);color:var(--mut);font-size:22px;line-height:1;cursor:pointer;z-index:1}
+.who-x:hover{color:var(--ink)}
+.who-in{padding:26px 26px 22px}
+.who-head{display:flex;gap:18px;align-items:center}
+.who-head img{width:96px;height:96px;flex:none;border-radius:50%;object-fit:cover;box-shadow:0 0 0 3px var(--card),0 0 0 5px var(--acc)}
+.who-head h2{all:unset;display:block;font-size:21px;font-weight:700;line-height:1.25}
+.who-head p{margin:4px 0 0;color:var(--mut);font-size:14px;line-height:1.4}
+.who-lead{margin:18px 0 0;font-size:15.5px}
+.who-nums{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:18px 0 0}
+.who-nums div{border:1px solid var(--line);border-radius:12px;padding:10px 6px;text-align:center}
+.who-nums b{display:block;font-size:20px;color:var(--acc);line-height:1.1}.who-nums span{font-size:11.5px;color:var(--mut);line-height:1.25;display:block;margin-top:3px}
+.who h3{font-size:12px;text-transform:uppercase;letter-spacing:.7px;color:var(--mut);margin:22px 0 8px}
+.who ul.tl{list-style:none;margin:0;padding:0}
+.who ul.tl li{position:relative;padding:0 0 10px 18px;font-size:14.5px}
+.who ul.tl li::before{content:"";position:absolute;left:3px;top:8px;width:7px;height:7px;border-radius:50%;background:var(--acc)}
+.who ul.tl li small{display:block;color:var(--mut);font-size:12.5px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips span{padding:4px 10px;border-radius:999px;background:color-mix(in srgb,var(--acc) 12%,transparent);color:var(--ink);font-size:13px}
+.pubs{list-style:none;margin:0;padding:0}
+.pubs li{padding:8px 0;border-top:1px solid var(--line);font-size:14px;line-height:1.4}
+.pubs li:first-child{border-top:0;padding-top:0}
+.pubs a{color:var(--ink);text-decoration:none}.pubs a:hover{color:var(--acc)}
+.pubs small{display:block;color:var(--mut);font-size:12.5px;margin-top:2px}
+.who details summary{cursor:pointer;color:var(--acc);font-size:14px;padding:8px 0 0;list-style:none}
+.who details summary::-webkit-details-marker{display:none}
+.who details[open] summary{display:none}
+.who-foot{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-top:22px;padding-top:16px;border-top:1px solid var(--line)}
+.who-foot a{color:var(--mut);font-size:13.5px;text-decoration:none}.who-foot a:hover{color:var(--acc)}
+.who-go{border:0;border-radius:999px;padding:10px 18px;background:var(--acc);color:#fff;font:inherit;font-size:14.5px;font-weight:600;cursor:pointer}
+@media (prefers-color-scheme:dark){.who-go{color:#0f1216}}
+@media (max-width:480px){.who-in{padding:22px 18px 18px}.who-head{flex-direction:column;align-items:flex-start;gap:12px}.who-head img{width:84px;height:84px}.who-nums{grid-template-columns:repeat(2,1fr)}}
 </style>
 </head>
 <body>
 <main>
   <h1>Dr. Öğr. Üyesi Muhammed Emin Göktepe</h1>
   <div class="sub">Trabzon Üniversitesi Tıp Fakültesi · Aile Hekimliği Anabilim Dalı</div>
+  <button type="button" class="who-btn" id="whoOpen" aria-haspopup="dialog"><img src="/img/emin-goktepe.webp" alt="" width="26" height="26">Ben kimim?</button>
   <h2>Klinik araçlar</h2>
   <a class="card" href="/ahurapor/">
     <b>AHU Rapor →</b>
@@ -43,5 +86,70 @@ footer{margin-top:40px;font-size:12.5px;color:var(--mut)}
   </div>
   <footer>Bu sitedeki bilgiler hap bilgidir; güncel SUT ve Medula ile doğrulayınız.</footer>
 </main>
+<dialog class="who" id="who" aria-labelledby="whoName">
+  <button type="button" class="who-x" id="whoX" aria-label="Kapat">×</button>
+  <div class="who-in">
+    <div class="who-head">
+      <img src="/img/emin-goktepe.webp" alt="Dr. Muhammed Emin Göktepe" width="96" height="96">
+      <div>
+        <h2 id="whoName">Muhammed Emin Göktepe</h2>
+        <p>Dr. Öğr. Üyesi · Aile Hekimliği Uzmanı<br>Trabzon Üniversitesi Tıp Fakültesi</p>
+      </div>
+    </div>
+    <p class="who-lead">Birinci basamakta kişi merkezli bakımın peşindeyim: evde sağlık ve palyatif bakımdan geleneksel tıbba, tıbbi hipnozdan yapay zekâya.</p>
+    <div class="who-nums">
+      <div><b>12</b><span>uluslararası makale</span></div>
+      <div><b>6</b><span>kitap bölümü</span></div>
+      <div><b>30+</b><span>bildiri</span></div>
+      <div><b>25+</b><span>hakemlik</span></div>
+    </div>
+    <h3>Eğitim</h3>
+    <ul class="tl">
+      <li>Aile Hekimliği uzmanlığı<small>Samsun Üniversitesi Tıp Fakültesi · 2019–2022 · tez: palyatif bakım servisi hastaları</small></li>
+      <li>Tıp doktoru<small>Fırat Üniversitesi Tıp Fakültesi · 2018 (ilk iki yıl Giresun Üniversitesi)</small></li>
+    </ul>
+    <h3>Yol</h3>
+    <ul class="tl">
+      <li>Trabzon Üniversitesi Tıp Fakültesi, Aile Hekimliği AD<small>Doktor öğretim üyesi · 2026'dan beri</small></li>
+      <li>Görele Op. Dr. Ergun Özdemir Devlet Hastanesi<small>Başhekim ve GETAT ünitesi sorumlusu · 2023–2025</small></li>
+      <li>Editörlük<small>Sabuncuoğlu Şerefeddin Health Sciences (alan editörü) · Trabzon Medical Journal (bölüm editörü)</small></li>
+    </ul>
+    <h3>İlgi alanları</h3>
+    <div class="chips"><span>Kişi merkezli bakım</span><span>Evde sağlık</span><span>Palyatif bakım</span><span>Apiterapi</span><span>Hirudoterapi</span><span>Kupa</span><span>Ozon</span><span>Tıbbi hipnoz</span><span>Tıpta yapay zekâ</span><span>Sigara bıraktırma</span><span>Geriatri</span></div>
+    <h3>Öne çıkan yayınlar</h3>
+    <ul class="pubs">
+        <li><a href="https://doi.org/10.1186/s12877-026-08429-z" target="_blank" rel="noopener">Empathy levels of family physicians and age discrimination</a><small>BMC Geriatrics · 2026</small></li>
+        <li><a href="https://doi.org/10.1038/s41598-025-86324-0" target="_blank" rel="noopener">Solitary rectal ulcer syndrome: 36 cases</a><small>Scientific Reports · 2025</small></li>
+        <li><a href="https://doi.org/10.5772/intechopen.1017901" target="_blank" rel="noopener">Honey and propolis in clinical practice</a><small>Kitap bölümü · IntechOpen · 2026</small></li>
+    </ul>
+    <details>
+      <summary>4 yayın daha ↓</summary>
+      <ul class="pubs">
+          <li><a href="https://doi.org/10.1097/SCS.0000000000011546" target="_blank" rel="noopener">Traumatic anterior skull base fractures and CSF fistulas</a><small>Journal of Craniofacial Surgery · 2026</small></li>
+          <li><a href="https://doi.org/10.5152/pcp.2023.22518" target="_blank" rel="noopener">Monocyte-to-HDL ratio in major depressive disorder</a><small>Psychiatry and Clinical Psychopharmacology · 2023</small></li>
+          <li>Healthcare professionals and ozone therapy<small>Alternative Therapies in Health and Medicine · 2023</small></li>
+          <li><a href="https://doi.org/10.31086/tjgeri.2022.261" target="_blank" rel="noopener">Palliative care consultations</a><small>Turkish Journal of Geriatrics · 2022</small></li>
+      </ul>
+    </details>
+    <div class="who-foot">
+      <a href="https://orcid.org/0000-0001-9587-4496" target="_blank" rel="noopener">ORCID · 0000-0001-9587-4496 ↗</a>
+      <button type="button" class="who-go" id="whoGo">Siteye geç</button>
+    </div>
+  </div>
+</dialog>
+<script>
+(function(){
+  var d=document.getElementById('who'),KEY='whoSeen';
+  if(!d||typeof d.showModal!=='function')return;
+  function open(){if(!d.open)d.showModal()}
+  function close(){if(d.open)d.close()}
+  document.getElementById('whoOpen').addEventListener('click',open);
+  document.getElementById('whoX').addEventListener('click',close);
+  document.getElementById('whoGo').addEventListener('click',close);
+  d.addEventListener('click',function(e){if(e.target===d)close()});
+  var seen=false;try{seen=sessionStorage.getItem(KEY)==='1';sessionStorage.setItem(KEY,'1')}catch(e){}
+  if(!seen)setTimeout(open,500);
+})();
+</script>
 </body>
 </html>

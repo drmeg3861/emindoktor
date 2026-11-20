@@ -105,6 +105,7 @@ mark{background:var(--mark);color:inherit;border-radius:3px;padding:0 1px}
 .ah{font-size:12.5px;font-weight:700;margin-right:6px}.ah.ok{color:var(--ok)}.ah.no{color:var(--no)}
 .mx{font-size:11px;border:1px solid var(--line);border-radius:5px;padding:0 5px;margin-right:4px;color:var(--mut)}
 .mk{font-size:12.5px;padding:2px 7px}.mwarn{background:var(--warns);color:var(--warn);border-radius:8px;padding:6px 9px;font-size:13px;margin-top:4px;font-weight:600}
+.cmb{display:flex;flex-wrap:wrap;align-items:center;gap:6px}.cmb .plus{font-weight:700;color:var(--mut)}.chip.cmbc{font-size:13.5px;padding:5px 11px}.chip.cmbc[disabled]{opacity:.75;cursor:default}.tpr .chip.cmbc{font-size:12px;padding:2px 8px}
 .copy{margin-top:14px;border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:10px;padding:8px 12px;font-size:14px;cursor:pointer}
 .empty{color:var(--mut);text-align:center;padding:30px 10px}
 .hint{font-size:13px;color:var(--mut);margin-top:14px;line-height:1.6}
@@ -603,17 +604,17 @@ function tpBlock(e,t){
     || `<div class="gp">Aktif ürün yok — tüm preparatlar pasif (Medula'da yazılamaz).</div>`;
   const lg=lim?`<div class="gp" style="margin-top:6px">Yeşil: AH raporu çıkabilir (≤${lim} mg) · Kırmızı/üstü çizili: AH çıkaramaz</div>`:"";
   const pz=pas.length?`<details class="dt"><summary>Pasif ürünler (${pas.length}) — Medula'da yazılamaz</summary><div class="gp" style="margin-top:6px">${pas.map(p=>`${hl(p.ad,tt)} <span style="opacity:.7">(${p.s.map(x=>esc(x[0])).join(", ")})</span>`).join(" · ")}</div></details>`:"";
-  const cb=e.tp.c.length?`<details class="dt"${brandHit(e,tt)&&e.tp.c.some(c=>c.ad===brandHit(e,tt))?" open":""}><summary>Kombine preparatlar (${e.tp.c.length})</summary>${e.tp.c.map(c=>`<div class="tpr"><b>${hl(c.ad,tt)}</b><span class="gp">${esc(c.w)}</span><div class="mgs">${c.s.map(x=>`<span class="mg">${esc(x)}</span>`).join("")}</div></div>`).join("")}</details>`:"";
+  const cb=e.tp.c.length?`<details class="dt"${brandHit(e,tt)&&e.tp.c.some(c=>c.ad===brandHit(e,tt))?" open":""}><summary>Kombinasyon preparatları — ayrı raporlanır (${e.tp.c.length})</summary>${e.tp.c.map(c=>{const ce=D.find(x=>x.cw===c.w);return `<div class="tpr"><b>${hl(c.ad,tt)}</b>${ce?`<button class="chip cmbc" data-n="${esc(ce.n)}">→ ${esc(ce.n)}</button>`:`<span class="gp">${esc(c.w)}</span>`}<div class="mgs">${c.s.map(x=>`<span class="mg">${esc(x)}</span>`).join("")}</div></div>`}).join("")}</details>`:"";
   const ch=e.chg?`<details class="dt chg" open><summary>🔔 Son değişiklikler (${CHG_R?CHG_R.join("–"):""})</summary>${e.chg.map(x=>`<div class="chr"><span class="chd">${esc(x[0])}</span><span class="chk ${x[1]==="pasife alındı"?"k-p":"k-a"}">${esc(x[1])}</span> ${hl(x[2],tt)}</div>`).join("")}</details>`:"";
   return `<div class="sec"><h3>Aktif ticari preparatlar (${akt.length}) · A→Z</h3>${ch}${rows}${lg}${cb}${pz}<div class="gp" style="margin-top:8px;font-size:11.5px">Kaynak: SKRS E-Reçete İlaç Listesi, ${SKRS_TARIH} · Alfabetik sıralıdır, tanıtım amacı yoktur.</div></div>`;
 }
 function card(e,t){
   const s=ST[e.s];
-  const flags=e.f.map(f=>`<span class="flag ${/KIRMIZI/.test(f)?"red":/YEŞİL/.test(f)?"grn":/Medula/.test(f)?"ver":/AH uzmanı kurulu/.test(f)?"skr":""}">${esc(f)}</span>`).join("");
+  const flags=e.f.map(f=>`<span class="flag ${/KIRMIZI/.test(f)?"red":/YEŞİL/.test(f)?"grn":/Medula/.test(f)?"ver":/AH uzmanı kurulu|Kombinasyon/.test(f)?"skr":""}">${esc(f)}</span>`).join("");
   const dx=e.d.length?`<div class="sec"><h3>Rapor tanıları</h3><div class="tags">${e.d.map(x=>`<span class="tag">${hl(x,scope==="tani"?t:"")}</span>`).join("")}</div></div>`:"";
   const kub=e.kub.length?`<div class="sec"><h3>EK-4/D'de olmayan · KÜB endikasyonları</h3><div class="tags">${e.kub.map(x=>`<span class="tag kub">${hl(x,scope==="tani"?t:"")}</span>`).join("")}</div></div>`:"";
   const nt=e.x.length?`<div class="sec"><h3>Açıklama / dikkat</h3><ul class="notes">${e.x.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>`:"";
-  const al=e.a.length?` · <span style="opacity:.8">${esc(e.a.join(", "))}</span>`:"";
+  const al=e.a.length&&!e.cmb?` · <span style="opacity:.8">${esc(e.a.join(", "))}</span>`:"";
   return `<div class="card">
    ${brandHit(e,t)?`<div class="bhc">🏷 ${esc(brandHit(e,t))} → etken madde</div>`:""}
    <h2>${hl(e.n,t)}</h2>
@@ -621,6 +622,7 @@ function card(e,t){
    <span class="badge ${s[0]}">${s[1]}</span>
    ${flags?`<div class="flags">${flags}</div>`:""}
    <div class="sec"><h3>Kim çıkarır</h3><div>${esc(e.w)}</div></div>
+   ${comboBlock(e)}
    ${medBlock(e)}
    ${critBlock(e)}
    ${tpBlock(e,t)}
@@ -661,6 +663,7 @@ function renderList(t){
 
 function show(e,t){
   out.innerHTML=card(e,t);
+  out.querySelectorAll(".cmbc[data-n]").forEach(b=>b.onclick=()=>choose(D.find(x=>x.n===b.dataset.n)));
   const b=document.getElementById("cp");
   b.onclick=async()=>{try{await navigator.clipboard.writeText(summary(e));b.textContent="Kopyalandı ✓"}catch(_){b.textContent="Kopyalanamadı"}};
 }
@@ -716,6 +719,62 @@ document.getElementById("clr").onclick=()=>{q.value="";run();q.focus()};
 // Sayfanın herhangi yerine dokununca/yazınca arama kutusuna dön
 document.addEventListener("keydown",ev=>{if(SP.style.display!=="none"&&!SP.classList.contains("hide"))return;if(document.activeElement!==q&&ev.key.length===1&&!ev.metaKey&&!ev.ctrlKey){q.focus();q.select()}});
 D.filter(e=>e.n==="Furosemid").forEach(e=>{e.d=e.d.concat([E.HEP]);e._dx=norm(e.d.concat(e.kub).join(" | "))});
+/* ===== KOMBİNASYONLAR — Medula'da kombinasyon kendi etken maddesiyle raporlanır (örn. KANDESARTAN+AMLODİPİN) ===== */
+const EN_TR={ramipril:"Ramipril",perindopril:"Perindopril",zofenopril:"Zofenopril",cilazapril:"Silazapril",lisinopril:"Lisinopril",benazepril:"Benazepril",fosinopril:"Fosinopril",trandolapril:"Trandolapril",enalapril:"Enalapril",losartan:"Losartan",eprosartan:"Eprosartan",valsartan:"Valsartan",irbesartan:"Irbesartan",candesartan:"Kandesartan",telmisartan:"Telmisartan","olmesartan medoxomil":"Olmesartan",amlodipine:"Amlodipin",verapamil:"Verapamil",nitrendipine:"Nitrendipin",lercanidipine:"Lerkanidipin",indapamide:"Indapamid",hydrochlorothiazide:"Hidroklorotiyazid",atenolol:"Atenolol",bisoprolol:"Bisoprolol",nebivolol:"Nebivolol",atorvastatin:"Atorvastatin",sacubitril:"Sakubitril"};
+/* tek preparatı olmayan bileşenler */
+const PSEUDO={
+ "Hidroklorotiyazid":{n:"Hidroklorotiyazid",s:"ok",d:D_DIU,g:"Diüretik (tiyazid)"},
+ "Klortalidon":{n:"Klortalidon",s:"ok",d:D_DIU,g:"Diüretik (tiyazid benzeri)"},
+ "Nitrendipin":{n:"Nitrendipin",s:"ok",d:D_KKB,g:"KKB (dihidropiridin)"},
+ "Sakubitril":{n:"Sakubitril",s:"no",d:[],g:"Neprilisin inhibitörü",w:"Sakubitril/valsartan: kardiyoloji (veya iç hastalıkları) uzman hekim raporu — AH uzmanı ✕"}};
+function comboParts(w){
+  const p=w.replace(/ and /g,", ").split(", ").map(x=>x.trim()).filter(Boolean);
+  return p.map(x=>{
+    if(/^(diuretics|thiazides)$/.test(x)){
+      if(/^perindopril/.test(w)) return "Indapamid";
+      if(/^atenolol/.test(w)) return "Klortalidon";
+      return "Hidroklorotiyazid";
+    }
+    return EN_TR[x]||null;
+  });
+}
+function buildCombos(data){
+  const byW={};
+  Object.keys(data).forEach(k=>{if(k.startsWith("__")||!data[k].c)return;
+    data[k].c.forEach(c=>{const o=byW[c.w]||(byW[c.w]={w:c.w,b:{}});const s=o.b[c.ad]||(o.b[c.ad]=new Set());c.s.forEach(x=>s.add(x))})});
+  const out=[];
+  Object.values(byW).forEach(o=>{
+    const parts=comboParts(o.w); if(parts.length<2||parts.some(x=>!x))return;
+    const comps=parts.map(n=>D.find(e=>e.n===n&&!e.cmb)||PSEUDO[n]||null); if(comps.some(x=>!x))return;
+    const name=parts.join(" + ");
+    if(D.some(e=>norm(e.n).replace(/ /g,"")===norm(name).replace(/ /g,"")))return;
+    const st=comps.some(c=>c.s==="no")?"no":comps.some(c=>c.s==="k")?"k":"ok";
+    const dk=x=>norm(x.split(" (")[0]);
+    let dx=comps[0].d.slice(); comps.slice(1).forEach(c=>{const ks=c.d.map(dk);dx=dx.filter(x=>ks.includes(dk(x)))});
+    let uni=false; if(!dx.length){uni=true;const seen=new Set();comps.forEach(c=>c.d.forEach(x=>{if(!seen.has(dk(x))){seen.add(dk(x));dx.push(x)}}))}
+    const arb=comps.some(c=>/ARB/.test(c.g||"")), stat=comps.some(c=>/Statin/.test(c.g||""));
+    const x=["Medula'da kombinasyonlar kombinasyon olarak raporlanır: raporda etken madde olarak “"+parts.map(p=>p.toLocaleUpperCase("tr")).join(" + ")+"” seçilir; bileşenlere ayrı ayrı rapor yazılmaz.",
+      uni?"Bileşenlerin ortak EK-4/D tanısı yok: aşağıda her bileşenin tanıları birlikte listelendi — raporda her bileşeni karşılayan tanı(lar) yazılmalı.":"Rapor tanısı tüm bileşenlerin ortak endikasyonu olmalı (aşağıdaki liste bileşenlerin ortak EK-4/D tanılarıdır)."];
+    if(arb) x.push("ARB KOMBİNE preparatlarda açıklamaya yazılmalı: “Hastanın monoterapi ile kan basıncı yeterli oranda kontrol altına alınamamıştır.”");
+    if(stat) x.push("Statin bileşeni için AH uzmanı doz sınırı geçerli (atorvastatin ≤20 mg); 20 mg üstü atorvastatin içeren dozlar AH raporuyla verilmez. Statin başlama kriterleri ayrıca aranır.");
+    if(dx.some(d=>/Kalp yetmezliği/.test(d))) x.push(KY_NOT);
+    x.push("Kombinasyonun Medula kaydı ayrıca doğrulanmadı — yazmadan önce Medula'da kontrol edin.");
+    const w=st==="no"?comps.filter(c=>c.s==="no").map(c=>c.w||(c.n+": "+(D.find(e=>e.n===c.n)||{}).w)).join(" · "):
+      st==="k"?"Koşullu: "+comps.filter(c=>c.s==="k").map(c=>c.n+" — "+c.w).join(" · "):TUM;
+    const l=Object.entries(o.b).map(([ad,s])=>({ad,a:true,s:[...s].sort().map(v=>[v,"a",null])})).sort((a,b)=>a.ad.localeCompare(b.ad,"tr"));
+    const e={n:name,a:parts.concat(["Kombinasyon","Kombine"]),g:"Kombinasyon · "+[...new Set(comps.map(c=>(c.g||"").split(" · ").pop()))].join(" + "),s:st,w,d:dx,kub:[],x,f:["Kombinasyon ("+parts.length+" etken madde)"],cmb:comps.map(c=>({n:c.n,s:c.s})),cw:o.w};
+    e.tp={lim:null,l,c:[]};
+    e._br=l.map(p=>({ad:p.ad,n:norm(p.ad),a:true}));
+    out.push(e);
+  });
+  out.forEach(e=>{e.i=D.length;D.push(e);e._n=norm(e.n);e._a=e.a.map(norm).concat(e._br.map(b=>b.n));e._g=norm(e.g);e._dx=norm(e.d.join(" | "))});
+  return out.length;
+}
+function comboBlock(e){
+  if(!e.cmb) return "";
+  return `<div class="sec"><h3>Etken maddeler (${e.cmb.length}) · kombinasyon</h3><div class="cmb">${e.cmb.map(c=>{const has=D.some(x=>x.n===c.n&&!x.cmb);return `<button class="chip cmbc"${has?` data-n="${esc(c.n)}"`:" disabled"}><span class="dot ${ST[c.s][2]}" style="display:inline-block;margin-right:6px"></span>${esc(c.n)}</button>`}).join('<span class="plus">+</span>')}</div></div>`;
+}
+
 /* ===== TİCARİ PREPARATLAR =====
    Kaynak: SKRS E-Reçete İlaç ve Diğer Farmasötik Ürünler Listesi (aktif + pasif), 17.11.2026
    skrs.json: {etken: {l:[{ad, s:[[doz, "a"|"p", mg]], a}], c:[{ad, w, s:[doz]}]}}
@@ -734,9 +793,10 @@ function applySKRS(data){
     t.l.sort((x,y)=>(y.a-x.a)||x.ad.localeCompare(y.ad,"tr"));
     t.c.sort((x,y)=>x.ad.localeCompare(y.ad,"tr"));
     e.tp={lim:LIM[e.n],l:t.l,c:t.c};
-    e._br=t.l.map(p=>({ad:p.ad,n:norm(p.ad),a:p.a})).concat(t.c.map(p=>({ad:p.ad,n:norm(p.ad),a:true,k:1})));
+    e._br=t.l.map(p=>({ad:p.ad,n:norm(p.ad),a:p.a}));
     e._a=e._a.concat(e._br.map(b=>b.n));
   });
+  buildCombos(data);
   SKRS_OK=true;
 }
 fetch("skrs.json").then(r=>r.json()).then(d=>{applySKRS(d);if(q.value)run();else home()}).catch(()=>{});

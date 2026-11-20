@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0f766e">
+<title>AHU Rapor — Etken Madde Arama</title>
+<style>
+:root{
+  --bg:#f6f7f9;--card:#fff;--ink:#14181f;--mut:#5b6472;--line:#e3e6eb;
+  --acc:#0f766e;--accs:#e6f4f2;--ok:#15803d;--oks:#e8f6ec;--warn:#b45309;--warns:#fdf3e5;--no:#b91c1c;--nos:#fbeaea;
+  --mark:#fde68a;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#0f1216;--card:#171b21;--ink:#e8ebf0;--mut:#98a2b3;--line:#262c35;
+  --acc:#2dd4bf;--accs:#11302c;--ok:#4ade80;--oks:#12291a;--warn:#fbbf24;--warns:#2e2412;--no:#f87171;--nos:#301616;--mark:#6b5a12;
+}}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-text-size-adjust:100%}
+.top{position:sticky;top:0;z-index:5;background:var(--bg);padding:calc(10px + env(safe-area-inset-top)) 14px 8px;border-bottom:1px solid var(--line)}
+.brand{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin:0 2px 8px}
+.brand b{font-size:15px;letter-spacing:.2px}
+.brand span{font-size:12px;color:var(--mut)}
+.sbox{position:relative}
+#q{width:100%;font-size:19px;padding:14px 44px 14px 16px;border:2px solid var(--line);border-radius:14px;background:var(--card);color:var(--ink);outline:none}
+#q:focus{border-color:var(--acc)}
+#clr{position:absolute;right:8px;top:50%;transform:translateY(-50%);border:0;background:transparent;color:var(--mut);font-size:22px;width:34px;height:34px;border-radius:50%;cursor:pointer}
+.meta{display:flex;justify-content:space-between;font-size:12.5px;color:var(--mut);margin:7px 3px 0}
+.chips{display:flex;gap:6px;overflow-x:auto;margin-top:8px;padding-bottom:2px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:0 0 auto;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:4px 10px;font-size:12.5px;cursor:pointer;white-space:nowrap}
+.chip.on{background:var(--acc);border-color:var(--acc);color:#fff}
+main{padding:12px 14px calc(30px + env(safe-area-inset-bottom));max-width:820px;margin:0 auto}
+.list{display:flex;flex-direction:column;gap:6px}
+.row{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;cursor:pointer}
+.row.act{border-color:var(--acc);box-shadow:0 0 0 1px var(--acc)}
+.row .nm{font-weight:600}
+.row .gp{font-size:12px;color:var(--mut)}
+.row .grow{flex:1;min-width:0}
+.rowx{align-items:flex-start}.rowx .dot{margin-top:7px}
+.rdx{margin-top:7px;gap:5px}.rdx .tag{font-size:12.5px;padding:2px 7px}
+.dot{width:10px;height:10px;border-radius:50%;flex:0 0 auto}
+.d-ok{background:var(--ok)}.d-k{background:var(--warn)}.d-no{background:var(--no)}
+mark{background:var(--mark);color:inherit;border-radius:3px;padding:0 1px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;animation:in .15s ease-out}
+@keyframes in{from{opacity:.4;transform:translateY(4px)}to{opacity:1;transform:none}}
+.card h2{margin:0;font-size:24px;line-height:1.2}
+.card .grp{color:var(--mut);font-size:13px;margin-top:3px}
+.badge{display:inline-block;margin-top:10px;font-weight:700;font-size:13.5px;padding:6px 10px;border-radius:10px}
+.b-ok{background:var(--oks);color:var(--ok)}.b-k{background:var(--warns);color:var(--warn)}.b-no{background:var(--nos);color:var(--no)}
+.sec{margin-top:14px}
+.sec h3{margin:0 0 6px;font-size:12px;text-transform:uppercase;letter-spacing:.6px;color:var(--mut)}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tag{background:var(--accs);color:var(--ink);border-radius:8px;padding:4px 9px;font-size:14px}
+.tag.kub{background:transparent;border:1px dashed var(--line)}
+.notes{margin:0;padding-left:18px}
+.notes li{margin:4px 0}
+.flags{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.flag{font-size:12px;border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--mut)}
+.flag.red{border-color:var(--no);color:var(--no)}.flag.ver{border-color:var(--acc);color:var(--acc);font-weight:700}.flag.grn{border-color:var(--ok);color:var(--ok)}.flag.skr{border-color:var(--acc);background:var(--accs);color:var(--acc);font-weight:700}
+.tpr{display:flex;flex-wrap:wrap;align-items:center;gap:6px;padding:7px 0;border-bottom:1px dashed var(--line)}
+.tpr:last-of-type{border-bottom:0}
+.mgs{display:flex;gap:5px;flex-wrap:wrap;width:100%}
+.mg{font-size:13px;border:1px solid var(--line);border-radius:7px;padding:1px 7px}
+.mg-ok{background:var(--oks);color:var(--ok);border-color:var(--ok)}.chr{font-size:13px;padding:3px 0}.chd{color:var(--mut);margin-right:6px;font-size:12px}.chk{font-size:11px;font-weight:700;border-radius:5px;padding:1px 6px;margin-right:4px}.k-p{background:var(--nos);color:var(--no)}.k-a{background:var(--oks);color:var(--ok)}
+.mg-p{opacity:.55;border-style:dashed}
+.dt{margin-top:8px;border-top:1px dashed var(--line);padding-top:6px}.dt summary{cursor:pointer;font-size:13px;color:var(--acc)}
+.mg-no{background:var(--nos);color:var(--no);border-color:var(--no);text-decoration:line-through}
+.st{font-size:11px;font-weight:700;border-radius:5px;padding:1px 6px}
+.st-a{background:var(--oks);color:var(--ok)}.st-p{background:var(--nos);color:var(--no)}.st-w{border:1px solid var(--line);color:var(--mut);font-weight:500}
+.bh{font-weight:500;color:var(--acc)}.bhc{font-size:13px;color:var(--acc);margin-bottom:4px}
+.row{min-height:52px}
+#splash{position:fixed;inset:0;z-index:50;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:calc(20px + env(safe-area-inset-top)) 18px calc(20px + env(safe-area-inset-bottom));overflow:auto;transition:opacity .35s}
+#splash.hide{opacity:0;pointer-events:none}
+.sp-card{max-width:440px;width:100%;text-align:center}
+.sp-ico{width:64px;height:64px;margin:0 auto 10px;border-radius:18px;background:var(--acc);color:#fff;font-size:34px;line-height:64px;font-weight:700}
+.sp-card h1{margin:0;font-size:28px}
+.sp-sub{color:var(--mut);font-size:14px;margin-top:4px}
+.sp-sec{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-top:14px}
+.sp-lbl{font-size:11px;text-transform:uppercase;letter-spacing:.7px;color:var(--mut)}
+.sp-name{font-weight:700;font-size:17px;margin-top:3px}
+.sp-note{font-size:13px;color:var(--mut);margin-top:3px;line-height:1.45}
+#sp-go{margin-top:18px;width:100%;border:0;border-radius:12px;background:var(--acc);color:#fff;font-size:17px;font-weight:700;padding:13px;cursor:pointer}
+.sp-link{color:var(--acc);word-break:break-all;font-weight:600}
+.credit a{color:var(--acc)}
+.sp-warn{font-size:11.5px;color:var(--mut);margin-top:10px}
+.credit{margin-top:14px;font-size:12px;color:var(--mut);line-height:1.6;border-top:1px solid var(--line);padding-top:10px}
+.credit b{color:var(--ink);font-weight:600}
+.crit{display:flex;flex-direction:column;gap:6px}
+.cr{display:grid;grid-template-columns:26px 92px 1fr auto;align-items:center;gap:8px;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:8px 10px}
+.cb{width:26px;height:26px;border-radius:50%;background:var(--acc);color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;font-size:13px}
+.cl{font-size:12px;color:var(--mut);line-height:1.1}.cl b{display:block;font-size:22px;color:var(--ink)}
+.cc b{display:block;font-size:14.5px}.cc small{display:block;font-size:12.5px;color:var(--mut);line-height:1.35;margin-top:1px}
+.ct{font-size:11.5px;font-weight:700;border-radius:6px;padding:2px 7px;white-space:nowrap}.t2{background:var(--warns);color:var(--warn)}.t1{background:var(--oks);color:var(--ok)}
+.rf{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:10px}.rfh{display:block;width:100%;font-size:12px;color:var(--mut);margin-bottom:2px}
+.ck{margin-top:10px;display:flex;flex-direction:column;gap:6px;font-size:13.5px}.ck .ct{margin-right:4px}
+.ex{margin-top:10px;font-size:13px;background:var(--accs);border-radius:10px;padding:8px 10px}
+@media (max-width:420px){.cr{grid-template-columns:24px 78px 1fr}.cr .ct{grid-column:2/4;justify-self:start}.cl b{font-size:19px}}
+.med{background:var(--accs);border-radius:12px;padding:10px 12px}
+.mdu{margin-top:6px}.mh{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:13.5px}
+.mo{font-size:11.5px;font-weight:700;background:var(--card);border:1px solid var(--line);border-radius:6px;padding:1px 7px}
+.mr{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:7px 9px;margin-top:6px}.mr-no{opacity:.8;border-style:dashed}
+.ah{font-size:12.5px;font-weight:700;margin-right:6px}.ah.ok{color:var(--ok)}.ah.no{color:var(--no)}
+.mx{font-size:11px;border:1px solid var(--line);border-radius:5px;padding:0 5px;margin-right:4px;color:var(--mut)}
+.mk{font-size:12.5px;padding:2px 7px}.mwarn{background:var(--warns);color:var(--warn);border-radius:8px;padding:6px 9px;font-size:13px;margin-top:4px;font-weight:600}
+.copy{margin-top:14px;border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:10px;padding:8px 12px;font-size:14px;cursor:pointer}
+.empty{color:var(--mut);text-align:center;padding:30px 10px}
+.hint{font-size:13px;color:var(--mut);margin-top:14px;line-height:1.6}
+kbd{border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:0 5px;font-size:12px;background:var(--card)}
+.foot{font-size:11.5px;color:var(--mut);margin-top:22px;line-height:1.5}
+.more{font-size:13px;color:var(--mut);margin:10px 2px 0}
+</style>
+</head>
+<body>
+<div id="splash" role="dialog" aria-label="Uygulama hakkında">
+  <div class="sp-card">
+    <div class="sp-ico">℞</div>
+    <h1>AHU Rapor</h1>
+    <div class="sp-sub">Aile Hekimliği Uzmanlarının Rapor Çıkarabildiği İlaçlar<br>Etken madde · Ticari ad · Tanı arama</div>
+    <div class="sp-sec">
+      <div class="sp-lbl">Kaynak çalışma</div>
+      <div class="sp-name">Uzm. Dr. Ensar ERDOĞAN</div>
+      <div class="sp-note">“Aile Hekimliği Uzmanlarının Rapor Çıkarabildiği İlaçlar” · Rev. 17.03.2026<br>Türkiye Aile Hekimleri Uzmanlık Derneği (TAHUD) web sitesinden alınmıştır:<br><a class="sp-link" href="https://tahud.org.tr/kitap/aile-hekimligi-uzmanlarinin-rapor-cikartabildigi-ilaclar" target="_blank" rel="noopener">tahud.org.tr/kitap/aile-hekimligi-uzmanlarinin-rapor-cikartabildigi-ilaclar</a><br>Emeği ve paylaşımı için teşekkür ederiz.</div>
+    </div>
+    <div class="sp-sec">
+      <div class="sp-lbl">Uygulamayı geliştiren</div>
+      <div class="sp-name">Dr. Öğr. Üyesi Muhammed Emin GÖKTEPE</div>
+      <div class="sp-note">Trabzon Üniversitesi Tıp Fakültesi<br>Aile Hekimliği Anabilim Dalı</div>
+    </div>
+    <button id="sp-go">Başla</button>
+    <div class="sp-warn">Hap bilgidir; rapor öncesi güncel SUT / Medula ile doğrulayın.</div>
+  </div>
+</div>
+<div class="top">
+  <div class="brand"><b>AHU Rapor · Etken Madde</b><span>Rev. 17.03.2026</span></div>
+  <div class="sbox">
+    <input id="q" type="search" inputmode="search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Etken madde veya ticari ad… (örn. atorv, kolestor)" autofocus>
+    <button id="clr" aria-label="Temizle">×</button>
+  </div>
+  <div class="meta"><span id="cnt"></span><span id="mode">ad + grup</span></div>
+  <div class="chips" id="chips"></div>
+</div>
+<main id="out"></main>
+
+<script>
+/* ===== VERİ — Kaynak: "Aile Hekimliği Uzmanlarının Rapor Çıkarabildiği İlaçlar", Uzm. Dr. Ensar Erdoğan, rev. 17.03.2026 ===== */
+const AY="Açıklama girmeye gerek yok.";
+const KUB="Endikasyon uyumu aranır — KÜB endikasyonlarını kontrol edin.";
+const EK4F="SUT EK-4F listesinde: raporda tedavi şeması ve dozu belirtilmeli.";
+const SEMA="Raporda tedavi şeması ve dozu belirtilmeli.";
+const TUM="Tüm uzman hekimler (AH uzmanı dahil)";
+const AHU="Aile Hekimliği Uzmanları";
+const SK="Kanser tedavisinde: tüm uzman hekimler, SAĞLIK KURULU raporu.";
+
+/* Ortak tanı setleri */
+const T={
+ KBH:"Kronik böbrek hastalıkları", HT:"Arteriyel hipertansiyon", AHF:"Adrenal hiperfonksiyon", KY:"Kalp yetmezliği",
+ PHT:"Pulmoner hipertansiyon", RAY:"Reynaud hastalığı", PSD:"Periferik ve serebral (serebrovasküler) damar hastalıkları, venöz yetmezlik",
+ KMP:"Kardiyomyopati", KRKH:"Kronik romatizmal kalp hastalığı", ARA:"Akut romatizmal ateş (ARA) ve kapak hastalıkları",
+ DIS:"Disritmiler", DKH:"Doğuştan kalp hastalıkları", KAH:"Koroner arter hastalığı", BEH:"Behçet hastalığı", ODN:"Organ ve doku nakli",
+ PTE:"Pulmoner tromboemboli", KAN:"Kanser", KANH:"Kan hastalıkları", EPI:"Epilepsi, Narkolepsi ve Febril konvülziyonlar",
+ DEM:"Demiyelinizan hastalıklar (Lökodistrofi, MS vb.)", SSPE:"Subakut sklerozan panensefalit (SSPE)", MG:"Myasthenia gravis",
+ PSO:"Psöriazis", VIT:"Vitiligo", PEM:"Pemfigus", KDH:"Konnektif doku hastalıkları", IBH:"İnflamatuar bağırsak hastalıkları",
+ DIAH:"Diffüz interstisyel akciğer hastalıkları", AST:"Astım", KOAH:"KOAH", BRON:"Bronşektazi", HIPF:"Hipofiz yetmezliği büyüme hormonu kullanımı",
+ PSIK:["Genel tıbbi duruma bağlı mental bozukluklar","Şizofreni","Şizoaffektif bozukluk","Sanrısal bozukluk","Atipik psikoz","Anksiyete bozuklukları (Panik bozukluk, Sosyal fobi, OKB)"],
+};
+const KARD=[T.KRKH,T.ARA,T.DIS,T.KMP];
+const ANTITROMB_BASE=[T.BEH,T.ODN,T.PHT,T.PTE,T.KRKH,T.KAH,T.DIS,T.DKH,"Akut romatizmal ateş",T.KMP,T.PSD];
+const KARD_ASA=[T.KBH,T.HT,T.KY,T.KRKH,T.KAH,T.DIS,T.DKH,"Akut romatizmal ateş",T.KMP,T.PSD];
+const SOL=[T.AST,T.KOAH,T.DIAH];
+
+/* s: "ok" AH uzmanı çıkarabilir | "k" koşullu/kısıtlı | "no" AH uzmanı çıkaramaz
+   n: ad, a: diğer adlar, g: grup, w: kim çıkarır, d: tanılar, kub: KÜB endikasyonları (EK-4/D'de olmayan), x: notlar, f: bayraklar */
+const D=[];
+function add(o){D.push(o)}
+function many(names,base){names.forEach(n=>{const [nm,...al]=Array.isArray(n)?n:[n];add(Object.assign({},base,{n:nm,a:(base.a||[]).concat(al)}))})}
+
+/* --- ANTİHİPERTANSİFLER --- */
+const AHT_NOT=["Tüm oral antihipertansiflere tüm uzman hekimler rapor çıkarabilir.","İkili/üçlü kombine preparatlara da rapor çıkarılabilir.","Tanılar SUT EK-4/D başlıklarındandır; hastanın gerçek tanısına uyan başlığı seçin."];
+/* SUT EK-4/D tanı başlıkları (ICD-10) — antihipertansif sınıfları */
+const E={
+ KBH:"Kronik böbrek hastalıkları (N01–N08, N11, N15–N16, N18–N19, N25–N29, D63.8, Q61.2, Y83.0)",
+ AHF:"Adrenal hiperfonksiyon (E26)",
+ KY:"Kalp yetmezliği (I50)",
+ KAH:"Koroner arter hastalığı (I20, I21, I25, Z95.1, Z95.5–Z95.9)",
+ DIS:"Disritmiler (I44–I45, I47–I49)",
+ HT:"Arteriyel hipertansiyon (I10–I13, I15)",
+ DKH:"Doğuştan kalp hastalıkları (Q20–Q28)",
+ ARA:"Akut romatizmal ateş ve kapak hastalıkları (I05–I08, I34–I37, I39)",
+ KMP:"Kardiyomiyopati (I42–I43)",
+ PHT:"Pulmoner hipertansiyon (I27.0, I27.2)",
+ RAY:"Raynaud hastalığı (I73.0)",
+ KRKH:"Kronik romatizmal kalp hastalığı (I09)",
+ HEP:"Hepatit B, C, D ve otoimmün hepatit",
+};
+const D_ACE=[E.KBH,E.KY,E.KAH,E.HT,E.DKH,E.ARA,E.KMP,E.KRKH];
+const D_KKB=[E.KBH,E.KAH,E.DIS,E.HT,E.KMP,E.PHT,E.RAY];
+const D_BB=[E.KBH,E.KY,E.KAH,E.DIS,E.HT,E.DKH,E.ARA,E.KMP,E.KRKH];
+const D_AB=[E.KBH,E.KY,E.KAH,E.HT,E.KMP];
+const D_DIU=[E.KBH,E.KY,E.HT,E.DKH,E.ARA,E.KMP,E.KRKH];
+const KY_NOT="Tansiyonu normal/düşük KY hastasında I10 yazmayın — Kalp yetmezliği (I50) veya ilgili kardiyak tanı ile çıkarın.";
+const AHT_D=[E.HT];
+many(["Ramipril","Perindopril","Zofenopril","Silazapril","Lisinopril","Kinapril","Benazepril","Fosinopril","Trandolapril","Enalapril"],
+ {g:"Antihipertansif · ACEİ",s:"ok",w:TUM,d:D_ACE,x:AHT_NOT.concat([KY_NOT]),a:["ACE inhibitörü","ACEI"]});
+many(["Losartan","Eprosartan","Valsartan","Irbesartan","Kandesartan","Telmisartan","Olmesartan"],
+ {g:"Antihipertansif · ARB",s:"ok",w:TUM,d:D_ACE,a:["ARB","Anjiyotensin reseptör blokeri"],
+  x:AHT_NOT.concat([KY_NOT,"ARB KOMBİNE preparatlarda açıklamaya yazılmalı: “Hastanın monoterapi ile kan basıncı yeterli oranda kontrol altına alınamamıştır.”"])});
+many(["Amlodipin","Felodipin","Nikardipin","Nifedipin","Nimodipin","Lasidipin","Lerkanidipin","Benidipin"],
+ {g:"Antihipertansif · KKB (dihidropiridin)",s:"ok",w:TUM,d:D_KKB,x:AHT_NOT,a:["Kalsiyum kanal blokeri","KKB"]});
+many(["Verapamil","Diltiazem"],{g:"Antihipertansif · KKB (non-dihidropiridin)",s:"ok",w:TUM,d:D_KKB,x:AHT_NOT,a:["Kalsiyum kanal blokeri","KKB"]});
+many(["Indapamid","Furosemid","Torasemid","Spironolakton",["Triamteren+Hidroklorotiazid","Hidroklorotiazid","HCTZ"]],
+ {g:"Antihipertansif · Diüretik",s:"ok",w:TUM,d:D_DIU,a:["Diüretik"],x:AHT_NOT.concat([KY_NOT,"Ülkemizde tiazid grubu diüretiklerin tek preparatı yok."])});
+add({n:"Eplerenon",g:"Antihipertansif · Diüretik",s:"no",w:"Sadece Kardiyoloji uzmanı",d:[],x:["Diüretikler içinde Eplerenon raporunu yalnız kardiyoloji çıkarabilir."],a:["Diüretik"]});
+many(["Propranolol","Sotalol"],{g:"Antihipertansif · Beta bloker (non-selektif)",s:"ok",w:TUM,d:D_BB,x:AHT_NOT.concat([KY_NOT]),a:["Beta bloker"]});
+many(["Metoprolol","Atenolol","Bisoprolol","Nebivolol",["Atenolol+Klortalidon","Klortalidon"]],{g:"Antihipertansif · Beta bloker (selektif)",s:"ok",w:TUM,d:D_BB,x:AHT_NOT.concat([KY_NOT]),a:["Beta bloker"]});
+add({n:"Karvedilol",g:"Antihipertansif · Alfa+Beta bloker",s:"ok",w:TUM,d:D_AB,x:AHT_NOT.concat([KY_NOT]),a:["Beta bloker"]});
+add({n:"Metildopa",g:"Diğer antihipertansif",s:"ok",w:TUM,d:[T.KBH,T.HT,T.AHF],x:[AY]});
+add({n:"Doksazosin",g:"Diğer antihipertansif",s:"k",w:"BPH endikasyonunda sadece Üroloji; diğer endikasyonlarda tüm uzman hekimler",d:[T.KBH,T.PHT,T.HT,T.RAY,T.AHF],x:["Benign prostat hiperplazisi (BPH) tanısıyla AH uzmanı çıkaramaz.",AY]});
+add({n:"Rilmenidin",g:"Diğer antihipertansif",s:"ok",w:TUM,d:[T.KBH,T.KRKH,T.HT,T.DKH,T.AHF],x:[AY]});
+
+/* --- KARDİYOVASKÜLER --- */
+add({n:"Pentoksifilin",g:"Kardiyovasküler",s:"ok",w:TUM,d:[T.KY,T.PHT,T.RAY,T.PSD,T.KMP],x:[AY]});
+add({n:"Digoksin",g:"Kardiyovasküler",s:"ok",w:TUM,d:[T.KY].concat(KARD),x:[AY]});
+add({n:"Amiodaron",g:"Kardiyovasküler",s:"ok",w:TUM,d:[T.KY].concat(KARD),x:[AY]});
+add({n:"Propafenon",g:"Kardiyovasküler",s:"ok",w:TUM,d:[T.KY].concat(KARD),x:[AY]});
+add({n:"İzosorbid mononitrat",a:["Isosorbit","İzosorbit monohidrat","ISMN"],g:"Kardiyovasküler",s:"ok",w:TUM,d:[T.KY,T.PHT,T.KAH,T.KMP],x:[AY]});
+add({n:"Trimetazidin",g:"Kardiyovasküler",s:"ok",w:TUM,d:[T.KAH,T.PSD],x:[AY]});
+add({n:"Diosmin+Hesperidin",a:["Diosmin","Hesperidin","Daflon"],g:"Kardiyovasküler · Venotonik",s:"ok",w:TUM,d:[T.PSD],kub:["Alt ekstremitelerin fonksiyonel ve organik kronik yetersizliği","Hemoroid krizi"],x:[AY]});
+add({n:"Kalsiyum dobesilat",a:["Dobesilat","Doxium"],g:"Kardiyovasküler · Venotonik",s:"ok",w:TUM,d:[T.PSD],kub:["Arterio-venöz kaynaklı sirkülasyon bozuklukları","Diyabetik retinopati","Hemoroidal rahatsızlıklar","Mikroanjiopati","Venöz yetmezlik","Yüzeyel tromboflebit"],x:[AY]});
+add({n:"Rutosid / Okserutin",a:["Rutosid","Okserutin","Troksérutin"],g:"Kardiyovasküler · Venotonik",s:"ok",w:TUM,d:[T.PSD],kub:["Diyabetik retinopati","Hemoroid semptomları","Kronik venöz yetmezlik","Lenf ödem"],x:[AY]});
+add({n:"Essin / Triterpen glikozid",a:["Essin","Aescin","Triterpen glikozid","At kestanesi"],g:"Kardiyovasküler · Venotonik",s:"ok",w:TUM,d:[T.PSD],kub:["Hemoroid semptomları","Kronik venöz yetmezlik"],x:[AY]});
+
+/* --- ANTİLİPİDEMİK --- */
+const STAT_X=[
+ "Yüksek doz (Atorva 40–80, Rosuva 20–40, Prava 40): Kardiyoloji, KVC, Endokrin, Geriatri, Nöroloji, İç Hst. düzenler; ilk rapor süresi (24 ay) sonunda devam raporlarını AH uzmanı da düzenleyebilir.",
+ "Beksaroten tedavisinde reçeteye: “304-Beksaroten tedavisinde lipid düşürücü ilaç kullanımı” yazılmalı."];
+const STAT_D=["Hiperkolesterolemi/Hiperlipidemi (E78.x)","Koroner arter hastalığı (I20, I21, I25)"];
+add({n:"Atorvastatin",g:"Antilipidemik · Statin",s:"k",w:"AH uzmanı 20 mg'a kadar",d:STAT_D,x:STAT_X,f:["Doz sınırı: ≤20 mg"],a:["Statin","Lipitor","Ator"]});
+add({n:"Rosuvastatin",g:"Antilipidemik · Statin",s:"k",w:"AH uzmanı 10 mg'a kadar",d:STAT_D,x:STAT_X,f:["Doz sınırı: ≤10 mg"],a:["Statin","Crestor"]});
+add({n:"Pitavastatin",g:"Antilipidemik · Statin",s:"k",w:"AH uzmanı 4 mg'a kadar",d:STAT_D,x:STAT_X,f:["Doz sınırı: ≤4 mg"],a:["Statin"]});
+add({n:"Pravastatin",g:"Antilipidemik · Statin",s:"k",w:"AH uzmanı 20 mg'a kadar",d:STAT_D,x:STAT_X,f:["Doz sınırı: ≤20 mg"],a:["Statin"]});
+many(["Fenofibrat","Gemfibrozil"],{g:"Antilipidemik · Fibrat",s:"no",w:"Kardiyoloji, KVC, Endokrinoloji, İç Hastalıkları, Nöroloji",d:[],x:["AH uzmanı fibrat raporu çıkaramaz."],a:["Fibrat"]});
+add({n:"Kolesevelam",g:"Antilipidemik",s:"no",w:"Kardiyoloji, KVC, İç Hastalıkları, Nöroloji",d:[],x:["AH uzmanı çıkaramaz."]});
+add({n:"Ezetimib",g:"Antilipidemik",s:"k",w:"Beksaroten tedavisinde tüm uzman hekimler; diğer endikasyonlarda Kardiyoloji, KVC, İç Hst., Nöroloji",d:["Beksaroten tedavisine bağlı lipid yüksekliği"],x:["Diğer endikasyonlarda AH uzmanı çıkaramaz."]});
+
+/* --- DERMATOLOJİK --- */
+const DERM=["Psöriazis","Vitiligo","Darier","İktiyozis","Hidradenitis suppurativa","Liken","Epidermodisplazia verruciformis"];
+add({n:"Asitretin",g:"Dermatolojik",s:"ok",w:TUM,d:DERM,x:[AY]});
+add({n:"İzotretinoin",a:["Isotretinoin","Roaccutane"],g:"Dermatolojik",s:"ok",w:TUM,d:DERM,kub:["Kalıcı yara izi bırakma riski olan akne","Konglobat akne","Nodüler akne","Topikal akne tedavisine dirençli akne"],x:[AY]});
+
+/* --- GENİTAL SİSTEM / CİNSİYET HORMONLARI --- */
+add({n:"Kabergolin",g:"Genital sistem / hormon",s:"k",w:"Parkinson: sadece Nöroloji ve Geriatri · Diğer: tüm uzman hekimler",d:[],kub:["Amenore","Anovülasyon","Fizyolojik laktasyon inhibisyonu","Fizyolojik laktasyon supresyonu","Galaktore","Hiperprolaktinemik bozukluklar","Oligomenore"],x:["Parkinson tanısıyla AH uzmanı çıkaramaz.",AY]});
+add({n:"Bromokriptin",g:"Genital sistem / hormon",s:"ok",w:TUM,d:["Parkinson hastalığı","Hipofiz hormon fazlalığı (Akromegali, Hiperprolaktinemi)"],x:[]});
+add({n:"Metilergonovin",a:["Methergin"],g:"Genital sistem / hormon",s:"ok",w:AHU,d:[],kub:["Doğum sonrası kanama","Düşüğe bağlı uterus kanaması","Loşi retansiyonu","Sezaryen sonrası","Tamamlanmamış düşük","Uterus atonisine bağlı kanama","Uterus kanamaları","Uterus subinvolüsyonuna bağlı kanama"],x:[AY]});
+const HRT=["Raporda tedavi şeması ve dozu belirtilmeli."];
+add({n:"Estradiol+Noretisteron",a:["Östradiol","Noretisteron","HRT"],g:"Genital sistem / hormon · HRT",s:"ok",w:AHU,d:[],kub:["Kırık riski yüksek menopoz sonrası osteoporozun önlenmesi","Östrojen hormon replasman tedavisi"],x:HRT});
+add({n:"Estradiol+Drospirenon",a:["Östradiol","Drospirenon","HRT"],g:"Genital sistem / hormon · HRT",s:"ok",w:AHU,d:[],kub:["Östrojen hormon replasman tedavisi"],x:HRT});
+add({n:"Estradiol",a:["Östradiol","HRT"],g:"Genital sistem / hormon · HRT",s:"ok",w:AHU,d:[],kub:["Kırık riski yüksek menopoz sonrası osteoporozun önlenmesi","Menopoz sonrası östrojen yetmezliği","Östrojen hormon replasman tedavisi","Postmenopozal osteoporoz profilaksisi"],x:HRT});
+add({n:"Estradiol+Siproteron",a:["Östradiol","Siproteron","HRT"],g:"Genital sistem / hormon · HRT",s:"ok",w:AHU,d:[],kub:["Deri ve ürogenital traktüsün involüsyon bulguları","Hipogonadizme bağlı östrojen eksiklik semptomları","Kastrasyon","Klimakterik depresif ruh halleri","Klimakterik şikayetler","Menopoza bağlı östrojen eksiklik semptomları","Menstrüel düzensizlikler","Postmenopozal osteoporoz profilaksisi","Primer amenore","Primer ovaryan yetmezlik","Sekonder amenore"],x:HRT});
+add({n:"Estradiol+Norgestrel",a:["Östradiol","Norgestrel","HRT"],g:"Genital sistem / hormon · HRT",s:"ok",w:AHU,d:[],kub:["Hipogonadizme bağlı östrojen eksiklik semptomları","Kastrasyona bağlı östrojen eksikliği","Menopoza bağlı östrojen eksiklik semptomları","Menstrüel düzensizlikler","Östrojen eksikliğinde hormon replasmanı","Postmenopozal osteoporoz","Primer amenore","Primer ovaryan yetmezlik","Sekonder amenore"],x:HRT});
+add({n:"Etinilestradiol+Siproteron",a:["Etinil estradiol","Siproteron","Diane"],g:"Genital sistem / hormon",s:"ok",w:AHU,d:[],kub:["Akne","Akne vulgaris","Hirsutizm","Şiddetli akne"],x:HRT});
+add({n:"Estradiol+Medroksiprogesteron",a:["Östradiol","Medroksiprogesteron","HRT"],g:"Genital sistem / hormon · HRT",s:"ok",w:AHU,d:[],kub:["Kırık riski yüksek menopoz sonrası osteoporozun önlenmesi","Menopoz sonrası östrojen yetmezliği","Östrojen hormon replasman tedavisi","Postmenopozal osteoporoz profilaksisi"],x:HRT});
+add({n:"Siproteron",a:["Androcur"],g:"Genital sistem / hormon",s:"ok",w:TUM,d:["Kanser (sağlık kurulu raporu)"],kub:["Ağır hirsutizm","Ameliyat edilemeyen prostat karsinomunda antiandrojen tedavi","Androjenizasyon belirtileri","Androjenlere bağlı kelliğe varan yoğun saç dökülmesi","Hastalık derecesinde yüz ve vücutta kıllanma","Seksüel sapmalarda cinsel dürtülerin azaltılması"],x:[SK]});
+add({n:"Danazol",g:"Genital sistem / hormon",s:"ok",w:TUM,d:["Herediter anjioödem","Hipogonadizm"],kub:["Endometriyozis","Fibrokistik meme hastalıkları","Histeroskopik endometriyal ablasyon öncesi","Menoraji","Organik nedenli olmayan menoraji","Premenstrüel sendrom","Primer jinekomasti","Puberte prekoks"],x:[SEMA,"KÜB endikasyonu aranır."]});
+add({n:"Didrogesteron",a:["Duphaston"],g:"Genital sistem / hormon",s:"ok",w:AHU,d:[],kub:["Disfonksiyonel uterus kanaması","Dismenore","Endometriyozis","Korpus luteum yetmezliğine bağlı infertilite","Menstrüel siklusun düzenlenmesi","Postmenopozal endometriyal hiperplazinin önlenmesi","Premenstrüel sendrom","Progesteron eksikliği","Progesteron eksikliğine bağlı düşük tehdidi","Progesteron eksikliğine bağlı habitüel abortus","Sekonder amenore","Uterusu intakt kadınlarda HRT","Yardımcı üreme tekniği"],x:[SEMA]});
+add({n:"Klomifen sitrat",a:["Klomifen","Clomid"],g:"Genital sistem / hormon",s:"ok",w:TUM,d:[],kub:["Ciddi oligomenore","Fonksiyonel uterin kanamalar","Ovaryan disfonksiyon","Ovülasyon indüksiyonu","Sekonder amenore","Stein-Leventhal tipi polikistik over"],x:[]});
+add({n:"Agnucaston",a:["Vitex agnus castus","Agnus castus"],g:"Genital sistem / hormon",s:"ok",w:TUM,d:[],kub:["Mastodini","Menstrüel ritim anomalileri","Premenstrüel sendrom"],x:[AY]});
+
+/* --- GİS VE METABOLİZMA --- */
+const GIS_K=["Duodenal ülser","Gastrik ülser","GÖRH","H. pylori","Peptik ülser"];
+many(["Omeprazol","Pantoprazol","Lansoprazol","Rabeprazol",["Esomeprazol","Ezomeprazol"],"Deksrabeprazol"],{g:"GİS · PPİ",s:"ok",w:TUM,d:[],kub:GIS_K,x:[AY],a:["PPI","Proton pompa inhibitörü"]});
+many(["Famotidin","Nizatidin"],{g:"GİS · H2 reseptör antagonisti",s:"ok",w:TUM,d:[],kub:GIS_K,x:[AY],a:["H2 bloker"]});
+add({n:"Misoprostol",g:"GİS",s:"no",w:"Medula: yalnız Kadın Hastalıkları ve Doğum (kaynak PDF: tüm uzmanlar)",d:[],kub:GIS_K,x:[AY]});
+add({n:"Antasitler",a:["Antasit"],g:"GİS",s:"ok",w:TUM,d:[],kub:GIS_K,x:[AY]});
+many(["Ondansetron","Granisetron","Palonosetron"],{g:"GİS · Serotonin antagonisti (antiemetik)",s:"ok",w:TUM,d:[T.KAN,T.KANH],x:[EK4F,AY],a:["5-HT3","Antiemetik"]});
+add({n:"Potasyum",a:["Potasyum klorür","KCl"],g:"GİS / metabolizma",s:"ok",w:TUM,d:[T.KBH],kub:["Böbrek taşı metafilaksisi","Böbrek taşı profilaksisi","Hipokalemi","Hipokalemik kardiyak aritmi","Hipokalemik nöromusküler bozukluklar","Hipositratüri","Kalsiyum oksalat taşları","Ketoasidoz","Metabolik asidoz","Ürik asit taşları"],x:[AY,"Potasyum sitrat (Urocit-K) raporunu yalnız Nefroloji ve Üroloji çıkarabilir."]});
+add({n:"Potasyum sitrat",a:["Urocit-K"],g:"GİS / metabolizma",s:"no",w:"Sadece Nefroloji ve Üroloji",d:[],x:["AH uzmanı çıkaramaz."]});
+add({n:"Kalsitriol",a:["Aktif D vitamini","Rocaltrol"],g:"GİS / metabolizma",s:"ok",w:TUM,d:[T.KBH,"Hipoparatiroidi","Rezistan rickets ve osteomalazi","Juvenil osteoporoz","Kronik steroid kullanımına bağlı osteoporoz","Fosfor metabolizması bozuklukları"],kub:["D vitaminine bağlı raşitizm","Hipofosfatemik raşitizm","İdiyopatik hipoparatiroidi","Postmenopozal osteoporoz","Psödohipoparatiroidi","Renal osteodistrofi","Sekonder hiperparatiroidizm"],x:[EK4F,AY,"Aktif D vitaminleri (kalsitriol, alfakalsidol) osteoporoz tedavisinde ödenmez."]});
+add({n:"Kalsiyum asetat",g:"GİS / metabolizma",s:"ok",w:TUM,d:[T.KBH,"Hipoparatiroidi"],kub:["Hiperfosfatemi"],x:[AY]});
+add({n:"Kalsiyum karbonat",g:"GİS / metabolizma",s:"ok",w:TUM,d:[T.KBH,"Hipoparatiroidi"],kub:["Hiperfosfatemi","Renal yetmezlik"],x:[AY]});
+add({n:"Kalsiyum karbonat+Vitamin D3",a:["Kolekalsiferol","D vitamini","Kalsiyum D3"],g:"GİS / metabolizma",s:"ok",w:TUM,d:[T.KBH,"Hipoparatiroidi","Rezistan rickets ve osteomalazi","Osteoporoz"],kub:["Fibröz osteodistrofi (ve profilaksisi)","Kalsiyum eksikliği","Osteomalazi (ve profilaksisi)","Osteoporoz (ve profilaksisi)","Vitamin D3 eksikliği"],x:[AY]});
+add({n:"L-Glutamin / Enteral beslenme ürünleri",a:["Glutamin","Mama","Enteral beslenme","Malnütrisyon"],g:"GİS / metabolizma · Beslenme",s:"k",w:TUM,d:["Malnütrisyon (+ eşlik eden hastalığın ICD-10 kodu)"],x:[
+ "ÇOCUK: yatan hasta, doğuştan metabolik hastalık, kanser, kistik fibrozis, Crohn, yanık veya sonda/gastrostomi/jejunostomi ile beslenenlerde malnütrisyon koşulu aranmaz. Yatan hasta dışında bu durumların belirtildiği sağlık kurulu raporu gerekir. Rapor süresi 6 ay.",
+ "Çocuk raporunda: ürün adı, günlük kalori ihtiyacı, ağırlık, boy, yaşa göre ağırlık SD veya VKİ ile belirlenen günlük miktar yazılır; en fazla 30 günlük doz.",
+ "YETİŞKİN malnütrisyon tanımı (üçü birlikte): 1) Son 6 ayda >%5 veya 6 aydan uzun sürede >%10 istemsiz kilo kaybı, ya da VKİ <22 (≥70 yaş) / <20 (<70 yaş); 2) Malnütrisyona neden olan eşlik eden hastalık/travma; 3) Besin alımında azalma (1 hafta <%50 enerji veya 2 hafta herhangi azalma veya sindirim/emilimi bozan GİS hastalığı).",
+ "Diyet veya obezite cerrahisi sonrası kilo kaybı malnütrisyon sayılmaz. Bu durumlar raporda belirtilmeli.",
+ "Yetişkinde günlük 1200 kcal dozda ödenir. Yatan, kanser ve tüple beslenen hastalarda malnütrisyon koşulları aranmaz.",
+ "Yetişkin raporunda: ürün adı, günlük kalori ihtiyacı ve miktar, ağırlık, boy, varsa eşlik eden hastalığın ICD-10 kodu; en fazla 30 günlük doz. Rapor süresi 3 ay (yatan dışı sağlık kurulu raporu ile 6 ay).",
+ "K52.2 ve T78.1 kodlarında “yalnızca inek sütü alerjisi için” ibaresi yer alır."]});
+add({n:"Çölyak hastalığı (glutensiz ürün)",a:["Çölyak","Glutensiz un","Celiac"],g:"GİS / metabolizma · Beslenme",s:"k",w:"İlk rapor: Gastroenteroloji (yoksa Çocuk Sağlığı veya İç Hastalıkları), 3 yıl süreli · 2. ve sonraki raporlar: bu uzmanlar veya AH uzmanı",d:["Çölyak hastalığı"],x:["İlk raporu AH uzmanı düzenleyemez; devam raporlarını düzenleyebilir.","Özel formüllü un ve mamul ürün ödemesi (gastroenteroloji raporuyla, aylık): 0–5 yaş 344,48 TL · 5–15 yaş 525 TL · 15 yaş üstü 475,74 TL."]});
+add({n:"Mesalazin",a:["Salofalk","Pentasa","Asacol"],g:"GİS",s:"ok",w:TUM,d:[T.IBH],kub:["Ülseratif kolit","Ülseratif kolit profilaksisi"],x:[EK4F,AY]});
+add({n:"Sülfasalazin",a:["Salisilazosülfapiridin","Salazopyrin","Sulfasalazin"],g:"GİS",s:"ok",w:TUM,d:[T.IBH],kub:["Ülseratif kolit","Crohn hastalığı","Romatoid artrit"],x:[AY]});
+
+/* --- ANTİDİYABETİK --- */
+const DM_D=["Diabetes Mellitus (E10–E14)"];
+const DM_X=["Rapor açıklamasına AKŞ, HbA1c ve kilo değerleri girilmeli."];
+add({n:"İnsan (human) insülini",a:["İnsülin","Human insülin","Regüler insülin","NPH"],g:"Antidiyabetik",s:"ok",w:TUM,d:DM_D,x:DM_X});
+add({n:"Metformin",a:["Biguanid"],g:"Antidiyabetik · Biguanid",s:"ok",w:TUM,d:DM_D,x:DM_X,f:["Günde en fazla 3 kez"]});
+add({n:"Glimepirid",a:["Glimeperid","Sülfonilüre","Amaryl"],g:"Antidiyabetik · Sülfonilüre",s:"ok",w:TUM,d:DM_D,x:DM_X,f:["Günde en fazla 1 kez"]});
+add({n:"Gliklazid",a:["Sülfonilüre","Diamicron"],g:"Antidiyabetik · Sülfonilüre",s:"ok",w:TUM,d:DM_D,x:DM_X,f:["Günde en fazla 4 kez"]});
+add({n:"Glibenklamid",a:["Sülfonilüre"],g:"Antidiyabetik · Sülfonilüre",s:"ok",w:TUM,d:DM_D,x:DM_X,f:["Günde en fazla 4 kez"]});
+add({n:"Glipizid",a:["Sülfonilüre"],g:"Antidiyabetik · Sülfonilüre",s:"ok",w:TUM,d:DM_D,x:DM_X,f:["Günde en fazla 2 kez"]});
+add({n:"Akarboz",a:["Alfa glukozidaz inhibitörü","Glucobay"],g:"Antidiyabetik",s:"ok",w:TUM,d:DM_D,x:DM_X,f:["Günde en fazla 3 kez"]});
+add({n:"Nateglinid",g:"Antidiyabetik",s:"ok",w:AHU,d:DM_D,x:DM_X,f:["Günde en fazla 3 kez"]});
+
+/* --- ANTİTROMBOTİK --- */
+add({n:"Asetilsalisilik asit",a:["Aspirin","ASA","Coraspin"],g:"Antitrombotik",s:"ok",w:TUM,d:KARD_ASA,kub:["Aortokoroner by-pass","AV şantlarda post-op tromboz profilaksisi","Geçici iskemik ataklar","İnme profilaksisi","Kardiyovasküler cerrahi profilaksisi","Non-stabil anjina pektoris"],x:[AY]});
+add({n:"Heparin",g:"Antitrombotik",s:"ok",w:TUM,d:ANTITROMB_BASE,kub:["Akut miyokard enfarktüsü","Akut periferik arter oklüzyonu","Derin ven trombozu","Arteryel tromboembolik olayların profilaksisi","Ekstrakorporeal dolaşım","Unstabil anjina","Hemodiyaliz"],x:[AY]});
+const LMWH_X=["Dozu gösteren rapora dayanılarak başlanır. Başlangıçta 3 ay, devamda 1 yıl rapor.","GEBELERDE sadece Kadın Hastalıkları ve Doğum uzmanı çıkarabilir.",AY];
+add({n:"Enoksaparin",a:["Clexane","DMAH","LMWH"],g:"Antitrombotik · DMAH",s:"k",w:TUM+" (gebelerde sadece Kadın Doğum)",d:ANTITROMB_BASE,kub:["Akut koroner sendrom","Derin ven trombozu","Hemodiyalizde tromboembolizm profilaksisi","Kalp yetmezliği","Unstabil anjina","Perkütan koroner girişim"],x:LMWH_X});
+add({n:"Bemiparin",a:["Hibor","DMAH","LMWH"],g:"Antitrombotik · DMAH",s:"k",w:TUM+" (gebelerde sadece Kadın Doğum)",d:ANTITROMB_BASE,kub:["Cerrahi","Derin ven trombozu","Hemodiyaliz","Hemodiyalizde tromboembolizm profilaksisi","Venöz tromboemboli profilaksisi"],x:LMWH_X});
+add({n:"Varfarin",a:["Coumadin","Warfarin"],g:"Antitrombotik",s:"ok",w:TUM,d:ANTITROMB_BASE,x:[AY]});
+add({n:"Dipiridamol",g:"Antitrombotik",s:"ok",w:TUM,d:KARD_ASA,x:[AY]});
+add({n:"Tiklopidin",g:"Antitrombotik",s:"ok",w:TUM,d:[T.ODN,T.KY,T.HT,T.KRKH,T.KAH,T.DIS,T.DKH,"Akut romatizmal ateş",T.KMP,T.PSD],x:[AY]});
+add({n:"Klopidogrel",a:["Plavix","Karum"],g:"Antitrombotik",s:"k",w:"İlk 2 rapor (toplam 24 ay) sonrasında, en fazla 12 aylık devam raporlarını AH uzmanı düzenleyebilir",d:["Akut koroner sendrom (NSTEMI/USAP/STEMI)","Kalp kapak biyoprotezi","Anjiyografik belgelenmiş KAH","Tıkayıcı periferik arter hastalığı","Serebral iskemik olay (iskemik inme)"],x:[
+ "AKS ile yatırılan/müşahede edilen (EKG değişikliği veya troponin + NSTEMI, USAP, STEMI): Kardiyoloji, KVC, İç Hst. veya Acil Tıp raporsuz yazabilir; taburculuk sonrası 4 haftayı geçmeden raporsuz veya ≤12 ay süreli uzman raporu ile diğer hekimler de yazar.",
+ "Biyoprotez kapak, anjiyografik KAH, tıkayıcı PAH veya iskemik inme: Kardiyoloji, İç Hst., Nöroloji, KVC veya Acil Tıp ≤12 ay süreli rapor düzenler; tüm hekimler reçete eder.",
+ "İlk iki rapor süresi sonunda (toplam 24 ay), sonraki raporlar en fazla 12 ay süreyle AH uzmanınca da düzenlenebilir."]});
+
+/* --- ANTİHEMORAJİK --- */
+add({n:"Fitomenadion (Vitamin K1)",a:["Vitamin K","K vitamini","Konakion"],g:"Antihemorajik",s:"ok",w:TUM,d:["Doğuştan metabolik ve kalıtsal hastalıklar","Bağırsak operasyonuna bağlı malabsorpsiyon","MNGIE (Mitokondriyal nörogastrointestinal ensefalomiyopati)"],x:[AY]});
+add({n:"Traneksamik asit",a:["Transamin"],g:"Antihemorajik",s:"k",w:TUM,d:["Yalnızca hemofili"],x:[AY]});
+
+/* --- SİSTEMİK HORMON --- */
+add({n:"Desmopressin",a:["Minirin","DDAVP"],g:"Sistemik hormon",s:"ok",w:TUM,d:["Santral diabetes insipidus (sprey ve oral)","Primer enürezis nokturna (yalnız oral form)"],x:["Burun spreyi yalnız santral DI'da.",EK4F,KUB,AY]});
+many([["Kortikosteroidler","Prednizolon","Prednisolon","Metilprednizolon","Metilprednisolon","Deksametazon","Betametazon","Steroid"]],{g:"Sistemik hormon",s:"ok",w:TUM,d:[],x:[AY]});
+const TIR=[T.HIPF,"Hipotiroidizm"];
+add({n:"Levotiroksin sodyum",a:["Levotiroksin","Euthyrox","Tefor","LT4"],g:"Sistemik hormon · Tiroid",s:"ok",w:TUM,d:TIR,x:[AY]});
+add({n:"Liyotironin sodyum",a:["Liyotironin","T3"],g:"Sistemik hormon · Tiroid",s:"ok",w:TUM,d:TIR,x:[AY]});
+add({n:"Liyotironin+Levotiroksin",a:["Levotiroksin","Liyotironin"],g:"Sistemik hormon · Tiroid",s:"ok",w:TUM,d:TIR,x:[AY]});
+add({n:"Propiltiyourasil",a:["PTU"],g:"Sistemik hormon · Tiroid",s:"ok",w:TUM,d:[T.HIPF,"Hipertiroidizm"],kub:["Basedow-Graves hastalığı","Ameliyat öncesi ötiroid hale getirme","Tiroid krizi","Tirotoksikoz"],x:[AY]});
+add({n:"Metimazol / Tiamazol",a:["Metimazol","Tiyamazol","Thyromazol"],g:"Sistemik hormon · Tiroid",s:"ok",w:TUM,d:[T.HIPF,"Hipertiroidizm"],kub:["Otonom adenom","Radyoaktif iyot tedavisi sonrası","Ameliyat öncesi ötiroid hale getirme","Tiroid krizi","Tirotoksikoz"],x:[AY]});
+add({n:"İyot / Potasyum iyodür",a:["İyot","Potasyum iyodür","İyodür"],g:"Sistemik hormon · Tiroid",s:"ok",w:TUM,d:[],kub:["Guatrın yeniden büyümesinin önlenmesi","İyot eksikliğine bağlı guatrın önlenmesi"],x:[AY]});
+
+/* --- ANTİNEOPLASTİK / İMMÜN --- */
+const ONK=["Kanser tedavisinde raporda tedavi protokolü gösterilmeli.","Kanserde endikasyon dışı kullanım: yalnız Tıbbi Onkoloji veya Hematoloji."];
+add({n:"Anastrozol",a:["Arimidex"],g:"Antineoplastik",s:"ok",w:SK,d:["Kanser"],kub:["Erken evre meme kanseri","İleri evre meme kanseri","Postmenopozal kadında erken evre meme kanseri"],x:[KUB,AY].concat(ONK)});
+add({n:"Eksemestan",a:["Aromasin"],g:"Antineoplastik",s:"ok",w:SK,d:["Kanser"],kub:["Erken evre meme kanseri","İleri evre meme kanseri"],x:[KUB,AY].concat(ONK)});
+add({n:"Megestrol asetat",a:["Megestrol","Megace"],g:"Antineoplastik",s:"ok",w:TUM,d:["Kanser"],kub:["İleri evre meme kanseri","İnoperabl meme kanseri","Kansere bağlı anoreksi","Kansere bağlı kilo kaybı","Metastatik meme kanseri","Rekürren meme kanseri"],x:["Tedavi protokolünü gösteren rapora dayanılarak 3 aylık dozlarda verilebilir.",KUB]});
+add({n:"Bikalutamid",a:["Casodex"],g:"Antineoplastik",s:"ok",w:SK,d:["Kanser"],kub:["Prostat kanseri"],x:[KUB,AY].concat(ONK)});
+add({n:"Löprolid asetat",a:["Leuprolid","Lupron"],g:"Antineoplastik",s:"ok",w:"Kanser: tüm uzmanlar, sağlık kurulu raporu (protokol) · Hipogonadizm: tüm uzman hekimler",d:["Kanser","Hipogonadizm (E28.3–E28.9, E29.1–E29.9)"],kub:["Endometriozis","Meme kanseri","Uterus miyomu","Prostat kanseri","Santral puberte prekoks"],x:[AY]});
+add({n:"Letrozol",a:["Femara"],g:"Antineoplastik",s:"ok",w:SK,d:["Kanser"],kub:["Erken evre meme kanseri","İnvaziv meme kanseri","Meme kanseri","Metastatik meme kanseri"],x:["Endikasyon uyumu aranır (EK-4/D madde 2.2).",AY].concat(ONK)});
+add({n:"Goserelin",a:["Zoladex"],g:"Antineoplastik",s:"ok",w:"Kanser: tüm uzmanlar, sağlık kurulu raporu (protokol) · Puberte prekoks: tüm uzman hekimler",d:["Puberte prekoks (E30.1)","Kanser"],kub:["Prostat kanseri","Metastatik prostat kanseri"],x:[AY]});
+add({n:"Tamoksifen",g:"Antineoplastik",s:"ok",w:TUM,d:["Kanser"],x:[AY].concat(ONK)});
+const IMM=[EK4F,KUB,AY];
+add({n:"Mikofenolat mofetil",a:["Cellcept","MMF"],g:"İmmünsüpresif",s:"ok",w:TUM,d:[T.PEM,T.ODN,T.KDH],x:IMM});
+add({n:"Mikofenolik asit",a:["Myfortic"],g:"İmmünsüpresif",s:"ok",w:TUM,d:[T.PEM,T.ODN,T.KDH],x:IMM});
+add({n:"Takrolimus",a:["Prograf","Protopic"],g:"İmmünsüpresif",s:"ok",w:TUM,d:[T.ODN,"Merhem: Psöriazis, Vitiligo"],x:IMM});
+add({n:"Siklosporin",a:["Sandimmun","Neoral"],g:"İmmünsüpresif",s:"ok",w:TUM,d:[T.SSPE,"Kronik ve nükseden üveitler, tiroide bağlı ve sempatik oftalmopati",T.PSO,T.VIT,T.PEM,"Liken","Pyoderma gangrenosum",T.BEH,T.KAN,T.ODN,T.KBH,T.DIAH,T.KDH],x:IMM});
+add({n:"Everolimus",a:["Certican"],g:"İmmünsüpresif",s:"ok",w:TUM,d:["Solid organ ve kompozit doku nakilleri","Endikasyon dışı kullanım koşulları"],x:IMM});
+add({n:"Sirolimus",a:["Rapamune"],g:"İmmünsüpresif",s:"ok",w:TUM,d:[T.KAN,T.ODN],x:IMM});
+add({n:"Azatioprin",a:["Imuran"],g:"İmmünsüpresif",s:"ok",w:TUM,d:[T.MG,T.DEM,T.SSPE,T.PEM,T.BEH,T.KAN,T.ODN,T.DIAH,T.IBH,T.KDH,"Hepatit B, C, D"],x:IMM});
+add({n:"Metotreksat sodyum",a:["MTX","Metoject"],g:"İmmünsüpresif",s:"ok",w:TUM,d:[T.PSO,T.VIT,T.IBH,T.KDH],x:[EK4F,AY]});
+add({n:"Metotreksat",a:["MTX"],g:"Antineoplastik / İmmün",s:"ok",w:TUM,d:[T.MG,T.DEM,T.SSPE,T.PSO,T.VIT,T.BEH,T.KAN,T.IBH,T.KDH,T.KANH],x:[KUB,AY]});
+add({n:"Melfalan",g:"Antineoplastik",s:"ok",w:TUM,d:["Amiloidoz",T.KAN,T.KANH],x:[AY].concat(ONK)});
+add({n:"Busulfan",g:"Antineoplastik",s:"ok",w:TUM,d:[T.KAN,T.KANH],x:[AY].concat(ONK)});
+add({n:"Siklofosfamid",a:["Endoxan"],g:"Antineoplastik",s:"ok",w:TUM,d:["Kanser"],x:[KUB,AY].concat(ONK)});
+add({n:"Klorambusil",a:["Leukeran"],g:"Antineoplastik",s:"ok",w:TUM,d:[T.MG,T.DEM,T.BEH,T.KAN,T.IBH,T.KDH,T.KANH],x:[KUB,AY]});
+add({n:"Merkaptopürin",a:["6-MP","Purinethol"],g:"Antineoplastik",s:"ok",w:TUM,d:[T.KAN,T.KANH,T.KDH],x:[AY]});
+add({n:"Kapesitabin",a:["Xeloda"],g:"Antineoplastik",s:"ok",w:SK,d:["Kanser"],x:[AY].concat(ONK)});
+add({n:"5-Fluorourasil",a:["Fluorourasil","5-FU","Efudix"],g:"Antineoplastik",s:"ok",w:TUM,d:["Mikozis fungoides",T.KAN,T.KANH],kub:["Arsenik keratozu","Bowen hastalığı","Keratoakantoma","Senil keratoz","Skuamöz hücreli karsinom","Solar keratoz","Yüzeyel bazal hücreli karsinom","Yüzeyel premalign cilt lezyonları"],x:[KUB,AY]});
+add({n:"Vinorelbin",a:["Navelbine"],g:"Antineoplastik",s:"ok",w:SK,d:["Kanser"],x:["Oral form: kür protokolünde belirtilmesi ve tedaviye enjektabl form ile başlanması şartıyla.",AY].concat(ONK)});
+add({n:"Estramustin fosfat",a:["Estramustin"],g:"Antineoplastik",s:"ok",w:TUM,d:[T.KAN,T.KANH],x:[AY].concat(ONK)});
+add({n:"Hidroksiüre",a:["Hidroksikarbamid","Hydrea"],g:"Antineoplastik",s:"ok",w:TUM,d:[T.KAN,T.KANH],x:[AY].concat(ONK)});
+
+/* --- KAS-İSKELET --- */
+add({n:"Baklofen",a:["Lioresal"],g:"Kas-iskelet",s:"ok",w:TUM,d:["Spastisite",T.DEM,"Serebral palsi"],kub:["Amiyotrofik lateral skleroz","Siringomiyeli","Omurilik kompresyonu","Paraparezi","Spastik spinal paralizi","Transvers miyelit"],x:[AY]});
+add({n:"Tolperizon",a:["Mydocalm"],g:"Kas-iskelet",s:"ok",w:TUM,d:["Spastisite"],x:[KUB,AY]});
+add({n:"Kolşisin",a:["Colchicum"],g:"Kas-iskelet",s:"ok",w:TUM,d:[T.PSO,T.VIT,"Amiloidoz",T.BEH,T.KBH,"Ailevi Akdeniz ateşi (FMF)"],kub:["Akut gut","Akut veya rekürren perikardit","Gut hastalığı","Kronik gut"],x:[AY]});
+add({n:"Allopurinol",a:["Ürikoliz"],g:"Kas-iskelet",s:"ok",w:TUM,d:[],kub:["Akut gut artriti","Akut ürik asit litiyazisi","Akut ürik asit nefropatisi","Böbrek taşı","Deri tofüsü","Hiperürikozüri","İdiyopatik gut","Lesch-Nyhan sendromu","Myeloproliferatif hastalıklar","Nefrolitiyazis","Neoplastik hastalık","Oksalat böbrek taşları","Ürat/ürik asit birikimi"],x:[AY]});
+const BIF_X=["Osteoporozda AH uzmanı ÇIKARAMAZ: İç Hst., FTR, Ortopedi, Kadın Doğum, Endokrinoloji düzenler.","Juvenil osteoporozda tüm uzman hekimler (açıklama gerekmez).","Osteoporoz raporu için son 2 yıl içindeki KMY ölçümünün tarihi ve sonucu yazılır; KMY yılda 1'den sık yapılamaz."];
+many([["Zoledronik asit","Aclasta"],["Alendronik asit","Alendronat","Fosamax"],["Risedronat sodyum","Risedronik asit","Resendronik asit","Actonel"]],{g:"Kas-iskelet · Bifosfonat",s:"k",w:"Juvenil osteoporoz: tüm uzman hekimler · Osteoporoz: AH uzmanı çıkaramaz",d:["Juvenil osteoporoz"],x:BIF_X,a:["Bifosfonat"]});
+many([["İbandronik asit","Ibandronat","Bonviva"],["Pamidronat disodyum","Pamidronat"]],{g:"Kas-iskelet · Bifosfonat",s:"k",w:"Juvenil osteoporoz ve kanser: tüm uzman hekimler · Osteoporoz: AH uzmanı çıkaramaz",d:["Juvenil osteoporoz","Kanser"],x:BIF_X,a:["Bifosfonat"]});
+
+/* --- NÖROPSİKİYATRİK --- */
+const ANALJ=[T.KAN,T.KANH];
+add({n:"Petidin / Meperidin",a:["Petidin","Meperidin","Aldolan"],g:"Nöropsikiyatrik · Opioid",s:"ok",w:TUM,d:ANALJ,x:[AY],f:["KIRMIZI reçete"]});
+add({n:"Tramadol",a:["Contramal"],g:"Nöropsikiyatrik · Opioid",s:"ok",w:TUM,d:ANALJ,x:[AY],f:["YEŞİL reçete"]});
+add({n:"Fentanil",a:["Durogesic"],g:"Nöropsikiyatrik · Opioid",s:"ok",w:TUM,d:ANALJ,x:[EK4F,AY],f:["KIRMIZI reçete"]});
+add({n:"Morfin",g:"Nöropsikiyatrik · Opioid",s:"ok",w:TUM,d:ANALJ,x:[AY],f:["KIRMIZI reçete"]});
+add({n:"Oksikodon",a:["Oxycontin"],g:"Nöropsikiyatrik · Opioid",s:"ok",w:TUM,d:ANALJ,x:[AY],f:["KIRMIZI reçete"]});
+const EP=[T.EPI,T.DEM,T.SSPE];
+add({n:"Fenobarbital",a:["Luminal"],g:"Nöropsikiyatrik · Antiepileptik",s:"ok",w:TUM,d:EP,x:[KUB,AY],f:["YEŞİL reçete"]});
+add({n:"Fenitoin",a:["Epdantoin"],g:"Nöropsikiyatrik · Antiepileptik",s:"ok",w:TUM,d:["Myotoniler","Trigeminal nevralji"].concat(EP,["Epidermolizis bullosa"]),x:[AY]});
+add({n:"Klonazepam",a:["Rivotril"],g:"Nöropsikiyatrik · Antiepileptik",s:"ok",w:TUM,d:["Distoniler","Hemifasyal spazm"].concat(EP),kub:["Atonik nöbet","Basit parsiyel nöbet","Grand mal","İnfantil spazm / West sendromu","Lennox-Gastaut sendromu","Myoklonik nöbet","Tipik absans","Tonik-klonik nöbet","Sekonder jeneralize nöbet"],x:[AY],f:["YEŞİL reçete"]});
+add({n:"Karbamazepin",a:["Tegretol"],g:"Nöropsikiyatrik · Antiepileptik",s:"ok",w:TUM,d:["Myotoniler","Trigeminal nevralji","Nöropatik ağrı"].concat(EP,T.PSIK.slice(1)),x:[AY]});
+add({n:"Okskarbazepin",a:["Trileptal"],g:"Nöropsikiyatrik · Antiepileptik",s:"ok",w:TUM,d:["Myotoniler","Trigeminal nevralji"].concat(EP,T.PSIK.slice(1)),x:[KUB,AY]});
+add({n:"Valproik asit",a:["Valproat","Depakin","Konvulex"],g:"Nöropsikiyatrik · Antiepileptik",s:"k",w:"Epilepsi: tüm uzman hekimler · Bipolar bozukluk: sadece Psikiyatri ve Nöroloji",d:["Epilepsi"],x:["Bipolar bozukluk endikasyonunda AH uzmanı çıkaramaz.",KUB,AY]});
+add({n:"Sodyum valproat",a:["Valproat","Depakin"],g:"Nöropsikiyatrik · Antiepileptik",s:"k",w:"Epilepsi vb.: tüm uzman hekimler · Bipolar bozukluk: sadece Psikiyatri ve Nöroloji",d:EP,x:["Bipolar bozukluk endikasyonunda AH uzmanı çıkaramaz.",KUB,AY]});
+add({n:"Biperiden",a:["Akineton"],g:"Nöropsikiyatrik",s:"ok",w:TUM,d:["Parkinson hastalığı","Distoniler","Hemifasyal spazm"].concat(T.PSIK),x:[AY],f:["YEŞİL reçete"]});
+add({n:"Levodopa+Benserazid",a:["Levodopa","Madopar"],g:"Nöropsikiyatrik · Antiparkinson",s:"ok",w:TUM,d:["Parkinson hastalığı"],x:[AY]});
+add({n:"Levodopa+Karbidopa",a:["Levodopa","Sinemet"],g:"Nöropsikiyatrik · Antiparkinson",s:"ok",w:TUM,d:["Parkinson hastalığı"],x:[AY]});
+add({n:"Amantadin",a:["PK-Merz"],g:"Nöropsikiyatrik · Antiparkinson",s:"k",w:"Parkinson ve ilaca bağlı EPS: sadece Nöroloji veya Geriatri · İnfluenza A profilaksisi: tüm uzman hekimler",d:["İnfluenza A salgınında profilaksi (koşullu)"],x:["İnfluenza A salgınında profilaksi: 7 yaş altı, 65 yaş üstü veya risk grupları (HIV+, malignite, DM dahil kronik metabolik hastalık, kronik renal disfonksiyon, hemoglobinopati, immün yetmezlik/immünsüpresif tedavi, 6 ay–18 yaş uzun süreli ASA kullanan) ve grip aşısının yapılamadığı durumlar.",EK4F,AY]});
+add({n:"Bornaprin",g:"Nöropsikiyatrik · Antiparkinson",s:"k",w:"Parkinson: sadece Nöroloji veya Geriatri · Diğer endikasyonlar: tüm uzman hekimler",d:[],x:[AY]});
+add({n:"Piribedil",a:["Trivastal"],g:"Nöropsikiyatrik",s:"ok",w:TUM,d:["Parkinson hastalığı",T.KY,T.KMP,T.PHT,T.PSD],x:[AY]});
+many(["Zuklopentiksol","Flupentiksol",["Sülpirid","Sulpirid","Dogmatil"],"Pimozid","Trifluoperazin","Flufenazin"],{g:"Nöropsikiyatrik · Antipsikotik",s:"ok",w:TUM,d:T.PSIK,x:[AY],a:["Antipsikotik"]});
+add({n:"Lityum",a:["Lithurit"],g:"Nöropsikiyatrik",s:"ok",w:TUM,d:T.PSIK,kub:["Akut mani","Ciddi kronik nötropeni","Kemoterapiye bağlı nötropeni","Manik depresif hastalık","Rekürren depresyon","Unipolar depresyon"],x:[AY]});
+add({n:"Haloperidol",a:["Norodol"],g:"Nöropsikiyatrik · Antipsikotik",s:"ok",w:TUM,d:T.PSIK,kub:["Çocukluk şizofrenisi","Davranış bozukluğu","Eksitasyon","Gilles de la Tourette","Hiperaktivite","Hipomani","İnatçı hıçkırık","Mani","Mental retardasyon","Organik beyin hasarı","Paranoid psikoz","Psikomotor ajitasyon","Saldırganlık"],x:[AY]});
+add({n:"Klorpromazin",a:["Largactil"],g:"Nöropsikiyatrik · Antipsikotik",s:"ok",w:TUM,d:["Demans"].concat(T.PSIK),x:[KUB,AY]});
+many([["Alprazolam","Xanax"],["Diazepam","Diazem"]],{g:"Nöropsikiyatrik · Benzodiazepin",s:"ok",w:TUM,d:[T.EPI],x:[AY],f:["YEŞİL reçete"],a:["Benzodiazepin"]});
+add({n:"Lorazepam",a:["Ativan","Benzodiazepin"],g:"Nöropsikiyatrik · Benzodiazepin",s:"ok",w:TUM,d:[T.EPI],kub:["Anksiyete","Cerrahi premedikasyon","Kemoterapiye bağlı akut bulantı-kusma"],x:[AY],f:["YEŞİL reçete"]});
+add({n:"Buspiron",a:["Buspon"],g:"Nöropsikiyatrik",s:"ok",w:TUM,d:[],kub:["Jeneralize anksiyete"],x:[AY]});
+add({n:"Zopiklon",a:["Imovane"],g:"Nöropsikiyatrik",s:"ok",w:TUM,d:[],kub:["Uykusuzluk"],x:[AY],f:["YEŞİL reçete"]});
+add({n:"Trazodon",a:["Desyrel"],g:"Nöropsikiyatrik",s:"ok",w:TUM,d:T.PSIK,kub:["Anksiyete","Depresif bozukluklar"],x:[AY]});
+add({n:"Pirasetam",a:["Nootropil"],g:"Nöropsikiyatrik",s:"ok",w:TUM,d:[T.PSD],kub:["Dikkat eksikliği","Disleksi","Hafıza kaybı","Kortikal kaynaklı miyoklonus","Psiko-organik sendromlar","Vertigo"],x:[AY]});
+add({n:"Betahistin",a:["Betaserc","Vasoserc"],g:"Nöropsikiyatrik",s:"ok",w:TUM,d:[],kub:["Tinnitus","Meniere sendromu","Vertigo","Vestibüler vertigo"],x:[AY]});
+add({n:"Neostigmin",g:"Nöropsikiyatrik",s:"ok",w:TUM,d:[T.MG],x:[AY]});
+add({n:"Piridostigmin",a:["Mestinon"],g:"Nöropsikiyatrik",s:"ok",w:TUM,d:[T.MG],x:[AY]});
+add({n:"Sinnarizin",a:["Sinnarazin","Stugeron"],g:"Nöropsikiyatrik",s:"ok",w:TUM,d:[T.KY,T.PHT,T.PSD,T.KMP],x:[AY]});
+add({n:"Flunarizin",a:["Sibelium"],g:"Nöropsikiyatrik",s:"ok",w:TUM,d:[],kub:["Auralı migren profilaksisi","Aurasız migren profilaksisi","Migrenöz vertigo"],x:[AY]});
+
+/* --- SOLUNUM --- */
+const INH=["İnhaler formların raporu çıkarılabilir; NEBÜL formları AH uzmanı çıkaramaz.",AY];
+add({n:"Salbutamol",a:["Ventolin"],g:"Solunum",s:"ok",w:TUM,d:SOL.concat([T.BRON]),x:INH,f:["Nebül hariç"]});
+add({n:"Salbutamol+İpratropium",a:["İpratropium","Combivent"],g:"Solunum",s:"ok",w:TUM,d:SOL,x:INH,f:["Nebül hariç"]});
+add({n:"Levosalbutamol+İpratropium",a:["Levosalbutamol","İpratropium"],g:"Solunum",s:"ok",w:TUM,d:SOL,x:INH,f:["Nebül hariç"]});
+add({n:"Budesonid",a:["Pulmicort","İKS"],g:"Solunum",s:"ok",w:TUM,d:SOL,x:INH,f:["Nebül hariç"]});
+add({n:"Siklesonid",a:["Alvesco","İKS"],g:"Solunum",s:"ok",w:TUM,d:SOL,x:INH,f:["Nebül hariç"]});
+add({n:"Flutikazon",a:["Flixotide","İKS"],g:"Solunum",s:"ok",w:TUM,d:SOL,x:INH,f:["Nebül hariç"]});
+many(["Terbutalin","Teofilin","Diprofilin","Aminofilin"],{g:"Solunum",s:"ok",w:TUM,d:SOL.concat([T.BRON]),x:[AY]});
+
+/* --- DİĞER --- */
+add({n:"Asetazolamid",a:["Diamox"],g:"Diğer",s:"k",w:"Glokom: sadece Göz Hastalıkları · Diğer: tüm uzman hekimler",d:[T.EPI,"Hepatit B, C enfeksiyonu",T.KBH,T.KY,T.HT,T.KMP,"Kronik karaciğer hastalıkları",T.AHF],x:["Glokom endikasyonunda AH uzmanı çıkaramaz.",AY]});
+add({n:"Polistiren sülfonat kalsiyum",a:["Kalsiyum polistiren sülfonat","Sorbisterit","Kalimate"],g:"Diğer",s:"ok",w:TUM,d:[T.KBH],kub:["Potasyum intoksikasyonu","Renal yetmezlik","Diyaliz hastaları","Serum potasyum yüksekliği"],x:[AY]});
+add({n:"Folinik asit / Kalsiyum folinat",a:["Folinik asit","Kalsiyum folinat","Lökovorin"],g:"Diğer",s:"ok",w:TUM,d:[T.KAN,T.KANH,"Folik asit eksikliği"],x:[AY]});
+add({n:"Mesna",a:["Uromitexan"],g:"Diğer",s:"ok",w:TUM,d:[T.KAN,T.KANH],kub:["Hemorajik sistit","Makrohematüri","Mikrohematüri","Ürotelyal toksisite"],x:[AY]});
+add({n:"Gonadorelin asetat",a:["Gonadorelin"],g:"Diğer",s:"ok",w:TUM,d:["Hipogonadizm","Puberte prekoks"],x:[EK4F,AY]});
+add({n:"Hidroksiklorokin sülfat",a:["Hidroksiklorokin","Plaquenil"],g:"Diğer",s:"ok",w:TUM,d:[],kub:["Diskoid lupus eritematozus","Güneş ışığına bağlı dermatolojik hastalıklar","Juvenil idiyopatik artrit","Romatoid artrit","Sistemik lupus eritematozus"],x:[AY]});
+
+/* --- TIBBİ MALZEME (SUT 3.3) --- kaynak: SUT güncel metni ve değişiklik tebliğleri; Medula'da henüz doğrulanmadı */
+const TM_KAYNAK="Kaynak: SUT (Sağlık Uygulama Tebliği) 3.3 tıbbi malzeme hükümleri. Medula tıbbi malzeme ekranında ayrıca doğrulayın.";
+add({n:"Şeker ölçüm çubuğu (strip)",a:["Strip","Glukometre çubuğu","Kan şekeri ölçüm çubuğu","Şeker çubuğu","Tıbbi malzeme"],g:"Tıbbi malzeme · Diyabet (SUT 3.3.2)",s:"ok",
+ w:"Aile hekimliği uzmanı, endokrinoloji, iç hastalıkları veya çocuk sağlığı uzmanı — uzman hekim raporu",
+ d:["07.02.1.1 Tip 1 DM strip (E10)","07.02.1.2 İnsülin kullanan Tip 2 DM strip (E11)","07.02.1.4 Sadece oral antidiyabetik kullanan DM strip (E11–E14)","07.02.2.1 Hipoglisemi strip (E16.0, E16.8–E16.9)","Gestasyonel diyabet"],
+ x:["Tip 1 DM çocuk (<18), gebe, transplant: raporda tedavi protokolünde belirtilen adet.","Tip 1 DM erişkin ve insülin kullanan Tip 2 DM: ayda en fazla 150 adet.","Hiperinsülinemik hipoglisemi (medikal tedaviyle kontrollü): çocuk ayda 150, erişkin ayda 50 adet.","Sadece oral antidiyabetik kullanan DM: 3 ayda en fazla 100 adet.","İnsülin kullanan Tip 2 raporunda hastanın insülin kullanımı sistemde görünmeli (eczane kontrol ediyor).","Strip rapora istinaden 3 aylık dozda verilebilir. Yatan hastada strip ödenmez.",TM_KAYNAK],
+ f:["SUT 3.3.2 · RG 12.12.2024"]});
+add({n:"Kan şekeri ölçüm cihazı (glukometre)",a:["Glukometre","Şeker ölçüm cihazı","Glikometre","Tıbbi malzeme"],g:"Tıbbi malzeme · Diyabet (SUT 3.3.2)",s:"ok",
+ w:"Strip raporunu yazabilen uzmanlar (AH uzmanı dahil)",d:["Strip raporundaki diyabet/hipoglisemi tanıları"],
+ x:["Cihaz bedeli Kurumca karşılanır; yenileme süresi 2 yıl. Bu süreden önce alınan cihaz ödenmez.",TM_KAYNAK],f:["SUT 3.3.2"]});
+add({n:"Hasta alt bezi / külotlu hasta alt bezi",a:["Hasta bezi","Bez","Alt bezi","Külotlu bez","İnkontinans","A10049","A10118","Çocuk hasta alt bezi","Tıbbi malzeme"],g:"Tıbbi malzeme · İnkontinans (SUT 3.3.34)",s:"k",
+ w:"Uzman hekim raporu — branş şartı yok, AMA rapor yalnız 2. veya 3. basamak resmi sağlık kurumunda düzenlenir (ASM'deki AH uzmanı ✕, hastanedeki AH uzmanı ✓)",
+ d:["İdrar ve/veya gaita inkontinansına neden olan PRİMER TANI (raporda yazılmalı)","Kolostomi/ileostomili hastada idrar inkontinansı","Ürostomili hastada gaita inkontinansı"],
+ x:["Rapor en fazla 2 yıl süreli; çocuklarda en az 2 yaşını tamamlamış olmak gerekir.","Günde en fazla 4 adet; raporda günlük kullanım adedi yazılır.","SUT kodu: 18 yaş üstü A10049 (hasta alt bezi/külotlu), çocuk A10118.","Ödeme aylık nakdi olarak doğrudan hak sahibine yapılır.","Vakıf üniversitesiyle işbirliği protokolü olan özel hastanelerin raporları da geçerli.",TM_KAYNAK],
+ f:["Yalnız 2./3. basamak"]});
+add({n:"Ostomi malzemeleri (kolostomi / ileostomi / ürostomi)",a:["Kolostomi torbası","İleostomi torbası","Ürostomi torbası","Ostomi","Stoma","Adaptör","Ostomi pastası","A10136","A10139","A10140","Tıbbi malzeme"],g:"Tıbbi malzeme · Ostomi (SUT 3.3)",s:"ok",
+ w:"Uzman hekim raporu — SUT'ta branş kısıtı belirtilmemiş",
+ d:["Stomaya neden olan teşhis + yapılan ameliyatın adı (raporda yazılmalı)"],
+ x:["Raporda: teşhis, ameliyat adı, malzeme adı, kullanım süresi ve günlük kullanım miktarı.","İkinci stoma varsa raporda açıkça belirtilir.","En fazla 2 aylık miktarlar halinde reçete edilir (pratikte 2 ayda en fazla 60 torba, 20 adaptör).","Süre belirtilmezse rapor 2 yıl geçerli.","Branş kısıtı olmadığı SUT metninden çıkarıldı; Medula'da henüz doğrulanmadı.",TM_KAYNAK],
+ f:["Medula'da doğrulanmadı"]});
+add({n:"İnsülin kalem iğne ucu",a:["İğne ucu","Kalem iğnesi","Pen iğnesi","İnsülin iğnesi","Tıbbi malzeme"],g:"Tıbbi malzeme · Diyabet",s:"ok",
+ w:"Rapor gerekmez — reçete ile",d:[],
+ x:["İnsülin kartuşlarıyla birlikte ya da tek başına reçete edildiğinde, hastanın günlük insülin kullanımına göre ödenir (TEB–SGK protokolü 3.9).","Raporda/sistemde görünen günlük enjeksiyon sayısıyla uyumlu yazın; fazlası kesilir.","Yatan hastada ödenmez."],f:["Raporsuz"]});
+add({n:"Hidrofilik kendinden kayganlaştırıcılı sonda",a:["Sonda","Hidrofilik sonda","Temiz aralıklı kateterizasyon","TAK","Kateter","A10010","Tıbbi malzeme"],g:"Tıbbi malzeme · Üriner",s:"no",
+ w:"Sağlık kurulu raporu: rekürren üretra darlığında üroloji/nefroloji/çocuk nefroloji/çocuk cerrahisi; nörojenik mesanede ayrıca nöroloji/çocuk nöroloji/FTR uzmanının yer aldığı kurul",
+ d:["Rekürren üretra darlığı (primer tanı)","Nörojenik mesane (primer tanı)"],
+ x:["AH uzmanı tek başına rapor düzenleyemez; kurul raporuna dayanarak tüm hekimler reçete edebilir.","İdrar + gaita inkontinansı nedeniyle hasta alt bezi alan hastada, SUT'a uygun raporla sonda bedeli de karşılanır.","Sağlık kurumunca temin edilirse rapor aranmaz.",TM_KAYNAK]});
+add({n:"Yara bakım ürünleri",a:["Yara örtüsü","Antimikrobiyal örtü","Bası yarası","Yara bakımı","Tıbbi malzeme"],g:"Tıbbi malzeme · Yara (SUT 3.3.1)",s:"no",
+ w:"Sağlık kurulu raporu (genel cerrahi, ortopedi, plastik cerrahi veya dermatoloji; yatarak tedavide geriatri de olabilir)",d:[],
+ x:["Ayaktan reçete: genel cerrahi, ortopedi, plastik cerrahi veya dermatoloji uzmanı.","Tek reçetede en fazla 15 günlük miktar; yeniden reçetede yara ebatları yazılır.","Epidermolizis bullosa: dermatoloji/plastik/genel cerrahi.",TM_KAYNAK]});
+add({n:"Ortez / protez (OP kodlu malzemeler)",a:["Ortez","Protez","Korse","Atel","Tekerlekli sandalye","Yürüteç","Tıbbi malzeme"],g:"Tıbbi malzeme · Ortez/Protez",s:"no",
+ w:"FTR, ortopedi; bazı kalemlerde nöroloji, nöroşirürji, geriatri veya plastik cerrahi",d:[],
+ x:["AH uzmanı ortez/protez raporu düzenleyemez.",TM_KAYNAK]});
+
+/* --- SAĞLIK KURULU: branş şartı olmayan → 3 AH uzmanından oluşan kurul düzenleyebilir (SUT 4.2.8.A, 04.04.2025 değişikliği) --- */
+const SKR_NOT="Sağlık kurulu raporu SUT'ta branş şartı içermiyor: 3 aile hekimliği uzmanından oluşan kurul (sağlık kurulu kurabilen tesiste, örn. üniversite hastanesi AH AD) düzenleyebilir.";
+const ENT_KAYNAK="Kaynak: SUT 4.2.8.A (04.04.2025 değişikliği dahil). Medula'da ayrıca doğrulayın.";
+add({n:"Enteral beslenme ürünleri — yetişkin, malnütrisyon",a:["Enteral beslenme","Mama","Beslenme solüsyonu","Oral nütrisyon","ONS","Ensure","Sağlık kurulu","3 uzman","Malnütrisyon"],g:"Sağlık kurulu · Beslenme (SUT 4.2.8.A-2a)",s:"ok",
+ w:"Sağlık kurulu raporu (3 uzman hekim) — branş şartı YOK → 3 AH uzmanı ✓ · Reçeteyi tüm hekimler yazar",
+ d:["Malnütrisyon + eşlik eden hastalığın ICD-10 kodu"],
+ x:["Malnütrisyon tanımı (ÜÇÜ BİRLİKTE raporda yazılır): 1) Son 6 ayda >%5 veya 6 aydan uzun sürede >%10 istemsiz kilo kaybı ya da DSÖ referanslı VKİ <22 (≥70 yaş) / <20 (<70 yaş); 2) Malnütrisyona yol açan eşlik eden hastalık/travma; 3) Besin alımında azalma (1 hafta <%50 enerji, 2 hafta herhangi azalma veya sindirim/emilimi bozan GİS hastalığı).","Diyet tedavisi veya obezite cerrahisi sonrası kilo kaybı malnütrisyon sayılmaz.","Rapor süresi 3 ay; günlük en fazla 1200 kcal.","Raporda: ürün (ticari) adı, günlük kalori ihtiyacı ve günlük miktar, vücut ağırlığı, boy, eşlik eden hastalığın ICD-10 kodu. Reçete en fazla 30 günlük doz.",SKR_NOT,ENT_KAYNAK],
+ f:["3 AH uzmanı kurulu ✓","3 ay · ≤1200 kcal"]});
+add({n:"Enteral beslenme ürünleri — malnütrisyon aranmayanlar (kanser, tüple beslenen)",a:["Enteral beslenme","Mama","PEG","Gastrostomi","Nazogastrik sonda","Jejunostomi","Kanser beslenme","Sağlık kurulu","3 uzman"],g:"Sağlık kurulu · Beslenme (SUT 4.2.8.A-2b)",s:"ok",
+ w:"Uzman hekimlerce düzenlenen 6 ay süreli sağlık kurulu raporu — branş şartı YOK → 3 AH uzmanı ✓ · Reçeteyi tüm hekimler yazar",
+ d:["Kanser (ICD-10)","Tüple beslenme: nazogastrik/nazoenterik sonda, gastrostomi (PEG), jejunostomi, gastrojejunostomi"],
+ x:["Bu gruplarda malnütrisyon koşulları aranmaz; durum raporda belirtilmeli.","Yatan hastada rapor gerekmez.","Raporda: ürün adı, günlük kalori ihtiyacı ve miktar, ağırlık, boy, ICD-10. En fazla 30 günlük doz.",SKR_NOT,ENT_KAYNAK],
+ f:["3 AH uzmanı kurulu ✓","6 ay"]});
+add({n:"Kıvam artırıcı / yoğunlaştırıcı (yutma güçlüğü)",a:["Kıvam artırıcı","Yoğunlaştırıcı","Disfaji","Yutma güçlüğü","Thicken","Sağlık kurulu"],g:"Sağlık kurulu · Beslenme (SUT 4.2.8.A-3)",s:"no",
+ w:"Sağlık kurulunda nöroloji, KBB, genel cerrahi, beyin cerrahi, anestezi/yoğun bakım, geriatri, tıbbi onkoloji veya radyasyon onkolojisi uzmanlarından en az biri olmalı",
+ d:["İnme, kronik nörolojik bozukluk, baş-boyun kanseri veya cerrahi rezeksiyona bağlı yutma güçlüğü"],
+ x:["Kurulda yalnız AH uzmanları varsa düzenlenemez; listedeki branşlardan biri gerekir.","Tüm uzman hekimler reçete eder; ayda en fazla 2 kutu.",ENT_KAYNAK]});
+add({n:"Dallı zincirli aminoasitten zengin ürün (karaciğer yetmezliği)",a:["Hepatik formül","Karaciğer ensefalopatisi","BCAA","Enteral beslenme"],g:"Beslenme (SUT 4.2.8.A-4)",s:"no",
+ w:"Gastroenteroloji veya iç hastalıkları uzman hekim raporu",d:["Karaciğer yetmezliği + evre ≥2 hepatik ensefalopati"],x:["Malnütrisyon kriteri aranmaz.",ENT_KAYNAK]});
+add({n:"Enteral beslenme ürünleri — çocuk",a:["Çocuk maması","Pediatrik beslenme","Mama","Enteral beslenme"],g:"Beslenme (SUT 4.2.8.A-1)",s:"no",
+ w:"İlk rapor: çocuk sağlığı ve hastalıkları veya çocuk cerrahisi (≤6 ay) · Devam: çocuk gastro/nöroloji/metabolizma/cerrahi/endokrinoloji",
+ d:["Malnütrisyon: <5 yaş yaşa göre ağırlık < −2 SD; ≥5 yaş VKİ < −2 SD (DSÖ referansı)"],
+ x:["Malnütrisyon aranmayanlar: doğuştan metabolik hastalık, kanser, kistik fibroz, Crohn, yanık, tüple beslenen (yatmıyorsa 6 aylık sağlık kurulu).","AH uzmanı çocuk enteral beslenme raporu düzenleyemez.",ENT_KAYNAK]});
+
+
+/* Tıbbi malzeme: piyasadaki ticari ad ÖRNEKLERİ (resmi SGK marka listesi yok; ödeme SUT koduyla, markadan bağımsız) */
+const MK={
+ "İnsülin kalem iğne ucu":["BD Micro-Fine / Ultra-Fine (embecta)","mylife Clickfine","NovoFine","NovoTwist","Smart Fine","Solofine"],
+ "Şeker ölçüm çubuğu (strip)":["Accu-Chek Active","Accu-Chek Instant","Accu-Chek Performa Nano","Contour Plus","Contour Plus Elite","Contour TS","Ebsensor","Fora G20","Gluco Dr Super Sensor","Ime-dc","Lifechek","On Call Plus","Optima","Vivachek"],
+ "Kan şekeri ölçüm cihazı (glukometre)":["Accu-Chek Active","Accu-Chek Instant","Contour Plus","Contour Plus Elite","Contour Plus One","Fora G20","Gluco Dr Super Sensor","Lifechek","On Call Plus","Optima","Vivachek Eco"]};
+D.forEach(e=>{if(MK[e.n]){e.mk=MK[e.n];e.a=e.a.concat(e.mk,e.mk.map(x=>x.replace(/[\s-]/g,"")))}});
+/* ===== ARAMA ===== */
+const norm=s=>s.toLocaleLowerCase("tr").replace(/\u0307/g,"").replace(/ı/g,"i").replace(/ş/g,"s").replace(/ç/g,"c").replace(/ğ/g,"g").replace(/ö/g,"o").replace(/ü/g,"u").replace(/â/g,"a").replace(/î/g,"i").replace(/û/g,"u").replace(/[^a-z0-9+ ]/g," ").replace(/\s+/g," ").trim();
+D.forEach((e,i)=>{e.i=i;e.d=e.d||[];e.kub=e.kub||[];e.x=e.x||[];e.f=e.f||[];e.a=e.a||[];
+  e._n=norm(e.n);e._a=e.a.map(norm);e._g=norm(e.g);
+  e._dx=norm(e.d.concat(e.kub).join(" | "));});
+
+const q=document.getElementById("q"),out=document.getElementById("out"),cnt=document.getElementById("cnt"),modeEl=document.getElementById("mode"),chips=document.getElementById("chips");
+let scope="ad"; // "ad" = ad+grup, "tani" = tanıda da ara
+let cur=[],act=0,pinned=null;
+
+const SC=[["ad","Etken madde"],["tani","+ Tanıda ara"]];
+SC.forEach(([k,l])=>{const b=document.createElement("button");b.className="chip"+(k===scope?" on":"");b.textContent=l;b.onclick=()=>{scope=k;[...chips.children].forEach(c=>c.classList.toggle("on",c===b));modeEl.textContent=k==="ad"?"ad + grup":"ad + grup + tanı";pinned=null;run();q.focus()};chips.appendChild(b)});
+
+function score(e,t){
+  if(!t) return 0;
+  const words=t.split(" ");
+  let s=0;
+  for(const w of words){
+    let ws=0;
+    if(e._n.startsWith(w)) ws=100;
+    else if(e._n.split(/[ +\/]/).some(p=>p.startsWith(w))) ws=80;
+    else if(w.length>=3&&e._n.includes(w)) ws=60;
+    else if(e._a.some(a=>a.split(/[ +\/]/).some(p=>p.startsWith(w)))) ws=55;
+    else if(w.length>=4&&e._a.some(a=>a.includes(w))) ws=40;
+    else if(w.length>=3&&e._g.split(/[ +\/]/).some(p=>p.startsWith(w))) ws=30;
+    else if(scope==="tani"&&w.length>=3&&e._dx.split(/[ +\/|(),]/).some(p=>p.startsWith(w))) ws=15;
+    if(!ws) return 0;
+    s+=ws;
+  }
+  return s;
+}
+
+function esc(s){return s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
+function hl(text,t){
+  if(!t) return esc(text);
+  const n=norm(text); // same length mapping assumption is unsafe -> do char-wise
+  const words=t.split(" ").filter(Boolean);
+  const map=[];let nn="";
+  for(let i=0;i<text.length;i++){const c=norm(text[i])||" ";nn+=c[0];map.push(i)}
+  const marks=new Array(text.length).fill(false);
+  for(const w of words){let p=0;while((p=nn.indexOf(w,p))>-1){for(let k=p;k<p+w.length;k++)marks[k]=true;p+=w.length}}
+  let r="",on=false;
+  for(let i=0;i<text.length;i++){if(marks[i]&&!on){r+="<mark>";on=true}if(!marks[i]&&on){r+="</mark>";on=false}r+=esc(text[i])}
+  return r+(on?"</mark>":"");
+}
+
+const ST={ok:["b-ok","✓ AH uzmanı rapor çıkarabilir","d-ok"],k:["b-k","◐ Koşullu / kısıtlı","d-k"],no:["b-no","✕ AH uzmanı çıkaramaz","d-no"]};
+
+/* Medula (medeczane.sgk.gov.tr › İlaç Bilgisi) kontrolü */
+let MED=null;
+const MED_NOT={
+ "Misoprostol":"Medula'da rapor yalnız Kadın Hastalıkları ve Doğum uzmanına tanımlı — kaynak PDF'ten farklı; AH uzmanı rapor çıkaramaz.",
+ "Salbutamol":"İNHALER (Ventolin): tüm uzman hekimler → AH ✓ · NEBÜL (Astosal): yalnız göğüs/immünoloji/çocuk branşları → AH ✕",
+ "Salbutamol+İpratropium":"Sorgulanan ürün NEBÜL formu → AH uzmanı çıkaramaz (kaynak PDF ile uyumlu).",
+ "Flutikazon":"İNHALER/DİSKUS (Flixotide): tüm uzman hekimler → AH ✓ · NEBÜL (Flixair): AH ✕",
+};
+function medBlock(e){
+  if(!MED) return "";
+  const L=MED.R[e.n]; if(!L) return "";
+  const C=MED.C;
+  const parts=L.map(it=>{
+    if(it.yok) return `<div class="mdu"><b>${esc(it.u)}</b><div class="gp">Medula'da bu ürün için SUT/rapor bilgisi görüntülenemedi.</div></div>`;
+    const rows=it.b.length?[...it.b].sort((x,y)=>y[2]-x[2]).map(b=>{
+      const [kod,br,ah,yas,sk,uy,sure]=b;
+      const tags=kod.map(k=>`<span class="tag mk"><b>${esc(k)}</b> ${esc(C[k]||"")}</span>`).join("");
+      const who=ah?`<span class="ah ok">✓ AH uzmanı${br==="Tüm uzman hekimler"?" (tüm uzmanlar)":""}</span>`:`<span class="ah no">✕ Yalnız: ${esc(br)}</span>`;
+      const ex=[sk?"Sağlık kurulu raporu":"",yas&&yas!=="0-999"?`Yaş ${esc(yas)}`:"",uy==="304"?"Yalnız beksaroten tedavisinde (304)":"",sure?`Maks. rapor ${esc(sure)}`:""].filter(Boolean).map(x=>`<span class="mx">${x}</span>`).join("");
+      return `<div class="mr ${ah?"":"mr-no"}">${who}${ex}<div class="tags" style="margin-top:4px">${tags||'<span class="gp">tanı kodu yok</span>'}</div></div>`}).join("")
+      :`<div class="gp">Bu ürün için Medula'da rapor satırı yok.</div>`;
+    return `<div class="mdu"><div class="mh"><b>${esc(it.u)}</b><span class="mo">${esc(it.o)}</span></div>${rows}</div>`;
+  }).join("");
+  const nt=MED_NOT[e.n]?`<div class="mwarn">⚠ ${esc(MED_NOT[e.n])}</div>`:"";
+  return `<div class="sec med"><h3>Medula'da ne yazıyor? · ${esc(MED.t)} ✓</h3>${nt}${parts}<div class="gp" style="font-size:11.5px;margin-top:6px">Kaynak: Medula Eczane › İlaç Bilgisi (temsilci ürün). Aynı etken maddenin farklı ürün/dozlarında kurallar değişebilir.</div></div>`;
+}
+function critBlock(e){
+  if(!/Statin/.test(e.g)) return "";
+  const R=[
+    ["a","> 190","Tek başına yeterli","Ek şart yok","2 ölçüm"],
+    ["b","> 160","+ 2 ek risk faktörü","Risk faktörlerinden en az 2'si","2 ölçüm"],
+    ["c","> 130","+ 3 ek risk faktörü","Risk faktörlerinin 3'ü de","2 ölçüm"],
+    ["ç","> 70","+ aşağıdaki hastalıklardan biri","DM · AKS · geçirilmiş Mİ · geçirilmiş inme · KAH · PAH · abdominal aort anevrizması · karotid arter hastalığı","1 ölçüm"]];
+  return `<div class="sec"><h3>Başlama kriterleri · LDL (mg/dL) · SUT 4.2.28.A-1</h3>
+  <div class="crit">${R.map(r=>`<div class="cr"><span class="cb">${r[0]}</span><span class="cl">LDL<b>${r[1]}</b></span><span class="cc"><b>${r[2]}</b><small>${r[3]}</small></span><span class="ct ${r[4]==="1 ölçüm"?"t1":"t2"}">${r[4]}</span></div>`).join("")}</div>
+  <div class="rf"><span class="rfh">Ek risk faktörleri (b, c için)</span><span class="tag">Hipertansiyon</span><span class="tag">Ailede erken KVH öyküsü</span><span class="tag">≥ 65 yaş</span></div>
+  <div class="ck">
+    <div><span class="ct t2">2 ölçüm</span> Son 6 ay içinde, <b>en az 1 hafta arayla</b> 2 yüksek LDL → iki sonuç + <b>tarihleri</b> açıklamaya</div>
+    <div><span class="ct t1">1 ölçüm</span> Son 6 ay içinde 1 yüksek LDL + tarihi + <b>hangi hastalık</b> olduğu açıklamaya</div>
+    <div>🔁 Yenilemede yeni tetkik istenmez · ≥ 6 ay ara verdiyse kriterler baştan aranır</div>
+    <div>🏷 Tanı: <b>E78.x</b> Hiperkolesterolemi/Hiperlipidemi veya <b>I20 / I21 / I25</b> KAH</div>
+  </div>
+  <div class="ex"><span class="rfh">Örnek açıklama</span>“LDL: 172 mg/dL (05.11.2026), 168 mg/dL (14.11.2026). Ek risk faktörleri: hipertansiyon, 67 yaş.”</div>
+  </div>`;
+}
+function tpBlock(e,t){
+  if(/^Tıbbi malzeme/.test(e.g)){
+    if(!e.mk) return "";
+    return `<div class="sec"><h3>Piyasadaki ticari adlar (örnek) · A→Z</h3><div class="mgs">${e.mk.map(x=>`<span class="mg">${hl(x,t||"")}</span>`).join("")}</div><div class="gp" style="margin-top:6px;font-size:11.5px">SGK markaya değil SUT koduna ödeme yapar; listede olmayan, ÜTS kayıtlı her marka verilebilir. Fiyat farkı hastaya yansıyabilir. Liste tam değildir, tanıtım amacı yoktur.</div></div>`;
+  }
+  if(!e.tp){
+    const msg=SKRS_OK?"SKRS e-reçete listesinde bu etken madde için ayrı bir ticari preparat yok (grup/diyet ürünü olabilir).":"Ticari preparat listesi yükleniyor…";
+    return `<div class="sec"><h3>Ticari preparatlar</h3><div class="gp">${msg}</div></div>`;
+  }
+  const lim=e.tp.lim, tt=t||"";
+  const chip=x=>{const [lab,st,mg]=x;const cls=st==="p"?"mg-p":(lim&&mg!=null?(mg<=lim?"mg-ok":"mg-no"):"");return `<span class="mg ${cls}" title="${st==="p"?"Pasif":"Aktif"}">${esc(lab)}${st==="p"?" · pasif":""}</span>`};
+  const akt=e.tp.l.filter(p=>p.a), pas=e.tp.l.filter(p=>!p.a);
+  const rows=akt.map(p=>`<div class="tpr"><b>${hl(p.ad,tt)}</b><div class="mgs">${p.s.filter(x=>x[1]==="a").map(chip).join("")}${p.s.some(x=>x[1]==="p")?`<span class="mg mg-p">+${p.s.filter(x=>x[1]==="p").length} pasif doz</span>`:""}</div></div>`).join("")
+    || `<div class="gp">Aktif ürün yok — tüm preparatlar pasif (Medula'da yazılamaz).</div>`;
+  const lg=lim?`<div class="gp" style="margin-top:6px">Yeşil: AH raporu çıkabilir (≤${lim} mg) · Kırmızı/üstü çizili: AH çıkaramaz</div>`:"";
+  const pz=pas.length?`<details class="dt"><summary>Pasif ürünler (${pas.length}) — Medula'da yazılamaz</summary><div class="gp" style="margin-top:6px">${pas.map(p=>`${hl(p.ad,tt)} <span style="opacity:.7">(${p.s.map(x=>esc(x[0])).join(", ")})</span>`).join(" · ")}</div></details>`:"";
+  const cb=e.tp.c.length?`<details class="dt"${brandHit(e,tt)&&e.tp.c.some(c=>c.ad===brandHit(e,tt))?" open":""}><summary>Kombine preparatlar (${e.tp.c.length})</summary>${e.tp.c.map(c=>`<div class="tpr"><b>${hl(c.ad,tt)}</b><span class="gp">${esc(c.w)}</span><div class="mgs">${c.s.map(x=>`<span class="mg">${esc(x)}</span>`).join("")}</div></div>`).join("")}</details>`:"";
+  const ch=e.chg?`<details class="dt chg" open><summary>🔔 Son değişiklikler (${CHG_R?CHG_R.join("–"):""})</summary>${e.chg.map(x=>`<div class="chr"><span class="chd">${esc(x[0])}</span><span class="chk ${x[1]==="pasife alındı"?"k-p":"k-a"}">${esc(x[1])}</span> ${hl(x[2],tt)}</div>`).join("")}</details>`:"";
+  return `<div class="sec"><h3>Aktif ticari preparatlar (${akt.length}) · A→Z</h3>${ch}${rows}${lg}${cb}${pz}<div class="gp" style="margin-top:8px;font-size:11.5px">Kaynak: SKRS E-Reçete İlaç Listesi, ${SKRS_TARIH} · Alfabetik sıralıdır, tanıtım amacı yoktur.</div></div>`;
+}
+function card(e,t){
+  const s=ST[e.s];
+  const flags=e.f.map(f=>`<span class="flag ${/KIRMIZI/.test(f)?"red":/YEŞİL/.test(f)?"grn":/Medula/.test(f)?"ver":/AH uzmanı kurulu/.test(f)?"skr":""}">${esc(f)}</span>`).join("");
+  const dx=e.d.length?`<div class="sec"><h3>Rapor tanıları</h3><div class="tags">${e.d.map(x=>`<span class="tag">${hl(x,scope==="tani"?t:"")}</span>`).join("")}</div></div>`:"";
+  const kub=e.kub.length?`<div class="sec"><h3>EK-4/D'de olmayan · KÜB endikasyonları</h3><div class="tags">${e.kub.map(x=>`<span class="tag kub">${hl(x,scope==="tani"?t:"")}</span>`).join("")}</div></div>`:"";
+  const nt=e.x.length?`<div class="sec"><h3>Açıklama / dikkat</h3><ul class="notes">${e.x.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>`:"";
+  const al=e.a.length?` · <span style="opacity:.8">${esc(e.a.join(", "))}</span>`:"";
+  return `<div class="card">
+   ${brandHit(e,t)?`<div class="bhc">🏷 ${esc(brandHit(e,t))} → etken madde</div>`:""}
+   <h2>${hl(e.n,t)}</h2>
+   <div class="grp">${esc(e.g)}${al}</div>
+   <span class="badge ${s[0]}">${s[1]}</span>
+   ${flags?`<div class="flags">${flags}</div>`:""}
+   <div class="sec"><h3>Kim çıkarır</h3><div>${esc(e.w)}</div></div>
+   ${medBlock(e)}
+   ${critBlock(e)}
+   ${tpBlock(e,t)}
+   ${dx}${kub}${nt}
+   <button class="copy" id="cp">Özeti kopyala</button>
+  </div>`;
+}
+
+function summary(e){
+  return [e.n+" ("+e.g+")",ST[e.s][1],"Kim: "+e.w,
+   e.d.length?"Tanılar: "+e.d.join("; "):"",
+   e.kub.length?"KÜB: "+e.kub.join("; "):"",
+   e.x.length?"Not: "+e.x.join(" "):""].filter(Boolean).join("\n");
+}
+
+function brandHit(e,t){
+  if(!e._br||!t) return "";
+  const w=t.split(" ").filter(Boolean);
+  if(w.every(x=>e._n.split(/[ +\/]/).some(p=>p.startsWith(x)))) return "";
+  const ok=b=>w.every(x=>b.n.split(" ").some(q=>q.startsWith(x))||(x.length>=4&&b.n.includes(x)));
+  const b=e._br.find(b=>b.a&&ok(b))||e._br.find(ok);
+  return b?b.ad:"";
+}
+function renderList(t){
+  const max=60;
+  const tx=scope==="tani";
+  const dxBlock=e=>{
+    if(!tx) return "";
+    const d=e.d.map(x=>`<span class="tag">${hl(x,t)}</span>`).join("");
+    const k=e.kub.map(x=>`<span class="tag kub">${hl(x,t)}</span>`).join("");
+    const none=(!e.d.length&&!e.kub.length)?`<span class="gp">Tanı kısıtı belirtilmemiş · Kim: ${esc(e.w)}</span>`:"";
+    const who=e.s!=="ok"?`<div class="gp" style="margin-top:5px;color:var(${e.s==="no"?"--no":"--warn"})">${esc(e.w)}</div>`:"";
+    return `<div class="tags rdx">${d}${k}${none}</div>${who}`;
+  };
+  out.innerHTML=`<div class="list">${cur.slice(0,max).map((e,k)=>`<div class="row${tx?" rowx":""}${k===act?" act":""}" data-k="${k}"><span class="dot ${ST[e.s][2]}"></span><div class="grow"><div class="nm">${brandHit(e,t)?`<span class="bh">🏷 ${hl(brandHit(e,t),t)}</span> → `:""}${hl(e.n,t)}</div><div class="gp">${esc(e.g)}</div>${dxBlock(e)}</div></div>`).join("")}</div>${cur.length>max?`<div class="more">+${cur.length-max} sonuç daha — yazmaya devam edin</div>`:""}`;
+  out.querySelectorAll(".row").forEach(r=>r.onclick=()=>choose(cur[+r.dataset.k]));
+}
+
+function show(e,t){
+  out.innerHTML=card(e,t);
+  const b=document.getElementById("cp");
+  b.onclick=async()=>{try{await navigator.clipboard.writeText(summary(e));b.textContent="Kopyalandı ✓"}catch(_){b.textContent="Kopyalanamadı"}};
+}
+
+function home(){
+  const rec=REC.filter(n=>D.some(e=>e.n===n));
+  const n={ok:0,k:0,no:0};D.forEach(e=>n[e.s]++);
+  out.innerHTML=`${rec.length?`<div class="sec" style="margin-top:0"><h3>Son bakılanlar</h3><div class="tags">${rec.map(n=>`<button class="chip rc" data-n="${esc(n)}">${esc(n)}</button>`).join("")}</div></div>`:""}
+  ${CHG_N?`<details class="sec dt" style="margin-top:0"><summary>🔔 Son 2 ayda aktif/pasif durumu değişen ${CHG_N} etken madde</summary><div class="tags" style="margin-top:8px">${D.filter(e=>e.chg).map(e=>`<button class="chip rc" data-n="${esc(e.n)}">${esc(e.n)} (${e.chg.length})</button>`).join("")}</div></details>`:""}
+  <div class="empty">Etken madde <b>veya</b> ticari adın ilk harflerini yazın.<br>Tek sonuç kalınca rapor bilgisi açılır.</div>
+  <div class="hint">Ticari adla da arayabilirsiniz (örn. <i>delix</i>, <i>concor</i>). Tıbbi malzeme için: <i>strip</i>, <i>smart fine</i>, <i>contour</i>, <i>bez</i>, <i>kolostomi</i>, <i>iğne ucu</i>. 3 AH uzmanı sağlık kurulu için: <i>sağlık kurulu</i>, <i>mama</i>, <i>ensure</i>, <i>nutrison</i>.<br><kbd>Enter</kbd> → ilk/tek sonucu açar ve yazıyı seçer; doğrudan yeni sorgu yazın, silmeye gerek yok.<br>
+  <kbd>↑</kbd><kbd>↓</kbd> → listede gezin · <kbd>Esc</kbd> → temizle<br>
+  “+ Tanıda ara” açıkken her ilacın altında rapor çıkabilecek tanılar listelenir; tanı adıyla da arayabilirsiniz (örn. <i>gut</i>, <i>KOAH</i>, <i>migren</i>).<br><br>
+  <span class="dot d-ok" style="display:inline-block"></span> ${n.ok} çıkarılabilir · <span class="dot d-k" style="display:inline-block"></span> ${n.k} koşullu · <span class="dot d-no" style="display:inline-block"></span> ${n.no} çıkarılamaz</div>
+  <div class="credit">Kaynak: <b>Uzm. Dr. Ensar ERDOĞAN</b> — “Aile Hekimliği Uzmanlarının Rapor Çıkarabildiği İlaçlar”, rev. 17.03.2026 · <a href="https://tahud.org.tr/kitap/aile-hekimligi-uzmanlarinin-rapor-cikartabildigi-ilaclar" target="_blank" rel="noopener">TAHUD web sitesi</a><br>Geliştiren: <b>Dr. Öğr. Üyesi Muhammed Emin GÖKTEPE</b> — Trabzon Üniversitesi Tıp Fakültesi, Aile Hekimliği Anabilim Dalı<br>Hap bilgidir; rapor öncesi güncel SUT / Medula / TEBRP ile doğrulayın. <a href="#" id="about">Hakkında</a></div>`;
+  cnt.textContent=D.length+" etken madde"+(SKRS_OK?" · "+D.reduce((x,e)=>x+(e.tp?e.tp.l.filter(p=>p.a).length+e.tp.c.length:0),0)+" aktif ticari ad":"");
+  const ab=document.getElementById("about");if(ab)ab.onclick=ev=>{ev.preventDefault();openSplash()};
+  out.querySelectorAll(".rc").forEach(b=>b.onclick=()=>choose(D.find(e=>e.n===b.dataset.n)));
+}
+
+function run(){
+  const t=norm(q.value);
+  if(!t){cur=[];home();return}
+  cur=D.map(e=>({e,s:score(e,t)})).filter(o=>o.s>0).sort((a,b)=>b.s-a.s||a.e.n.localeCompare(b.e.n,"tr")).map(o=>o.e);
+  act=0;
+  cnt.textContent=cur.length?cur.length+" sonuç":"Sonuç yok";
+  if(!cur.length){out.innerHTML=`<div class="empty">“${esc(q.value)}” bulunamadı.${scope==="ad"?"<br>Tanı adıysa “+ Tanıda ara”yı açın.":""}<br><span style="font-size:13px">Listede yoksa AH uzmanı raporu bu notta tanımlı değildir — SUT'tan kontrol edin.</span></div>`;return}
+  if(cur.length===1){show(cur[0],t);return}
+  renderList(t);
+}
+
+let REC=[];try{REC=JSON.parse(localStorage.getItem("ahu_rec")||"[]")}catch(_){}
+function remember(n){REC=[n].concat(REC.filter(x=>x!==n)).slice(0,10);try{localStorage.setItem("ahu_rec",JSON.stringify(REC))}catch(_){}}
+function choose(e){
+  remember(e.n);
+  q.value=e.n;
+  cur=[e];act=0;
+  cnt.textContent="1 sonuç";
+  show(e,norm(e.n));
+  q.focus();q.select();
+}
+
+q.addEventListener("input",run);
+q.addEventListener("keydown",ev=>{
+  if(ev.key==="Enter"){ev.preventDefault();if(cur.length){choose(cur[act]||cur[0])}else{q.select()}return}
+  if(ev.key==="Escape"){q.value="";run();return}
+  if(cur.length>1&&(ev.key==="ArrowDown"||ev.key==="ArrowUp")){
+    ev.preventDefault();act=(act+(ev.key==="ArrowDown"?1:-1)+Math.min(cur.length,60))%Math.min(cur.length,60);
+    renderList(norm(q.value));const a=out.querySelector(".row.act");a&&a.scrollIntoView({block:"nearest"});
+  }
+});
+document.getElementById("clr").onclick=()=>{q.value="";run();q.focus()};
+// Sayfanın herhangi yerine dokununca/yazınca arama kutusuna dön
+document.addEventListener("keydown",ev=>{if(SP.style.display!=="none"&&!SP.classList.contains("hide"))return;if(document.activeElement!==q&&ev.key.length===1&&!ev.metaKey&&!ev.ctrlKey){q.focus();q.select()}});
+D.filter(e=>e.n==="Furosemid").forEach(e=>{e.d=e.d.concat([E.HEP]);e._dx=norm(e.d.concat(e.kub).join(" | "))});
+/* ===== TİCARİ PREPARATLAR =====
+   Kaynak: SKRS E-Reçete İlaç ve Diğer Farmasötik Ürünler Listesi (aktif + pasif), 17.11.2026
+   skrs.json: {etken: {l:[{ad, s:[[doz, "a"|"p", mg]], a}], c:[{ad, w, s:[doz]}]}}
+   lim: AH uzmanının rapor çıkarabildiği üst mg (statinler) */
+const LIM={"Atorvastatin":20,"Rosuvastatin":10,"Pitavastatin":4,"Pravastatin":20};
+const SKRS_TARIH="17.11.2026 (değişiklik takibi 15.09.2026'dan beri) · Ruhsat durumu TİTCK 13.11.2026 listesiyle çapraz kontrol edildi";
+let SKRS_OK=false;
+let CHG_N=0,CHG_R=null;
+function applySKRS(data){
+  MED=data.__med||null;
+  CHG_R=data.__aralik||null;
+  D.forEach(e=>{
+    e.chg=(data.__chg||{})[e.n]||null; if(e.chg)CHG_N++;
+    const t=data[e.n];
+    if(!t){e.tp=null;return}
+    t.l.sort((x,y)=>(y.a-x.a)||x.ad.localeCompare(y.ad,"tr"));
+    t.c.sort((x,y)=>x.ad.localeCompare(y.ad,"tr"));
+    e.tp={lim:LIM[e.n],l:t.l,c:t.c};
+    e._br=t.l.map(p=>({ad:p.ad,n:norm(p.ad),a:p.a})).concat(t.c.map(p=>({ad:p.ad,n:norm(p.ad),a:true,k:1})));
+    e._a=e._a.concat(e._br.map(b=>b.n));
+  });
+  SKRS_OK=true;
+}
+fetch("skrs.json").then(r=>r.json()).then(d=>{applySKRS(d);if(q.value)run();else home()}).catch(()=>{});
+
+
+/* Medula ile doğrulanan kayıtlar (medeczane.sgk.gov.tr) */
+D.filter(e=>e.n==="Amlodipin").forEach(e=>{
+  e.d=["Kronik böbrek hastalıkları (03.00 · N01–N08, N11, N15–N16, N18–N19, N25–N29, D63.8, Q61.2, Y83.0)","Koroner arter hastalığı (04.02 · I20, I21, I25, Z95.1, Z95.5–Z95.9)","Arteriyel hipertansiyon (04.05 · I10–I13, I15)","Kardiyomiyopati (04.09 · I42–I43)","Raynaud hastalığı (04.11 · I73.0)","Adrenal hiperfonksiyon (07.04.2 · E26)","Pulmoner hipertansiyon (04.10 · I27.0, I27.2)","Disritmiler (04.03 · I44–I45, I47–I49)"];
+  e.w="Tüm uzman hekimler (Medula: Rap.Yaz.Branş = Tüm Uzman Hekimler, kural VEYA ile uygulanır)";
+  e.f=e.f.concat(["Medula ✓ 19.11.2026"]);
+  e.x=e.x.concat(["Raporsuz da reçete edilebilir (114014); rapor katılım payı muafiyeti içindir."]);
+  e._dx=norm(e.d.concat(e.kub).join(" | "));
+});
+home();q.focus();
+
+/* Açılış ekranı */
+const SP=document.getElementById("splash");
+function closeSplash(){SP.classList.add("hide");setTimeout(()=>{SP.style.display="none"},350);q.focus()}
+function openSplash(){SP.style.display="flex";requestAnimationFrame(()=>SP.classList.remove("hide"));document.getElementById("sp-go").focus()}
+document.getElementById("sp-go").onclick=closeSplash;
+SP.addEventListener("keydown",ev=>{if(ev.key==="Enter"||ev.key==="Escape"){ev.preventDefault();closeSplash()}});
+document.getElementById("sp-go").focus();
+</script>
+</body>
+</html>

@@ -11,36 +11,39 @@
 <meta property="og:description" content="Çocukluk çağı döküntülü hastalıklar için aile hekimlerine yönelik başvuru rehberi.">
 <meta property="og:url" content="https://emindoktor.com/dokuntulu-hastaliklar/">
 <meta property="og:locale" content="tr_TR">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#fffdf9">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Display&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&display=swap" rel="stylesheet">
 <style>
-:root{--paper:#f3eee4;--paper2:#e9e1d1;--ink:#1d1b17;--mute:#6c655a;--rule:#bfb5a3;--hair:#dcd3c3;--acc:#7c2232;--acc2:#ecd9d4;--ochre:#8a6214;--mark:#efd9a0;
+:root{color-scheme:light;--paper:#fffdf9;--paper2:#f6f2ea;--ink:#1c1d22;--mute:#5f6170;--rule:#c9c3b8;--hair:#e8e3da;--c:#d0442b;
+--red:#e03131;--redbg:#fff0ef;--amb:#d97706;--ambt:#9a4f00;--ambbg:#fff6e3;--mark:#ffe066;
 --disp:"Libre Caslon Display","Iowan Old Style","Palatino Linotype",Georgia,serif;--text:Literata,"Iowan Old Style",Georgia,serif}
-@media (prefers-color-scheme:dark){:root{--paper:#171512;--paper2:#221f1a;--ink:#ebe5d8;--mute:#a69d8e;--rule:#4a443a;--hair:#2f2b25;--acc:#dc9196;--acc2:#3a2427;--ochre:#d8ae62;--mark:#5a4718}}
-*{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%}
+*{box-sizing:border-box;--ct:color-mix(in srgb,var(--c) 9%,#fff)}
+html{-webkit-text-size-adjust:100%;background:var(--paper)}
 body{margin:0;background:var(--paper);color:var(--ink);font:400 17px/1.62 var(--text);font-variant-numeric:oldstyle-nums proportional-nums;text-rendering:optimizeLegibility}
-a{color:var(--acc);text-decoration-thickness:1px;text-underline-offset:2px}
+a{color:var(--c);text-decoration-thickness:1px;text-underline-offset:2px}
 button{font:inherit;color:inherit}
 .page{max-width:1180px;margin:0 auto;padding:0 22px}
-.sc{font-variant-caps:all-small-caps;letter-spacing:.07em}
 
 /* Künye */
 .mast{padding:26px 0 0}
 .kicker{display:flex;flex-wrap:wrap;gap:4px 18px;justify-content:space-between;border-bottom:1px solid var(--ink);padding-bottom:8px;font-size:14px;color:var(--mute);font-variant-caps:all-small-caps;letter-spacing:.08em}
 .kicker a{color:var(--ink);text-decoration:none}
 .mast h1{font:400 clamp(38px,7.2vw,78px)/1.02 var(--disp);letter-spacing:-.01em;margin:34px 0 0;max-width:15ch;text-wrap:balance}
-.deck{font-size:clamp(18px,2.3vw,22px);line-height:1.4;font-style:italic;margin:18px 0 0;max-width:40ch;color:var(--ink)}
+.mast h1 .w{color:#d0442b}
+.spectrum{height:10px;margin:24px 0 0;background:linear-gradient(90deg,#d0442b 0.0% 4.762%,#c2255c 4.762% 9.524%,#e8590c 9.524% 14.286%,#b8860b 14.286% 19.048%,#e64980 19.048% 23.81%,#9c36b5 23.81% 28.571%,#c92a2a 28.571% 33.333%,#e03131 33.333% 38.095%,#a61e4d 38.095% 42.857%,#862e9c 42.857% 47.619%,#d9480f 47.619% 52.381%,#b02525 52.381% 57.143%,#9a3412 57.143% 61.905%,#0c8599 61.905% 66.667%,#1971c2 66.667% 71.429%,#2f9e44 71.429% 76.19%,#5f3dc4 76.19% 80.952%,#c26a00 80.952% 85.714%,#3b5bdb 85.714% 90.476%,#087f5b 90.476% 95.238%,#5c940d 95.238% 100.0%)}
+.deck{font-size:clamp(18px,2.3vw,22px);line-height:1.4;font-style:italic;margin:18px 0 0;max-width:40ch}
 .method{margin:10px 0 0;font-size:14.5px;color:var(--mute);max-width:60ch}
-.credits{display:flex;flex-wrap:wrap;gap:10px 48px;margin:26px 0 0;padding:12px 0;border-top:3px double var(--ink);border-bottom:1px solid var(--ink)}
+.credits{display:flex;flex-wrap:wrap;gap:10px 48px;margin:22px 0 0;padding:12px 0;border-top:3px double var(--ink);border-bottom:1px solid var(--ink)}
 .credits div{display:flex;flex-direction:column}
 .credits dt{font-size:13.5px;color:var(--mute);font-variant-caps:all-small-caps;letter-spacing:.08em}
 .credits dd{margin:0;font-size:16px}
 
 /* Düzen */
 .layout{display:block;padding-top:8px}
-@media (min-width:960px){.layout{display:grid;grid-template-columns:248px minmax(0,1fr);gap:0 56px;padding-top:30px}}
+@media (min-width:960px){.layout{display:grid;grid-template-columns:256px minmax(0,1fr);gap:0 52px;padding-top:30px}}
 
 /* İçindekiler */
 .toc{position:sticky;top:0;z-index:6;background:var(--paper);border-bottom:1px solid var(--ink);margin:0 -22px;padding:10px 22px}
@@ -49,151 +52,151 @@ button{font:inherit;color:inherit}
 .find span{font-size:13.5px;color:var(--mute);font-variant-caps:all-small-caps;letter-spacing:.08em}
 .search{flex:1;min-width:0;border:0;background:none;color:var(--ink);font:italic 15.5px var(--text);padding:2px 0;outline:none;-webkit-appearance:none;appearance:none}
 .search::placeholder{color:var(--mute);opacity:.85}
-.find:focus-within{border-bottom-color:var(--acc)}
+.find:focus-within{border-bottom-color:var(--ink)}
 .tocbox summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:9px 0 2px;font-size:14px;font-variant-caps:all-small-caps;letter-spacing:.08em;color:var(--mute)}
 .tocbox summary::-webkit-details-marker{display:none}
-.tocbox summary b{font-weight:400;color:var(--ink);font-variant-caps:normal;letter-spacing:0;font-size:15.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.tocbox summary::after{content:"＋";color:var(--acc);font-variant-caps:normal}
+.tocbox summary b{font-weight:400;color:var(--c);font-variant-caps:normal;letter-spacing:0;font-size:15.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tocbox summary::after{content:"＋";color:var(--ink);font-variant-caps:normal}
 .tocbox[open] summary::after{content:"－"}
 .tocbox nav{max-height:68vh;overflow-y:auto;padding-bottom:6px}
 @media (min-width:960px){.tocbox summary{display:none}.tocbox nav{max-height:none;overflow:visible}}
 .grp{margin-top:18px}
-.gl{margin:0 0 4px;font-size:13px;color:var(--mute);font-variant-caps:all-small-caps;letter-spacing:.1em;border-bottom:1px solid var(--hair);padding-bottom:3px}
+.gl{margin:0 0 4px;font-size:13.5px;color:var(--g,var(--ink));font-variant-caps:all-small-caps;letter-spacing:.1em;border-bottom:2px solid var(--g,var(--ink));padding-bottom:2px}
 .grp ol{list-style:none;margin:0;padding:0}
-.chip{display:grid;grid-template-columns:2.1em 1fr;align-items:baseline;width:100%;text-align:left;background:none;border:0;padding:4px 0;font-size:15px;line-height:1.3;cursor:pointer;color:var(--ink)}
-.chip .n{font-size:12.5px;color:var(--mute);font-variant-numeric:lining-nums tabular-nums}
-.chip.red .n{color:var(--acc)}
-.chip:hover .t{text-decoration:underline;text-decoration-color:var(--rule);text-underline-offset:3px}
-.chip[aria-current="true"] .t{color:var(--acc);font-style:italic}
-.chip[aria-current="true"] .n::before{content:"▸ ";color:var(--acc)}
+.chip{display:grid;grid-template-columns:2.3em 1fr;align-items:baseline;width:100%;text-align:left;background:none;border:0;padding:4px 6px 4px 0;font-size:15px;line-height:1.3;cursor:pointer;color:var(--ink)}
+.chip .n{font-size:12.5px;font-weight:600;color:var(--c);font-variant-numeric:lining-nums tabular-nums;padding-left:6px}
+.chip:hover .t{text-decoration:underline;text-decoration-color:var(--c);text-underline-offset:3px}
+.chip[aria-current="true"]{background:var(--ct)}
+.chip[aria-current="true"] .t{color:var(--c);font-weight:600}
+.chip[aria-current="true"] .n{color:#fff;background:var(--c)}
 
 /* Ana sütun */
-main{padding:26px 0 40px;min-width:0;max-width:780px}
+main{padding:26px 0 40px;min-width:0;max-width:800px}
 @media (min-width:960px){main{padding-top:0}}
-.sec-head{margin:0 0 18px}
+.sec-head{margin:0 0 20px;background:var(--ct);border-top:8px solid var(--c);padding:14px 18px 16px}
 .sec-kicker{display:flex;flex-wrap:wrap;gap:4px 16px;align-items:baseline;margin:0;font-size:14px;color:var(--mute);font-variant-caps:all-small-caps;letter-spacing:.09em}
-.sec-kicker .num{color:var(--acc)}
-.flag{color:var(--acc)}.flag::before{content:"✱ "}
+.sec-kicker .num{color:var(--c);font-weight:600}
+.flag{color:#fff;background:var(--red);padding:0 7px 1px;letter-spacing:.07em}
 .sec-head h2{font:400 clamp(30px,4.6vw,46px)/1.08 var(--disp);margin:8px 0 0;letter-spacing:-.005em;text-wrap:balance}
 .sec-head .alt{margin:8px 0 0;font-style:italic;color:var(--mute);font-size:16px}
 .lede{font-size:19px;line-height:1.55;margin:0 0 22px}
-.lede::first-letter{float:left;font:400 3.5em/.84 var(--disp);color:var(--acc);margin:.06em .08em 0 0}
-.facts{display:grid;grid-template-columns:1fr;margin:0 0 30px;border-top:2px solid var(--ink);border-bottom:1px solid var(--ink)}
+.lede::first-letter{float:left;font:400 3.5em/.84 var(--disp);color:var(--c);margin:.06em .08em 0 0}
+.facts{display:grid;grid-template-columns:1fr;margin:0 0 30px;border-top:3px solid var(--c);border-bottom:1px solid var(--ink)}
 @media (min-width:640px){.facts{grid-template-columns:repeat(2,1fr)}}
 @media (min-width:1100px){.facts{grid-template-columns:repeat(4,1fr)}}
 .facts div{padding:9px 14px 10px 0;border-bottom:1px solid var(--hair)}
 @media (min-width:640px){.facts div{padding-left:14px;border-left:1px solid var(--hair)}.facts div:nth-child(2n+1){border-left:0;padding-left:0}}
 @media (min-width:1100px){.facts div{border-bottom:0}.facts div:nth-child(2n+1){border-left:1px solid var(--hair);padding-left:14px}.facts div:first-child{border-left:0;padding-left:0}}
-.facts dt{font-size:13px;color:var(--mute);font-variant-caps:all-small-caps;letter-spacing:.09em}
+.facts dt{font-size:13.5px;color:var(--c);font-variant-caps:all-small-caps;letter-spacing:.09em;font-weight:600}
 .facts dd{margin:2px 0 0;font-size:14.5px;line-height:1.45}
 
 /* Sekmeler */
 .tabs{display:flex;gap:2px 20px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;border-bottom:1px solid var(--ink);margin:0 0 26px}
 .tabs::-webkit-scrollbar{display:none}
 @media (min-width:760px){.tabs{flex-wrap:wrap}}
-.tab{background:none;border:0;border-bottom:2px solid transparent;margin-bottom:-1px;padding:6px 0 5px;cursor:pointer;white-space:nowrap;font-size:15.5px;color:var(--mute)}
+.tab{background:none;border:0;border-bottom:3px solid transparent;margin-bottom:-1px;padding:6px 0 4px;cursor:pointer;white-space:nowrap;font-size:15.5px;color:var(--mute)}
 .tab .tn{font-size:12px;margin-right:5px;font-variant-numeric:lining-nums;color:var(--rule)}
 .tab:hover{color:var(--ink)}
-.tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--acc)}
-.tab[aria-selected="true"] .tn{color:var(--acc)}
+.tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--c)}
+.tab[aria-selected="true"] .tn{color:var(--c);font-weight:600}
 .panel{display:none}.panel.on{display:block}
 
 /* Bölümler */
 .card{margin:0 0 30px}
-.card>h3{margin:0 0 10px;padding-top:8px;border-top:1px solid var(--rule);font-weight:400;font-size:15px;color:var(--mute);font-variant-caps:all-small-caps;letter-spacing:.1em}
+.card>h3{margin:0 0 10px;padding-top:8px;border-top:2px solid var(--c);font-weight:600;font-size:15px;color:var(--c);font-variant-caps:all-small-caps;letter-spacing:.1em}
 .card p{margin:0 0 8px}
-.card ul,.refs-intro ul{list-style:none;margin:0;padding:0}
+.card ul{list-style:none;margin:0;padding:0}
 .card li{position:relative;padding-left:1.25em;margin:0 0 7px}
-.card li::before{content:"–";position:absolute;left:0;color:var(--rule)}
-.card.red{border-top:3px double var(--acc);border-bottom:1px solid var(--acc);padding:2px 0 8px}
-.card.red>h3{border:0;color:var(--acc)}
-.card.red li::before{content:"✱";font-size:.8em;top:.15em;color:var(--acc)}
-.card.amber>h3{color:var(--ochre);border-top:1px dotted var(--ochre)}
-.card.amber li::before{color:var(--ochre)}
-.card.blue{background:var(--paper2);padding:4px 18px 10px}
-.card.blue>h3{border:0;color:var(--ink)}
-.card.blue li::before{content:"·";font-weight:600;color:var(--ink)}
-.badge{font-variant-caps:all-small-caps;letter-spacing:.08em;font-size:15px}
-.badge::before{content:"■ "}
-.b-red{color:var(--acc)}.b-grn,.b-blu{color:var(--mute)}
+.card li::before{content:"–";position:absolute;left:0;color:var(--c)}
+.card.red{background:var(--redbg);border-top:5px solid var(--red);padding:4px 18px 10px}
+.card.red>h3{border:0;color:var(--red)}
+.card.red>h3::before{content:"⚠ ";font-variant-caps:normal}
+.card.red li::before{content:"✱";font-size:.8em;top:.15em;color:var(--red)}
+.card.amber{background:var(--ambbg);border-top:5px solid var(--amb);padding:4px 18px 10px}
+.card.amber>h3{border:0;color:var(--ambt)}
+.card.amber li::before{color:var(--amb)}
+.card.blue{background:var(--ct);border-top:5px solid var(--c);padding:4px 18px 10px}
+.card.blue>h3{border:0;color:var(--c)}
+.card.blue li::before{content:"●";font-size:.55em;top:.6em;color:var(--c)}
+.badge{font-variant-caps:all-small-caps;letter-spacing:.08em;font-size:15px;padding:0 8px 1px}
+.b-red{color:#fff;background:var(--red)}.b-grn,.b-blu{color:var(--ink);background:var(--paper2)}
 .alt{color:var(--mute);font-style:italic}
 .empty{color:var(--mute);font-style:italic}
 
 /* Tablolar */
 .tw{overflow-x:auto;-webkit-overflow-scrolling:touch}
-table{width:100%;border-collapse:collapse;font-size:14.5px;line-height:1.45;border-top:2px solid var(--ink);border-bottom:2px solid var(--ink);font-variant-numeric:lining-nums}
+table{width:100%;border-collapse:collapse;font-size:14.5px;line-height:1.45;border-top:3px solid var(--c);border-bottom:2px solid var(--ink);font-variant-numeric:lining-nums}
 th,td{text-align:left;vertical-align:top;padding:8px 12px 8px 0}
-th{font-weight:400;font-size:13.5px;color:var(--mute);font-variant-caps:all-small-caps;letter-spacing:.08em;border-bottom:1px solid var(--ink)}
+th{font-weight:600;font-size:13.5px;color:var(--c);font-variant-caps:all-small-caps;letter-spacing:.08em;border-bottom:1px solid var(--ink)}
 td{border-bottom:1px solid var(--hair)}
 tr:last-child td{border-bottom:0}
 td b{font-weight:600}
 td a{color:var(--ink)}
 
 /* Kaynak işaretleri ve notlar */
-.ref{font-size:.66em;line-height:0;vertical-align:.55em;color:var(--acc);text-decoration:none;font-variant-numeric:lining-nums;padding:0 .1em;cursor:pointer}
+.ref{font-size:.66em;line-height:0;vertical-align:.55em;color:var(--c);font-weight:600;text-decoration:none;font-variant-numeric:lining-nums;padding:0 .1em;cursor:pointer}
 .ref:hover{text-decoration:underline}
-.note{position:absolute;z-index:30;width:min(360px,calc(100vw - 32px));background:var(--paper);border:1px solid var(--ink);box-shadow:6px 6px 0 var(--paper2);padding:12px 14px 10px;font-size:14px;line-height:1.45}
+.note{position:absolute;z-index:30;width:min(360px,calc(100vw - 32px));background:#fff;border:1px solid var(--ink);border-top:5px solid var(--c);box-shadow:6px 6px 0 var(--ct);padding:12px 14px 10px;font-size:14px;line-height:1.45}
 .note[hidden]{display:none}
 .note .nb{padding-right:18px}
+.note .nb b{color:var(--c)}
 .note .nb .tur{display:none}
 .note .x{position:absolute;top:4px;right:6px;border:0;background:none;font-size:20px;line-height:1;color:var(--mute);cursor:pointer;padding:4px}
-.note .jump{margin-top:8px;border:0;background:none;padding:0;color:var(--acc);cursor:pointer;font-size:13.5px;font-variant-caps:all-small-caps;letter-spacing:.08em}
-@media (max-width:700px){.note{position:fixed;left:0!important;right:0;bottom:0;top:auto!important;width:auto;border-width:2px 0 0;box-shadow:none;padding:14px 18px 18px}}
-ol.refs{margin:0;padding:0 0 0 2.4em;font-size:14.5px;line-height:1.5;border-top:2px solid var(--ink);padding-top:12px}
-ol.refs li{margin:0 0 8px;padding-left:.3em}
-ol.refs li::marker{color:var(--acc);font-variant-numeric:lining-nums;font-size:.92em}
+.note .jump{margin-top:8px;border:0;background:none;padding:0;color:var(--c);cursor:pointer;font-size:13.5px;font-weight:600;font-variant-caps:all-small-caps;letter-spacing:.08em}
+@media (max-width:700px){.note{position:fixed;left:0!important;right:0;bottom:0;top:auto!important;width:auto;border-width:5px 0 0;box-shadow:none;padding:14px 18px 18px}}
+ol.refs{margin:0;padding:12px 0 0 2.4em;font-size:14.5px;line-height:1.5;border-top:3px solid var(--c)}
+ol.refs li{margin:0 0 8px;padding-left:.3em;transition:background .6s}
+ol.refs li::marker{color:var(--c);font-weight:600;font-variant-numeric:lining-nums;font-size:.92em}
 ol.refs li::before{display:none}
 ol.refs .tur{margin-left:6px;color:var(--mute);font-variant-caps:all-small-caps;letter-spacing:.07em}
 ol.refs .tur::before{content:"["}ol.refs .tur::after{content:"]"}
-ol.refs li{transition:background .6s}
 
 /* Şekiller */
 .gal{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:26px 20px;counter-reset:sekil}
 figure{margin:0;cursor:zoom-in;counter-increment:sekil}
-figure img{display:block;width:100%;height:170px;object-fit:cover;outline:1px solid var(--hair);outline-offset:-1px;filter:saturate(.92)}
+figure img{display:block;width:100%;height:170px;object-fit:cover;border-bottom:4px solid var(--c)}
 figcaption{padding:7px 0 0;font-size:14px;line-height:1.4;font-style:italic}
-figcaption::before{content:"Şekil " counter(sekil) ". ";font-style:normal;color:var(--acc);font-variant-caps:all-small-caps;letter-spacing:.07em}
+figcaption::before{content:"Şekil " counter(sekil) ". ";font-style:normal;font-weight:600;color:var(--c);font-variant-caps:all-small-caps;letter-spacing:.07em}
 figcaption small{display:block;font-style:normal;color:var(--mute);font-size:12.5px;margin-top:3px}
 figcaption small a{color:var(--mute)}
-.lb{position:fixed;inset:0;background:rgba(18,16,13,.95);display:none;align-items:center;justify-content:center;flex-direction:column;z-index:40;padding:20px;cursor:zoom-out}
-.lb.on{display:flex}.lb img{max-width:100%;max-height:80vh;outline:1px solid rgba(255,255,255,.15)}
-.lb p{color:#eee6d6;max-width:640px;text-align:center;font:italic 15px/1.45 var(--text);margin:14px 0 0}
+.lb{position:fixed;inset:0;background:rgba(20,20,24,.94);display:none;align-items:center;justify-content:center;flex-direction:column;z-index:40;padding:20px;cursor:zoom-out}
+.lb.on{display:flex}.lb img{max-width:100%;max-height:80vh}
+.lb p{color:#f2f0ea;max-width:640px;text-align:center;font:italic 15px/1.45 var(--text);margin:14px 0 0}
 
 /* Araç sayfaları */
-.dl{display:grid;grid-template-columns:1fr;gap:0 40px;border-top:2px solid var(--ink)}
+.dl{display:grid;grid-template-columns:1fr;gap:0 36px}
 @media (min-width:760px){.dl{grid-template-columns:1fr 1fr}}
-.dl .card{cursor:pointer;margin:0;padding:14px 0 12px;border-bottom:1px solid var(--hair);background:none}
-.dl .card.red{border-top:0;border-bottom:1px solid var(--hair);padding:14px 0 12px}
-.dl .card>h3{border:0;padding:0;margin:0 0 6px;font:400 22px/1.2 var(--disp);letter-spacing:0;color:var(--ink)}
-.dl .card.red>h3::before{content:"✱ ";color:var(--acc);font-size:.75em}
-.dl .card>h3::after{content:" →";color:var(--acc);opacity:0;transition:opacity .15s}
+.dl .card,.dl .card.red{cursor:pointer;margin:0;padding:12px 0 14px;border:0;border-top:4px solid var(--c);background:none}
+.dl .card>h3{border:0;padding:0;margin:0 0 6px;font:400 22px/1.2 var(--disp);letter-spacing:0;color:var(--c);font-variant-caps:normal}
+.dl .card>h3::before{content:none}
+.dl .card>h3::after{content:" →";opacity:0;transition:opacity .15s}
 .dl .card:hover>h3::after{opacity:1}
 .dl .card p{font-size:14.5px;line-height:1.5;margin:0 0 4px}
-.morf{display:grid;grid-template-columns:1fr;gap:0 32px;margin:16px 0 28px;border-top:1px solid var(--ink);counter-reset:m}
+.morf{display:grid;grid-template-columns:1fr;gap:0 32px;margin:16px 0 28px;border-top:3px solid var(--c);counter-reset:m}
 @media (min-width:700px){.morf{grid-template-columns:1fr 1fr}}
-.morf button{counter-increment:m;display:grid;grid-template-columns:1.8em 1fr;text-align:left;background:none;border:0;border-bottom:1px solid var(--hair);padding:9px 0;font-size:16px;line-height:1.35;cursor:pointer;color:var(--ink)}
-.morf button::before{content:counter(m,lower-alpha) ")";color:var(--mute);font-style:italic}
-.morf button:hover{color:var(--acc)}
-.morf button.on{color:var(--acc);font-style:italic}
-.morf button.on::before{content:"▸";color:var(--acc);font-style:normal}
+.morf button{counter-increment:m;display:grid;grid-template-columns:1.8em 1fr;text-align:left;background:none;border:0;border-bottom:1px solid var(--hair);padding:9px 6px 9px 0;font-size:16px;line-height:1.35;cursor:pointer;color:var(--ink)}
+.morf button::before{content:counter(m,lower-alpha) ")";color:var(--c);font-style:italic;padding-left:4px}
+.morf button:hover{color:var(--c)}
+.morf button.on{color:var(--c);background:var(--ct);font-weight:600}
+.morf button.on::before{content:"▸";font-style:normal}
 
-/* Arama vurgusu */
 .hl{background:var(--mark);color:inherit;padding:0 1px}
 
 /* Kolofon */
 footer .colo{border-top:3px double var(--ink);margin-top:20px;padding:16px 0 40px;color:var(--mute);font-size:14px;line-height:1.55}
 footer p{margin:0 0 8px;max-width:78ch}
 footer b{color:var(--ink);font-weight:600}
-@media (min-width:960px){footer .colo{margin-left:304px}}
+@media (min-width:960px){footer .colo{margin-left:308px}}
 
-@media print{.toc,.tabs,.note{display:none!important}.panel{display:block!important}body{background:#fff;color:#000}.layout{display:block}}
+@media print{.toc,.tabs,.note{display:none!important}.panel{display:block!important}.layout{display:block}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
 <body>
 <header class="mast"><div class="page">
 <div class="kicker"><a href="/">emindoktor.com</a><span>Aile Hekimliği Başvuru Rehberi</span><span>Literatür taraması · Kasım 2026</span></div>
-<h1>Çocukluk Çağının Döküntülü Hastalıkları</h1>
+<h1>Çocukluk Çağının <span class="w">Döküntülü</span> Hastalıkları</h1>
+<div class="spectrum" aria-hidden="true"></div>
 <p class="deck">Aile Hekimliği Uzmanları için kanıta dayalı birinci basamak başvuru rehberi</p>
 <p class="method">PubMed, Cochrane, Consensus ve kılavuz (CDC, AAP, WHO, NICE, T.C. Sağlık Bakanlığı) taraması</p>
 <dl class="credits"><div><dt>Fikir babası</dt><dd>Uzm. Dr. Ensar Erdoğan</dd></div><div><dt>Projeyi yapan</dt><dd>Dr. Öğr. Üyesi Muhammed Emin Göktepe</dd></div></dl>
@@ -219,6 +222,9 @@ let curId=null,query="";
 const TOOLS=[["algoritma","Döküntü tipine göre ara","A"],["karsilastirma","Karşılaştırma","B"],["acil","Kırmızı bayraklar","C"],["turkiye","Aşı & bildirim (TR)","D"],["lezyon","Lezyon tipleri","E"]];
 const GROUPS=["Klasik ekzantem","Acil/ciddi","Sık görülen diğer"];
 const ROMAN=["I","II","III","IV"];
+const COL={"kizamik": "#d0442b", "kizamikcik": "#c2255c", "kizil": "#e8590c", "sucicegi": "#b8860b", "eritema": "#e64980", "roseola": "#9c36b5", "meningokoksemi": "#c92a2a", "kawasaki": "#e03131", "misc": "#a61e4d", "iga-vaskulit": "#862e9c", "ssss": "#d9480f", "ilac": "#b02525", "rickettsia": "#9a3412", "elayakagiz": "#0c8599", "mononukleoz": "#1971c2", "gianotti": "#2f9e44", "pitiriazis": "#5f3dc4", "impetigo": "#c26a00", "urtiker-em": "#3b5bdb", "mpox": "#087f5b", "skabiyes": "#5c940d", "algoritma": "#1864ab", "karsilastirma": "#0b7285", "acil": "#e03131", "turkiye": "#2b8a3e", "lezyon": "#7048e8"};
+const GCOL={"Araçlar":"#1c1d22","Klasik ekzantem":"#d0442b","Acil/ciddi":"#e03131","Sık görülen diğer":"#0c8599"};
+const col=id=>COL[id]||"#d0442b";
 const ORDER=[];GROUPS.forEach(g=>D.hastaliklar.filter(x=>(x.grup||"Sık görülen diğer")===g).forEach(x=>ORDER.push(x.id)));
 const numOf=id=>String(ORDER.indexOf(id)+1).padStart(2,"0");
 const shortName=h=>h.ad.split(" (")[0];
@@ -229,9 +235,9 @@ const ul=(a)=>a&&a.length?"<ul>"+a.map(x=>"<li>"+fmt(x)+"</li>").join("")+"</ul>
 const card=(t,body,cls="")=>body?`<section class="card ${cls}"><h3>${t}</h3>${body}</section>`:"";
 const secHead=(kick,title,alt="",flag="")=>`<header class="sec-head"><p class="sec-kicker">${kick}${flag?`<span class="flag">${flag}</span>`:""}</p><h2>${title}</h2>${alt?`<p class="alt">${alt}</p>`:""}</header>`;
 function chips(){const c=$("#chips");
- const btn=(id,ad,n,cls="")=>`<li><button class="chip ${cls}" data-id="${id}" aria-current="${id===curId}"><span class="n">${n}</span><span class="t">${esc(ad)}</span></button></li>`;
- let h=`<div class="grp"><p class="gl">I · Araçlar</p><ol>${TOOLS.map(t=>btn(t[0],t[1],t[2],t[0]==="acil"?"red":"")).join("")}</ol></div>`;
- GROUPS.forEach((g,i)=>{const hs=D.hastaliklar.filter(x=>(x.grup||"Sık görülen diğer")===g);if(hs.length)h+=`<div class="grp"><p class="gl">${ROMAN[i+1]} · ${g}</p><ol>${hs.map(x=>btn(x.id,shortName(x),numOf(x.id),g==="Acil/ciddi"?"red":"")).join("")}</ol></div>`});
+ const btn=(id,ad,n,cls="")=>`<li><button class="chip ${cls}" style="--c:${col(id)}" data-id="${id}" aria-current="${id===curId}"><span class="n">${n}</span><span class="t">${esc(ad)}</span></button></li>`;
+ let h=`<div class="grp" style="--g:${GCOL["Araçlar"]}"><p class="gl">I · Araçlar</p><ol>${TOOLS.map(t=>btn(t[0],t[1],t[2],t[0]==="acil"?"red":"")).join("")}</ol></div>`;
+ GROUPS.forEach((g,i)=>{const hs=D.hastaliklar.filter(x=>(x.grup||"Sık görülen diğer")===g);if(hs.length)h+=`<div class="grp" style="--g:${GCOL[g]}"><p class="gl">${ROMAN[i+1]} · ${g}</p><ol>${hs.map(x=>btn(x.id,shortName(x),numOf(x.id),g==="Acil/ciddi"?"red":"")).join("")}</ol></div>`});
  c.innerHTML=h;
  const t=TOOLS.find(x=>x[0]===curId),d=D.hastaliklar.find(x=>x.id===curId);$("#curName").textContent=t?t[1]:d?shortName(d):"";}
 function tabsHTML(tabs){return `<nav class="tabs" role="tablist">${tabs.map((t,i)=>`<button class="tab" role="tab" data-t="${i}" data-name="${t[0]}" aria-selected="${i===0}"><span class="tn">${i+1}</span>${t[0]}</button>`).join("")}</nav>`+tabs.map((t,i)=>`<section class="panel ${i===0?"on":""}" data-p="${i}">${t[1]}</section>`).join("")}
@@ -258,11 +264,11 @@ function disease(h){
 }
 const toolHead=(id,title)=>{const t=TOOLS.find(x=>x[0]===id);return secHead(`<span class="num">Araç ${t[2]}</span><span>Araçlar</span>`,title)};
 function compare(){const K=[["etken","Etken"],["inkubasyon","İnkübasyon"],["prodrom","Prodrom"],["dokuntu","Döküntü / yayılım"],["ipucu","Ayırt ettirici ipucu"],["atesIliskisi","Ateş–döküntü ilişkisi"]];
- return toolHead("karsilastirma","Karşılaştırmalı tablo")+`<section class="card"><div class="tw"><table><tr><th>Hastalık</th>${K.map(k=>`<th>${k[1]}</th>`).join("")}</tr>${D.hastaliklar.filter(h=>h.karsilastirma).map(h=>`<tr><td><a href="#${h.id}"><b>${esc(h.ad)}</b></a></td>${K.map(k=>`<td>${esc(h.karsilastirma[k[0]]||"")}</td>`).join("")}</tr>`).join("")}</table></div></section>`}
+ return toolHead("karsilastirma","Karşılaştırmalı tablo")+`<section class="card"><div class="tw"><table><tr><th>Hastalık</th>${K.map(k=>`<th>${k[1]}</th>`).join("")}</tr>${D.hastaliklar.filter(h=>h.karsilastirma).map(h=>`<tr><td><a href="#${h.id}" style="color:${col(h.id)}"><b>${esc(h.ad)}</b></a></td>${K.map(k=>`<td>${esc(h.karsilastirma[k[0]]||"")}</td>`).join("")}</tr>`).join("")}</table></div></section>`}
 function acil(){const G=["Ateş + peteşi/purpura (cam bardak testiyle solmayan) → meningokoksemi kabul et, sevk öncesi parenteral antibiyotik","Genel durum bozukluğu, letarji, kapiller dolum >3 sn, hipotansiyon, taşikardi/takipne","Mukozal tutulum (≥2 mukoza), Nikolsky (+), deri soyulması, büller → SJS/TEN, SSSS","≥5 gün ateş + konjonktivit, dudak/dil değişikliği, el-ayak ödemi → Kawasaki (5. günü bekleme, şüphede sevk)","Ateş + döküntü + karın ağrısı/şok + yakın COVID-19 → MIS-C","Yeni ilaçtan 2–8 hafta sonra ateş, yüz ödemi, LAP, eozinofili → DRESS","<3 ay bebekte ateş, immünsüprese çocuk, ağır dehidratasyon","Kara leke (tache noire) + ateş + makülopapüler döküntü (avuç/taban dahil) → riketsiyoz, KKKA ayırıcı tanısı"];
  const hs=D.hastaliklar.filter(h=>h.grup==="Acil/ciddi");
  return toolHead("acil","Kırmızı bayraklar – kaçırılmaması gereken döküntüler")+`<section class="card red"><h3>Ateş + döküntüde önce bunları düşün</h3><ul>${G.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></section>
- <div class="dl">${hs.map(h=>`<div class="card" data-go="${h.id}"><h3>${esc(h.ad)}</h3><p>${fmt(h.ozet)}</p><p><b>Sevk:</b> ${fmt((h.sevkEndikasyonlari||[])[0]||"")}</p></div>`).join("")}</div>`}
+ <div class="dl">${hs.map(h=>`<div class="card" style="--c:${col(h.id)}" data-go="${h.id}"><h3>${esc(h.ad)}</h3><p>${fmt(h.ozet)}</p><p><b>Sevk:</b> ${fmt((h.sevkEndikasyonlari||[])[0]||"")}</p></div>`).join("")}</div>`}
 const MORF=[["makulopapuler","Makülopapüler (kızarık, kabarık)",["kizamik","kizamikcik","roseola","eritema","mononukleoz","ilac","kawasaki","misc","rickettsia","pitiriazis","gianotti"]],
 ["veziküler","Veziküler / büllöz (su toplamış)",["sucicegi","elayakagiz","impetigo","mpox","ssss","urtiker-em","ilac"]],
 ["purpura","Peteşi / purpura (basmakla solmuyor)",["meningokoksemi","iga-vaskulit","rickettsia","eritema","ilac"]],
@@ -275,7 +281,7 @@ let morfSel=null;
 function algoritma(){const m=MORF.find(x=>x[0]===morfSel);const hs=m?m[2].map(id=>D.hastaliklar.find(h=>h.id===id)).filter(Boolean):[];
  return toolHead("algoritma","Döküntü tipine göre ayırıcı tanı")+`<p class="alt">Baskın döküntü özelliğini seçin; olası tanılar kartlarda listelenir (karta dokununca hastalığa gider).</p>
  <div class="morf">${MORF.map(x=>`<button data-morf="${x[0]}" class="${x[0]===morfSel?"on":""}">${esc(x[1])}</button>`).join("")}</div>
- ${hs.length?`<div class="dl">${hs.map(h=>`<div class="card ${h.grup==="Acil/ciddi"?"red":""}" data-go="${h.id}"><h3>${esc(h.ad)}</h3><p><b>İpucu:</b> ${esc((h.karsilastirma||{}).ipucu||"")}</p><p><b>Ateş ilişkisi:</b> ${esc((h.karsilastirma||{}).atesIliskisi||"")}</p></div>`).join("")}</div>`:""}`}
+ ${hs.length?`<div class="dl">${hs.map(h=>`<div class="card ${h.grup==="Acil/ciddi"?"red":""}" style="--c:${col(h.id)}" data-go="${h.id}"><h3>${esc(h.ad)}</h3><p><b>İpucu:</b> ${esc((h.karsilastirma||{}).ipucu||"")}</p><p><b>Ateş ilişkisi:</b> ${esc((h.karsilastirma||{}).atesIliskisi||"")}</p></div>`).join("")}</div>`:""}`}
 function turkiye(){const T=D.turkiye||{};const B=T.bildirim||{};const ad={kizamik:"Kızamık",kizamikcik:"Kızamıkçık",krs:"Konjenital rubella sendromu",sucicegi:"Suçiçeği",kizil:"Kızıl / GAS",meningokoksemi:"Meningokok hastalığı",mpox:"Mpox",kkka:"Kırım-Kongo kanamalı ateşi",rickettsia:"Riketsiyozlar",elayakagiz:"El-ayak-ağız hastalığı",kawasaki:"Kawasaki",eritema:"Parvovirüs B19",skabiyes:"Uyuz"};
  return toolHead("turkiye","Türkiye: aşı takvimi ve bildirim")+`${card("Aşı takvimi (ilgili aşılar)",ul(T.asiTakvimi),"blue")}
  <section class="card"><h3>Hastalık bazında bildirim (ASM pratiği)</h3><p class="alt">"Doğrulanmalı" yazanlar için HSGM'nin güncel Ek-I listesini esas alın.</p><div class="tw"><table><tr><th>Hastalık</th><th>Grup</th><th>Zaman</th><th>Not</th></tr>${Object.keys(ad).filter(k=>B[k]).map(k=>`<tr><td><b>${ad[k]}</b></td><td>${esc(B[k].grup)}</td><td>${esc(B[k].zaman)}</td><td>${esc(B[k].not)}</td></tr>`).join("")}</table></div></section>
@@ -285,6 +291,7 @@ function lezyon(){return toolHead("lezyon","Elemanter deri lezyonları")+`<secti
 function render(){const id=curId;let h;closeNote();
  if(id==="karsilastirma")h=compare();else if(id==="acil")h=acil();else if(id==="lezyon")h=lezyon();else if(id==="algoritma")h=algoritma();else if(id==="turkiye")h=turkiye();
  else h=disease(D.hastaliklar.find(x=>x.id===id)||D.hastaliklar[0]);
+ document.documentElement.style.setProperty("--c",col(id));
  $("#main").innerHTML=h;chips();}
 function go(){const id=location.hash.slice(1);const ok=D.hastaliklar.some(x=>x.id===id)||TOOLS.some(t=>t[0]===id);curId=ok?id:D.hastaliklar[0].id;render();}
 const mq=matchMedia("(min-width:960px)");const tocd=$("#tocd");
@@ -293,9 +300,9 @@ function toTop(){const top=$("#top").getBoundingClientRect().top+scrollY;if(scro
 /* Kaynak notu */
 const note=$("#note");let noteRef=null;
 function closeNote(){note.hidden=true;noteRef=null}
-function jumpRef(n){const m=$("#main");const last=m.querySelector('.tab[data-name="Kaynaklar"]');if(last)last.click();const el=document.getElementById("r-"+n);if(el){el.scrollIntoView({block:"center"});el.style.background="var(--acc2)";setTimeout(()=>el.style.background="",1500)}}
+function jumpRef(n){const m=$("#main");const last=m.querySelector('.tab[data-name="Kaynaklar"]');if(last)last.click();const el=document.getElementById("r-"+n);if(el){el.scrollIntoView({block:"center"});el.style.background="var(--ct)";setTimeout(()=>el.style.background="",1500)}}
 function openNote(a){const n=a.dataset.ref;const src=document.getElementById("r-"+n);if(!src){jumpRef(n);return}
- noteRef=n;note.querySelector(".nb").innerHTML=`<b style="color:var(--acc)">${esc(n)}.</b> `+src.innerHTML;note.hidden=false;
+ noteRef=n;note.querySelector(".nb").innerHTML=`<b>${esc(n)}.</b> `+src.innerHTML;note.hidden=false;
  if(!matchMedia("(max-width:700px)").matches){const r=a.getBoundingClientRect();const w=note.offsetWidth;let left=r.left+scrollX-12;left=Math.max(16,Math.min(left,scrollX+document.documentElement.clientWidth-w-16));note.style.left=left+"px";note.style.top=(r.bottom+scrollY+8)+"px"}
  else{note.style.left="";note.style.top=""}}
 note.addEventListener("click",e=>{e.stopPropagation();if(e.target.closest(".x"))closeNote();else if(e.target.closest(".jump")){const n=noteRef;closeNote();jumpRef(n)}});

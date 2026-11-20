@@ -1,5 +1,11 @@
-import json,re,collections
-r=json.load(open('/home/claude/in/rows.json'))
+import json,re,collections,argparse
+from pathlib import Path
+# Yollar betiğin konumuna göre çözülür; girdi/çıktı klasörü --girdi ile değiştirilebilir.
+TOOLS=Path(__file__).resolve().parent
+ap=argparse.ArgumentParser(description="SKRS satırlarından enteral beslenme ürün listesi (ent.json) üretir.")
+ap.add_argument('--girdi',type=Path,default=TOOLS/'in',help="rows.json klasörü; ent.json da buraya yazılır (varsayılan: tools/in)")
+IN=ap.parse_args().girdi
+r=json.load(open(IN/'rows.json',encoding='utf-8'))
 v=[x for x in r if (x.get('atc') or '').startswith(('V06DB','V06DX','V06D','V06DA','V06DC','V06B')) ]
 FL=r'(CIKOLATA|CILEK|CILEKLI|MUZ|MUZLU|VANILYA|VANILLA|VANILYALI|VANİLYA|KAKAOLU|KAHVE|KAHVELI|KAYISI|SEFTALI|ORMAN|MANGO|TROPIK|TROPIKAL|TROPİKAL|TROPIC|PORTAKAL|KARAMEL|NOTR|NOTRAL|NEUTRAL|AROMASIZ|MULTIFRUIT|CAPPUCCINO|CAPPUCINO|MANDALIN|FINDIK|TAVUK|MANTAR|COFFEE|CHOCOLATE|AHUDUDU|AHUDUDULU|KAYISI-SEFTALI|YABANI|CAFFE|LIMON|PORTAKAL-LIMON|SEFTALI-ZENCEFIL|DRING)'
 def split(ad):
@@ -41,4 +47,4 @@ for c,d in G.items():
         L.append({'ad':b,'s':ss,'a':any(t[1]=='a' for t in ss)})
     out[c]=L
     print(c,len(L),sum(p['a'] for p in L));print('  ',[p['ad'] for p in L if p['a']])
-json.dump(out,open('/home/claude/in/ent.json','w'),ensure_ascii=False)
+json.dump(out,open(IN/'ent.json','w',encoding='utf-8'),ensure_ascii=False)

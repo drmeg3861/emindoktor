@@ -8,8 +8,8 @@ Aile hekimliği uzmanlarının rapor çıkarabildiği ilaçlar ve tıbbi malzeme
 Hap bilgidir; rapor öncesi güncel SUT / Medula ile doğrulayın.
 
 ## Dosyalar
-- `index.html` — ana sayfa (doktoremin.com)
-- `ahurapor/index.html` — AHU Rapor uygulaması (doktoremin.com/ahurapor)
+- `index.html` — ana sayfa (emindoktor.com)
+- `ahurapor/index.html` — AHU Rapor uygulaması (emindoktor.com/ahurapor)
 - `ahurapor/skrs.json` — ticari preparat ve Medula verisi (haftalık güncellenir)
 
 Cloudflare Pages: build komutu yok, çıktı klasörü `/`.

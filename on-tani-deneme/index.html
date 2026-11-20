@@ -53,7 +53,9 @@ label.onay input{width:20px;height:20px;margin-top:3px;accent-color:var(--c);fle
 .drop b{display:block;font:400 22px/1.2 var(--disp);color:var(--c)}
 .drop small{color:var(--mute)}
 .drop[aria-disabled="true"]{opacity:.45;pointer-events:none}
-#dosya{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+.gizli-girdi{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+.secim{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ipucu{margin:8px 0 0;font-size:14px;color:var(--mute)}
 .onizle{display:none;margin:14px 0 0;gap:16px;align-items:flex-start}
 .onizle.on{display:flex;flex-wrap:wrap}
 .onizle img{max-width:240px;max-height:240px;border:1px solid var(--ink);display:block}
@@ -114,11 +116,13 @@ footer p{margin:0 0 6px}
 
     <section class="step">
       <h2><b>3</b> Fotoğraf ve kısa bilgi</h2>
-      <label class="drop" id="drop" for="dosya" aria-disabled="true">
-        <b>Fotoğraf seçin ya da çekin</b>
-        <small>Önce yukarıdaki onay kutusunu işaretleyin</small>
-      </label>
-      <input type="file" id="dosya" accept="image/*" capture="environment" disabled>
+      <div class="secim">
+        <label class="drop" id="dropKamera" for="kamera" aria-disabled="true"><b>Fotoğraf çek</b><small>Kamerayı açar</small></label>
+        <label class="drop" id="dropGaleri" for="dosya" aria-disabled="true"><b>Galeriden seç</b><small>Telefondaki fotoğraflardan</small></label>
+      </div>
+      <p class="ipucu" id="ipucu">Önce yukarıdaki onay kutusunu işaretleyin.</p>
+      <input type="file" id="kamera" class="gizli-girdi" accept="image/*" capture="environment" disabled>
+      <input type="file" id="dosya" class="gizli-girdi" accept="image/*" disabled>
       <div class="onizle" id="onizle">
         <img id="onizleImg" alt="Yüklenecek lezyon fotoğrafının küçültülmüş hâli">
         <p id="onizleBilgi"></p>
@@ -184,9 +188,10 @@ $("girisForm").addEventListener("submit",function(e){
 
 $("onay").addEventListener("change",function(){
   var on=this.checked;
-  $("dosya").disabled=!on;
-  $("drop").setAttribute("aria-disabled",on?"false":"true");
-  $("drop").querySelector("small").textContent=on?"JPEG, PNG ya da telefon kamerası · en uzun kenar 1024 px'e küçültülür":"Önce yukarıdaki onay kutusunu işaretleyin";
+  $("dosya").disabled=!on;$("kamera").disabled=!on;
+  $("dropKamera").setAttribute("aria-disabled",on?"false":"true");
+  $("dropGaleri").setAttribute("aria-disabled",on?"false":"true");
+  $("ipucu").textContent=on?"Fotoğraf en uzun kenarı 1024 px olacak şekilde küçültülür.":"Önce yukarıdaki onay kutusunu işaretleyin.";
   hazir();
 });
 function hazir(){$("analiz").disabled=!($("onay").checked&&gorsel)}
@@ -210,7 +215,7 @@ function kucult(dosya){
   });
 }
 
-$("dosya").addEventListener("change",function(){
+function dosyaSecildi(){
   var f=this.files&&this.files[0];
   this.value="";
   if(!f)return;
@@ -223,7 +228,9 @@ $("dosya").addEventListener("change",function(){
     $("onizle").classList.add("on");
     durum($("durum"),"");hazir();
   }).catch(function(){durum($("durum"),"Fotoğraf açılamadı. HEIC ise telefonda JPEG olarak paylaşmayı deneyin.","hata")});
-});
+}
+$("dosya").addEventListener("change",dosyaSecildi);
+$("kamera").addEventListener("change",dosyaSecildi);
 
 $("temizle").addEventListener("click",function(){
   gorsel="";onizleUrl="";$("onizleImg").removeAttribute("src");$("onizle").classList.remove("on");

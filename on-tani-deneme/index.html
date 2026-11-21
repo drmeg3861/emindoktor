@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow, noarchive">
 <meta name="referrer" content="no-referrer">
-<title>Lezyondan ön tanı – deneme</title>
+<title>Deri lezyonundan ön tanı – deneme</title>
 <meta name="color-scheme" content="light">
 <meta name="theme-color" content="#fffdf9">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -79,16 +79,37 @@ label.onay input{width:20px;height:20px;margin-top:3px;accent-color:var(--c);fle
 .oneri a{display:inline-block;margin-top:8px;font-size:15px;font-weight:600;color:var(--c)}
 .not{font-size:15px;color:var(--mute);margin:6px 0 0}
 .bos{display:none}
+.alanlar label:last-child{grid-column:span 2}
+details.liste{margin:14px 0 0;border-top:1px solid var(--hair);border-bottom:1px solid var(--hair);padding:8px 0}
+details.liste summary{cursor:pointer;font-size:15px;color:var(--c);font-weight:600}
+details.liste h5{margin:10px 0 2px;font-size:13.5px;font-variant-caps:all-small-caps;letter-spacing:.09em;color:var(--mute)}
+details.liste p.l{margin:0;font-size:14.5px;line-height:1.5}
+.seviye{padding:12px 18px 14px;margin:0 0 16px}
+.seviye h3{margin:0 0 4px;font-size:15px;font-variant-caps:all-small-caps;letter-spacing:.1em}
+.seviye p{margin:0;font-size:15.5px}
+.seviye.acil{background:var(--redbg);border-top:5px solid var(--red)}.seviye.acil h3{color:var(--red)}
+.seviye.sevk{background:var(--ambbg);border-top:5px solid var(--amb)}.seviye.sevk h3{color:var(--ambt)}
+.seviye.poliklinik{background:#eef8f0;border-top:5px solid var(--grn)}.seviye.poliklinik h3{color:var(--grn)}
+.abcde{border-left:4px solid var(--c);padding:6px 14px;margin:0 0 16px;font-size:15.5px;background:#fff}
+.abcde b{font-variant-caps:all-small-caps;letter-spacing:.08em;color:var(--c)}
+.oneri .g b{font-weight:600;color:var(--ink)}
+.oneri .isaret{display:inline-block;margin-left:8px;padding:0 7px 1px;color:#fff;background:var(--red);font-style:normal;letter-spacing:.06em}
+.oneri .isaret.sevk{background:var(--amb)}
+.oneri dl{margin:8px 0 0;font-size:15px}
+.oneri dt{font-weight:600;font-size:13.5px;font-variant-caps:all-small-caps;letter-spacing:.08em;color:var(--c);margin-top:6px}
+.oneri dd{margin:0}
+.kaynak{font-size:13px;color:var(--mute);margin:8px 0 0;line-height:1.45}
+.kaynak a{color:inherit}
 footer{margin:40px 0 0;padding:12px 0 0;border-top:3px double var(--ink);font-size:14px;color:var(--mute)}
 footer p{margin:0 0 6px}
 </style>
 </head>
 <body>
 <div class="page">
-  <div class="kicker"><span>emindoktor.com · Döküntülü Hastalıklar Rehberi</span><span class="tag">Deneme · Yalnız hekimler</span></div>
+  <div class="kicker"><span>emindoktor.com · Aile hekimliği polikliniği</span><span class="tag">Deneme · Yalnız hekimler</span></div>
   <h1>Lezyondan <span class="w">ön tanı</span></h1>
   <div class="spectrum" aria-hidden="true"></div>
-  <p class="deck">Lezyonun fotoğrafını yükleyin; yapay zekâ rehberdeki 21 hastalık arasından en olası ön tanıları önersin ve ilgili bölüme götürsün.</p>
+  <p class="deck">Poliklinikte gördüğünüz deri lezyonunun fotoğrafını yükleyin; yapay zekâ sık görülen deri tabloları ve döküntülü hastalıklar arasından en olası ön tanıları, kırmızı bayrakları ve ilk basamak notlarını önersin.</p>
 
   <section class="step" id="adim1">
     <h2><b>1</b> Erişim</h2>
@@ -105,12 +126,13 @@ footer p{margin:0 0 6px}
       <div class="box amber">
         <h3>KVKK ve sınırlar</h3>
         <ul class="kural">
-          <li>Yalnız lezyonu çekin: yüz, dövme, doğum lekesi gibi ayırt edici iz, kimlik, bileklik, yazı ya da arka plan görünmesin.</li>
+          <li>Yalnız lezyonu yakından çekin: tanınabilir yüz (gözler, yüzün bütünü), dövme, ayırt edici iz, kimlik, bileklik, yazı ya da arka plan görünmesin. Yüzdeki lezyonda yalnız lezyonlu bölgeyi çekin.</li>
           <li>Fotoğraf tarayıcınızda küçültülür ve konum, cihaz, tarih gibi gömülü bilgileri (EXIF) silinir.</li>
           <li>Fotoğraf bu sitede saklanmaz, kaydedilmez; yalnız analiz için yapay zekâ sağlayıcısına (Anthropic, ABD) iletilir. Bu bir yurt dışı aktarımdır.</li>
           <li>Hekimlere yönelik eğitim amaçlı karar desteğidir, tanı değildir. Karar her zaman muayeneye ve klinik değerlendirmeye dayanır.</li>
         </ul>
       </div>
+      <details class="liste" id="listeKutu" hidden><summary>Listedeki tablolar (<span id="listeSayi"></span>)</summary><div id="listeIcerik"></div><p class="not">Listede olmayan bir tablo önerilmez; gözden kaçabilir.</p></details>
       <label class="onay"><input type="checkbox" id="onay"> <span>Fotoğrafta yalnız lezyon var, kimliği belirleyen hiçbir şey yok. Hastadan ya da velisinden açık rıza aldım ve bunun eğitim amaçlı bir deneme olduğunu biliyorum.</span></label>
     </section>
 
@@ -128,10 +150,13 @@ footer p{margin:0 0 6px}
         <p id="onizleBilgi"></p>
       </div>
       <div class="alanlar">
-        <label>Yaş grubu<select id="yas"><option value="">belirtilmedi</option><option value="0-2">0–2 yaş</option><option value="2-5">2–5 yaş</option><option value="6-12">6–12 yaş</option><option value="13-18">13–18 yaş</option><option value="yetiskin">yetişkin</option></select></label>
+        <label>Yaş grubu<select id="yas"><option value="">belirtilmedi</option><option value="0-2">0–2 yaş</option><option value="2-5">2–5 yaş</option><option value="6-12">6–12 yaş</option><option value="13-18">13–18 yaş</option><option value="19-39">19–39 yaş</option><option value="40-64">40–64 yaş</option><option value="65+">65 yaş ve üstü</option></select></label>
+        <label>Yerleşim<select id="yer"><option value="">belirtilmedi</option><option value="yuz">yüz</option><option value="sacli">saçlı deri</option><option value="agiz">ağız/dudak</option><option value="govde">gövde</option><option value="kol">kol/el</option><option value="bacak">bacak/ayak</option><option value="kivrim">kıvrımlar</option><option value="genital">genital/perianal</option><option value="tirnak">tırnak</option><option value="yaygin">yaygın</option></select></label>
+        <label>Süre<select id="sure"><option value="">bilinmiyor</option><option value="0-2">0–2 gün</option><option value="3-7">3–7 gün</option><option value="8-30">1–4 hafta</option><option value="30+">1 aydan uzun</option></select></label>
         <label>Ateş<select id="ates"><option value="">bilinmiyor</option><option value="var">var</option><option value="yok">yok</option></select></label>
-        <label>Döküntü süresi<select id="sure"><option value="">bilinmiyor</option><option value="0-2">0–2 gün</option><option value="3-7">3–7 gün</option><option value="8+">7 günden uzun</option></select></label>
         <label>Kaşıntı<select id="kasinti"><option value="">bilinmiyor</option><option value="var">var</option><option value="yok">yok</option></select></label>
+        <label>Ağrı<select id="agri"><option value="">bilinmiyor</option><option value="var">var</option><option value="yok">yok</option></select></label>
+        <label>Büyüme / renk değişimi / kanama<select id="degisim"><option value="">bilinmiyor</option><option value="var">var</option><option value="yok">yok</option></select></label>
       </div>
       <div class="row" style="margin-top:18px">
         <button class="btn" id="analiz" type="button" disabled>Ön tanı öner</button>
@@ -147,23 +172,14 @@ footer p{margin:0 0 6px}
   </div>
 
   <footer>
-    <p>Hekimlere yönelik eğitim amaçlı karar desteğidir, tanı değildir. Öneriler yalnız rehberdeki 21 hastalıkla sınırlıdır; listede olmayan bir hastalık gözden kaçabilir.</p>
-    <p>Acil bulgu (basmakla solmayan peteşi/purpura, yaygın bül/soyulma, mukoza tutulumu, kötü genel durum) varsa beklemeden değerlendirin ve sevk edin.</p>
+    <p>Hekimlere yönelik eğitim amaçlı karar desteğidir, tanı değildir. Öneriler sınırlı bir tablo listesiyle sınırlıdır; listede olmayan bir hastalık gözden kaçabilir. Poliklinik notları genel çerçevedir; ilaç seçimi ve dozu için güncel kılavuza başvurun.</p>
+    <p>Acil bulgu (basmakla solmayan peteşi/purpura, yaygın bül/soyulma, mukoza tutulumu, kötü genel durum) varsa beklemeden değerlendirin ve sevk edin. Değişen, kanayan ya da düzensiz pigmente lezyonda ve iyileşmeyen yarada malignite açısından sevk edin.</p>
   </footer>
 </div>
 
 <script>
 (function(){
 "use strict";
-var H={
- "kizamik":["Kızamık","#d0442b"],"kizamikcik":["Kızamıkçık","#c2255c"],"kizil":["Kızıl","#e8590c"],"sucicegi":["Suçiçeği","#b8860b"],
- "eritema":["Eritema infeksiyozum","#e64980"],"roseola":["Roseola infantum","#9c36b5"],"meningokoksemi":["Meningokoksemi","#c92a2a"],
- "kawasaki":["Kawasaki hastalığı","#e03131"],"misc":["MIS-C","#a61e4d"],"iga-vaskulit":["IgA vasküliti (HSP)","#862e9c"],
- "ssss":["Stafilokokal haşlanmış deri sendromu","#d9480f"],"ilac":["İlaç erüpsiyonları","#b02525"],"rickettsia":["Akdeniz benekli ateşi","#9a3412"],
- "elayakagiz":["El-ayak-ağız hastalığı","#0c8599"],"mononukleoz":["Enfeksiyöz mononükleoz","#1971c2"],"gianotti":["Gianotti-Crosti sendromu","#2f9e44"],
- "pitiriazis":["Pitiriazis rosea","#5f3dc4"],"impetigo":["İmpetigo","#c26a00"],"urtiker-em":["Ürtiker ve eritema multiforme","#3b5bdb"],
- "mpox":["Mpox","#087f5b"],"skabiyes":["Uyuz (skabiyes)","#5c940d"]
-};
 var API="/api/on-tani", MAKS=1024;
 var parola="", gorsel="", onizleUrl="";
 function $(id){return document.getElementById(id)}
@@ -181,10 +197,25 @@ $("girisForm").addEventListener("submit",function(e){
   if(!p)return;
   durum($("girisDurum"),"Kontrol ediliyor","yukleniyor");
   gonder({parola:p,kontrol:true}).then(function(j){
-    if(j.tamam){parola=p;$("parola").value="";$("adim1").classList.add("bos");$("icerik").classList.remove("bos");if(j.anahtar===false&&j.uyari)durum($("durum"),j.uyari,"hata");}
+    if(j.tamam){parola=p;$("parola").value="";$("adim1").classList.add("bos");$("icerik").classList.remove("bos");if(j.anahtar===false&&j.uyari)durum($("durum"),j.uyari,"hata");liste(j);}
     else durum($("girisDurum"),j.hata||"Giriş yapılamadı.","hata");
   }).catch(function(){durum($("girisDurum"),"Sunucuya ulaşılamadı. Sayfayı yenileyip tekrar deneyin.","hata")});
 });
+
+function kaynakHtml(k){
+  if(!Array.isArray(k)||!k.length)return "";
+  return '<p class="kaynak">Kaynak: '+k.map(function(x){
+    var d=String(x&&x.doi||"");
+    var ad=esc(x&&x.kunye||"");
+    return /^10\.\d{4,9}\/[-._;()\/:A-Za-z0-9]+$/.test(d)?'<a href="https://doi.org/'+d+'" target="_blank" rel="noopener">'+ad+'</a>':ad;
+  }).join("; ")+'</p>';
+}
+function liste(j){
+  if(!j.liste||!j.liste.length)return;
+  var h="";j.liste.forEach(function(g){if(!g.adlar.length)return;h+="<h5>"+esc(g.grup)+"</h5><p class=\"l\">"+g.adlar.map(esc).join(" · ")+"</p>"});
+  h+=kaynakHtml(j.kaynak).replace("Kaynak:","Listenin dayandığı sıklık verileri:");
+  $("listeIcerik").innerHTML=h;$("listeSayi").textContent=(j.sayi||"")+" tablo";$("listeKutu").hidden=false;
+}
 
 $("onay").addEventListener("change",function(){
   var on=this.checked;
@@ -241,7 +272,7 @@ $("analiz").addEventListener("click",function(){
   if(!gorsel||!$("onay").checked)return;
   var b=this;b.disabled=true;
   durum($("durum"),"Değerlendiriliyor","yukleniyor");
-  gonder({parola:parola,gorsel:gorsel,yas:$("yas").value,ates:$("ates").value,sure:$("sure").value,kasinti:$("kasinti").value})
+  gonder({parola:parola,gorsel:gorsel,yas:$("yas").value,yer:$("yer").value,sure:$("sure").value,ates:$("ates").value,kasinti:$("kasinti").value,agri:$("agri").value,degisim:$("degisim").value})
   .then(function(j){
     if(j.hata){
       durum($("durum"),j.hata,"hata");
@@ -253,22 +284,40 @@ $("analiz").addEventListener("click",function(){
   .then(function(){hazir()});
 });
 
+var SEVIYE={
+ acil:["Acil değerlendirme","Beklemeden değerlendirin; gerekirse acil sevk edin."],
+ sevk:["Sevk düşünün","Tanı ya da tedavi için uzman değerlendirmesi gerekebilir."],
+ poliklinik:["Poliklinikte izlenebilir görünüyor","Görüntüde acil ya da sevk gerektiren bulgu öne çıkmadı; muayeneyle doğrulayın."]
+};
 function goster(j){
   var h="";
+  if(j.uygun_mu&&j.aciliyet&&SEVIYE[j.aciliyet]){
+    var sv=SEVIYE[j.aciliyet];
+    h+='<div class="seviye '+j.aciliyet+'"><h3>'+(j.aciliyet==="poliklinik"?"":"⚠ ")+esc(sv[0])+'</h3><p>'+esc(j.uyari||sv[1])+'</p></div>';
+  }else if(j.uyari){
+    h+='<div class="seviye acil"><h3>⚠ Dikkat</h3><p>'+esc(j.uyari)+'</p></div>';
+  }
   if(j.lezyon_tarifi)h+='<p class="tarif">'+esc(j.lezyon_tarifi)+'</p>';
-  if(j.uyari)h+='<div class="box red" style="margin:0 0 16px"><h3>⚠ Dikkat</h3><p style="margin:0">'+esc(j.uyari)+'</p></div>';
+  if(j.abcde)h+='<p class="abcde"><b>ABCDE</b> '+esc(j.abcde)+'</p>';
   if(!j.uygun_mu){
     h+='<div class="box amber"><h3>Değerlendirilemedi</h3><p style="margin:0">'+esc(j.not||"Fotoğraf değerlendirmeye uygun değil.")+'</p></div>';
   }else if(!j.oneriler||!j.oneriler.length){
-    h+='<div class="box amber"><h3>Listede uygun hastalık yok</h3><p style="margin:0">'+esc(j.not||"Görüntü rehberdeki 21 hastalıktan birine uymuyor.")+'</p></div>';
+    h+='<div class="box amber"><h3>Listede uygun tablo yok</h3><p style="margin:0">'+esc(j.not||"Görüntü listedeki tablolardan birine uymuyor.")+'</p></div>';
   }else{
     j.oneriler.forEach(function(o,i){
-      var d=H[o.id];if(!d)return;
-      h+='<article class="oneri" style="--c:'+d[1]+'"><span class="s">'+(i+1)+'</span>'+
-        '<h4>'+esc(d[0])+'</h4>'+
-        '<p class="g">Güven<i>'+esc(o.guven)+'</i></p>'+
-        '<p>'+esc(o.gerekce)+'</p>'+
-        '<a href="/dokuntulu-hastaliklar/#'+encodeURIComponent(o.id)+'" target="_blank" rel="noopener">Rehberde aç →</a></article>';
+      var renk=/^#[0-9a-f]{6}$/i.test(o.renk||"")?o.renk:"#1c1d22";
+      var isaret=o.isaret==="acil"?'<i class="isaret">acil</i>':o.isaret==="sevk"?'<i class="isaret sevk">sevk gerekir</i>':"";
+      h+='<article class="oneri" style="--c:'+renk+'"><span class="s">'+(i+1)+'</span>'+
+        '<h4>'+esc(o.ad)+'</h4>'+
+        '<p class="g">'+esc(o.grup||"")+' · Güven<i>'+esc(o.guven)+'</i>'+isaret+'</p>'+
+        '<div><p>'+esc(o.gerekce)+'</p>';
+      if(o.rehber&&/^\/dokuntulu-hastaliklar\/#[a-z-]+$/.test(o.rehber)){
+        h+='<a href="'+o.rehber+'" target="_blank" rel="noopener">Rehberde aç →</a>';
+      }else if(o.not){
+        h+='<dl><dt>Ayırıcı tanı</dt><dd>'+esc(o.not.a)+'</dd><dt>İlk basamak</dt><dd>'+esc(o.not.i)+'</dd><dt>Sevk</dt><dd>'+esc(o.not.s)+'</dd></dl>';
+      }
+      h+=kaynakHtml(o.kaynak);
+      h+='</div></article>';
     });
     if(j.not)h+='<p class="not">'+esc(j.not)+'</p>';
   }

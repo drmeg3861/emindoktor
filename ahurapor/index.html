@@ -3,23 +3,26 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0f766e">
+<meta name="theme-color" content="#f9ba27">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <title>AHU Rapor — Etken Madde Arama</title>
 <meta name="description" content="Aile hekimliği uzmanlarının rapor çıkarabildiği ilaçlar ve tıbbi malzemeler: etken madde, ticari ad ve tanı ile arama.">
 <link rel="canonical" href="https://emindoktor.com/ahurapor/">
 <style>
 :root{
-  --bg:#f6f7f9;--card:#fff;--ink:#14181f;--mut:#5b6472;--line:#e3e6eb;
-  --acc:#0f766e;--accs:#e6f4f2;--ok:#15803d;--oks:#e8f6ec;--warn:#b45309;--warns:#fdf3e5;--no:#b91c1c;--nos:#fbeaea;
-  --mark:#fde68a;
+  --bg:#fffbf0;--card:#fff;--ink:#1c1f4a;--mut:#5a5c73;--line:#ede3c8;
+  --acc:#1c1f4a;--accs:#fff3cf;--acct:#fff;--sun:#f9ba27;--leaf:#7abe4a;--ok:#15803d;--oks:#e8f6ec;--warn:#b45309;--warns:#fdf3e5;--no:#b91c1c;--nos:#fbeaea;
+  --mark:#ffd766;
 }
 @media (prefers-color-scheme:dark){:root{
   --bg:#0f1216;--card:#171b21;--ink:#e8ebf0;--mut:#98a2b3;--line:#262c35;
-  --acc:#2dd4bf;--accs:#11302c;--ok:#4ade80;--oks:#12291a;--warn:#fbbf24;--warns:#2e2412;--no:#f87171;--nos:#301616;--mark:#6b5a12;
+  --acc:#f9ba27;--accs:#2e2712;--acct:#1c1f4a;--ok:#4ade80;--oks:#12291a;--warn:#fbbf24;--warns:#2e2412;--no:#f87171;--nos:#301616;--mark:#6b5a12;
 }}
 *{box-sizing:border-box}
 html,body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-text-size-adjust:100%}
-.top{position:sticky;top:0;z-index:5;background:var(--bg);padding:calc(10px + env(safe-area-inset-top)) 14px 8px;border-bottom:1px solid var(--line)}
+.top{position:sticky;top:0;z-index:5;background:var(--bg);border-top:6px solid var(--sun);padding:calc(10px + env(safe-area-inset-top)) 14px 8px;border-bottom:1px solid var(--line)}
 .brand{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin:0 2px 8px}
 .brand b{font-size:15px;letter-spacing:.2px}
 .brand span{font-size:12px;color:var(--mut)}
@@ -31,7 +34,7 @@ html,body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 -apple-sy
 .chips{display:flex;gap:6px;overflow-x:auto;margin-top:8px;padding-bottom:2px;scrollbar-width:none}
 .chips::-webkit-scrollbar{display:none}
 .chip{flex:0 0 auto;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:4px 10px;font-size:12.5px;cursor:pointer;white-space:nowrap}
-.chip.on{background:var(--acc);border-color:var(--acc);color:#fff}
+.chip.on{background:var(--acc);border-color:var(--acc);color:var(--acct)}
 main{padding:12px 14px calc(30px + env(safe-area-inset-bottom));max-width:820px;margin:0 auto}
 .list{display:flex;flex-direction:column;gap:6px}
 .row{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;cursor:pointer}
@@ -75,14 +78,14 @@ mark{background:var(--mark);color:inherit;border-radius:3px;padding:0 1px}
 #splash{position:fixed;inset:0;z-index:50;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:calc(20px + env(safe-area-inset-top)) 18px calc(20px + env(safe-area-inset-bottom));overflow:auto;transition:opacity .35s}
 #splash.hide{opacity:0;pointer-events:none}
 .sp-card{max-width:440px;width:100%;text-align:center}
-.sp-ico{width:64px;height:64px;margin:0 auto 10px;border-radius:18px;background:var(--acc);color:#fff;font-size:34px;line-height:64px;font-weight:700}
+.sp-ico{width:64px;height:64px;margin:0 auto 10px;border-radius:18px;background:var(--sun);color:#1c1f4a;box-shadow:0 0 0 4px var(--leaf);font-size:34px;line-height:64px;font-weight:700}
 .sp-card h1{margin:0;font-size:28px}
 .sp-sub{color:var(--mut);font-size:14px;margin-top:4px}
 .sp-sec{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-top:14px}
 .sp-lbl{font-size:11px;text-transform:uppercase;letter-spacing:.7px;color:var(--mut)}
 .sp-name{font-weight:700;font-size:17px;margin-top:3px}
 .sp-note{font-size:13px;color:var(--mut);margin-top:3px;line-height:1.45}
-#sp-go{margin-top:18px;width:100%;border:0;border-radius:12px;background:var(--acc);color:#fff;font-size:17px;font-weight:700;padding:13px;cursor:pointer}
+#sp-go{margin-top:18px;width:100%;border:0;border-radius:12px;background:var(--sun);color:#1c1f4a;box-shadow:3px 3px 0 var(--leaf);font-size:17px;font-weight:700;padding:13px;cursor:pointer}
 .sp-link{color:var(--acc);word-break:break-all;font-weight:600}
 .credit a{color:var(--acc)}
 .sp-warn{font-size:11.5px;color:var(--mut);margin-top:10px}
@@ -90,7 +93,7 @@ mark{background:var(--mark);color:inherit;border-radius:3px;padding:0 1px}
 .credit b{color:var(--ink);font-weight:600}
 .crit{display:flex;flex-direction:column;gap:6px}
 .cr{display:grid;grid-template-columns:26px 92px 1fr auto;align-items:center;gap:8px;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:8px 10px}
-.cb{width:26px;height:26px;border-radius:50%;background:var(--acc);color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;font-size:13px}
+.cb{width:26px;height:26px;border-radius:50%;background:var(--acc);color:var(--acct);font-weight:700;display:flex;align-items:center;justify-content:center;font-size:13px}
 .cl{font-size:12px;color:var(--mut);line-height:1.1}.cl b{display:block;font-size:22px;color:var(--ink)}
 .cc b{display:block;font-size:14.5px}.cc small{display:block;font-size:12.5px;color:var(--mut);line-height:1.35;margin-top:1px}
 .ct{font-size:11.5px;font-weight:700;border-radius:6px;padding:2px 7px;white-space:nowrap}.t2{background:var(--warns);color:var(--warn)}.t1{background:var(--oks);color:var(--ok)}

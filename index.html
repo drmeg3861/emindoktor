@@ -13,93 +13,179 @@
 <meta property="og:image" content="https://emindoktor.com/img/emin-goktepe.webp">
 <meta property="og:locale" content="tr_TR">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Muhammed Emin Göktepe","honorificPrefix":"Dr. Öğr. Üyesi","jobTitle":"Aile Hekimliği Uzmanı","affiliation":{"@type":"CollegeOrUniversity","name":"Trabzon Üniversitesi Tıp Fakültesi"},"url":"https://emindoktor.com/","image":"https://emindoktor.com/img/emin-goktepe.webp","sameAs":["https://www.youtube.com/@emindoktorcom","https://www.instagram.com/emindoktorcom","https://linktr.ee/emindoktor","https://orcid.org/0000-0001-9587-4496"]}</script>
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#F9BA27">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Display&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#f6f7f9;--card:#fff;--ink:#14181f;--mut:#5b6472;--line:#e3e6eb;--acc:#0f766e}
-@media (prefers-color-scheme:dark){:root{--bg:#0f1216;--card:#171b21;--ink:#e8ebf0;--mut:#98a2b3;--line:#262c35;--acc:#2dd4bf}}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
-main{max-width:640px;margin:0 auto;padding:48px 20px}
-h1{font-size:28px;margin:0}.sub{color:var(--mut);margin-top:4px}
-h2{font-size:13px;text-transform:uppercase;letter-spacing:.7px;color:var(--mut);margin:36px 0 10px}
-a.card{display:block;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;color:inherit;text-decoration:none}
-a.card:hover{border-color:var(--acc)}a.card b{font-size:18px;color:var(--acc)}a.card p{margin:4px 0 0;color:var(--mut);font-size:14px}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}a.card.sm{padding:12px 14px}a.card.sm b{font-size:15.5px}
-footer{margin-top:40px;font-size:12.5px;color:var(--mut)}
+/* emindoktor.com — kanal renkleri: sarı #F9BA27, yeşil #7ABE4A, logo laciverti #1C1F4A */
+:root{color-scheme:light;--paper:#fffbf0;--paper2:#fff3cf;--sun:#f9ba27;--sunlt:#ffe9a8;--leaf:#7abe4a;--leafd:#3a7220;--ink:#1c1f4a;--mute:#5a5c73;--hair:#ede3c8;--rule:#d9cba3;
+--disp:"Libre Caslon Display","Iowan Old Style","Palatino Linotype",Georgia,serif;--text:Literata,"Iowan Old Style",Georgia,serif}
+*{box-sizing:border-box}
+html{background:var(--paper);-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 17px/1.6 var(--text);text-rendering:optimizeLegibility}
+a{color:inherit}
+button{font:inherit;color:inherit}
+.strip{height:10px;background:linear-gradient(90deg,var(--leaf) 0,var(--leaf) 34%,var(--sun) 34%,var(--sun) 100%)}
+.page{max-width:780px;margin:0 auto;padding:0 22px}
+
+/* Künye */
+.kicker{display:flex;flex-wrap:wrap;gap:6px 18px;justify-content:space-between;align-items:center;border-bottom:1px solid var(--ink);padding:18px 0 9px;font-size:14px;color:var(--mute);font-variant-caps:all-small-caps;letter-spacing:.08em}
+.brand{display:inline-flex;align-items:center;gap:9px;color:var(--ink);text-decoration:none;font-variant-caps:normal;letter-spacing:0;font-size:16px}
+.brand img{width:26px;height:auto}
+.hero{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:22px 34px;align-items:center;padding:38px 0 34px}
+.hero .ttl{margin:0;font-size:15px;color:var(--leafd);font-weight:600;font-variant-caps:all-small-caps;letter-spacing:.1em}
+.hero h1{font:400 clamp(40px,7.4vw,70px)/1.02 var(--disp);letter-spacing:-.01em;margin:6px 0 0;text-wrap:balance}
+.mk{background:linear-gradient(transparent 58%,var(--sun) 58%,var(--sun) 90%,transparent 90%);padding:0 .04em}
+.hero .sub{margin:16px 0 0;font-size:17.5px;line-height:1.5;font-style:italic;max-width:36ch}
+.who-btn{display:inline-block;-webkit-appearance:none;appearance:none;margin-top:20px;padding:9px 16px 10px;border:2px solid var(--ink);border-radius:3px;background:var(--sun);color:var(--ink);font-size:15.5px;font-weight:600;cursor:pointer;box-shadow:4px 4px 0 var(--leaf);transition:transform .12s,box-shadow .12s}
+.who-btn:hover,.who-btn:focus-visible{transform:translate(-1px,-1px);box-shadow:6px 6px 0 var(--leaf);outline:none}
+.who-btn:active{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--leaf)}
+.portre{display:block;-webkit-appearance:none;appearance:none;width:176px;height:176px;margin:13px;padding:0;border:0;border-radius:50%;background:var(--sun);cursor:pointer;box-shadow:0 0 0 5px #fff,0 0 0 13px var(--leaf)}
+.portre img{display:block;width:100%;height:100%;border-radius:50%;object-fit:cover}
+.portre:focus-visible{outline:3px solid var(--ink);outline-offset:16px}
+@media (max-width:620px){.hero{grid-template-columns:1fr;padding-top:28px}.portre{grid-row:1;width:124px;height:124px}}
+
+/* Bölümler */
+.sec{margin:0 0 42px}
+.sec>h2{display:flex;align-items:baseline;gap:12px;margin:0;padding:9px 0 6px;border-top:3px solid var(--ink);font-size:15px;font-weight:600;font-variant-caps:all-small-caps;letter-spacing:.1em}
+.sec>h2 .no{font:400 22px/1 var(--disp);color:var(--leafd);letter-spacing:0;font-variant-caps:normal}
+.item{display:block;padding:16px 0 17px;border-bottom:1px solid var(--rule);text-decoration:none;color:var(--ink)}
+.item .it{display:block;padding-right:46px;font:400 clamp(23px,3.4vw,29px)/1.18 var(--disp);text-wrap:balance}
+.item .it span{background:linear-gradient(transparent 62%,var(--sunlt) 62%,var(--sunlt) 92%,transparent 92%);transition:background .2s}
+.item:hover .it span,.item:focus-visible .it span{background:linear-gradient(transparent 52%,var(--sun) 52%,var(--sun) 94%,transparent 94%)}
+.item:focus-visible{outline:2px solid var(--ink);outline-offset:4px}
+.item .ar{float:right;margin-top:2px;font:400 30px/1 var(--disp);color:var(--leafd);transition:transform .15s}
+.item:hover .ar{transform:translateX(5px)}
+.item p{margin:6px 0 0;font-size:15.5px;line-height:1.5;color:var(--mute);max-width:60ch}
+.item .lbl{font-size:13.5px;color:var(--leafd);font-weight:600;font-variant-caps:all-small-caps;letter-spacing:.08em}
+.pair{display:grid;grid-template-columns:1fr;gap:0 30px}
+@media (min-width:640px){.pair{grid-template-columns:1fr 1fr}}
+
+/* Sosyal medya: kanal kartı */
+.kanal{display:flow-root;background:var(--sun);color:var(--ink);padding:24px 24px 22px;border-bottom:10px solid var(--leaf)}
+.kanal img{float:left;width:84px;height:auto;margin:0 22px 18px 0}
+.kanal h3{margin:0;padding-top:16px;font:400 clamp(26px,4vw,34px)/1.1 var(--disp)}
+.kanal .q{margin:4px 0 0;font-style:italic;font-size:16px}
+.kanal ul{clear:both;list-style:none;margin:0;padding:0;border-top:2px solid var(--ink)}
+.kanal li a{display:block;padding:10px 0;border-bottom:1px solid rgba(28,31,74,.28);text-decoration:none;font-size:17px}
+.kanal li:last-child a{border-bottom:0}
+.kanal li a b{font-weight:600}
+.kanal li a span{float:right;font-size:15px;margin-left:12px}
+.kanal li a:hover b,.kanal li a:focus-visible b{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:4px}
+@media (max-width:520px){.kanal img{width:60px;margin-right:16px}}
+
+footer{border-top:3px double var(--ink);margin:10px 0 0;padding:16px 0 44px;font-size:14px;color:var(--mute);display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 20px}
+
 /* Ben kimim */
-.who-btn{display:inline-flex;align-items:center;gap:8px;margin-top:14px;padding:6px 14px 6px 6px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--ink);font:inherit;font-size:14px;cursor:pointer}
-.who-btn:hover{border-color:var(--acc)}.who-btn img{width:26px;height:26px;border-radius:50%;object-fit:cover}
-dialog.who{width:min(560px,calc(100vw - 24px));max-height:calc(100dvh - 24px);padding:0;border:1px solid var(--line);border-radius:20px;background:var(--card);color:var(--ink);box-shadow:0 24px 60px rgba(0,0,0,.22);overflow:auto;overscroll-behavior:contain}
+dialog.who{width:min(580px,calc(100vw - 24px));max-height:calc(100dvh - 24px);padding:0;border:2px solid var(--ink);border-radius:4px;background:var(--paper);color:var(--ink);box-shadow:10px 10px 0 var(--leaf);overflow:auto;overscroll-behavior:contain}
+dialog.who::before{content:"";display:block;height:10px;background:linear-gradient(90deg,var(--leaf) 0,var(--leaf) 34%,var(--sun) 34%,var(--sun) 100%)}
 dialog.who[open]{animation:whoIn .35s ease-out}
-dialog.who::backdrop{background:rgba(15,18,22,.45);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+dialog.who::backdrop{background:rgba(28,31,74,.5);-webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px)}
 dialog.who[open]::backdrop{animation:whoFade .35s ease-out}
-@keyframes whoIn{from{opacity:0;transform:translateY(10px) scale(.98)}to{opacity:1;transform:none}}
+@keyframes whoIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 @keyframes whoFade{from{opacity:0}to{opacity:1}}
-@media (prefers-reduced-motion:reduce){dialog.who[open],dialog.who[open]::backdrop{animation:none}}
+@media (prefers-reduced-motion:reduce){dialog.who[open],dialog.who[open]::backdrop{animation:none}*{transition:none!important}}
 body:has(dialog.who[open]){overflow:hidden}
-.who-x{position:sticky;top:10px;float:right;margin:10px 10px 0 0;width:36px;height:36px;border:0;border-radius:50%;background:var(--bg);color:var(--mut);font-size:22px;line-height:1;cursor:pointer;z-index:1}
-.who-x:hover{color:var(--ink)}
-.who-in{padding:26px 26px 22px}
-.who-head{display:flex;gap:18px;align-items:center}
-.who-head img{width:96px;height:96px;flex:none;border-radius:50%;object-fit:cover;box-shadow:0 0 0 3px var(--card),0 0 0 5px var(--acc)}
-.who-head h2{all:unset;display:block;font-size:21px;font-weight:700;line-height:1.25}
-.who-head p{margin:4px 0 0;color:var(--mut);font-size:14px;line-height:1.4}
-.who-lead{margin:18px 0 0;font-size:15px;line-height:1.6;color:var(--ink);text-wrap:pretty}
-.who-nums{display:grid;grid-template-columns:repeat(auto-fit,minmax(92px,1fr));gap:8px;margin:18px 0 0}
-.who-nums div{border:1px solid var(--line);border-radius:12px;padding:10px 6px;text-align:center}
-.who-nums b{display:block;font-size:20px;color:var(--acc);line-height:1.1}.who-nums span{font-size:11.5px;color:var(--mut);line-height:1.25;display:block;margin-top:3px}
-.who h3{font-size:12px;text-transform:uppercase;letter-spacing:.7px;color:var(--mut);margin:22px 0 8px}
+.who-x{position:sticky;top:10px;float:right;margin:10px 10px 0 0;width:38px;height:38px;border:2px solid var(--ink);border-radius:50%;background:var(--paper);color:var(--ink);font-size:22px;line-height:1;cursor:pointer;z-index:1}
+.who-x:hover{background:var(--sun)}
+.who-in{padding:24px 26px 22px}
+.who-head{display:flex;gap:26px;align-items:center}
+.who-head img{width:100px;height:100px;flex:none;margin:9px;border-radius:50%;object-fit:cover;background:var(--sun);box-shadow:0 0 0 4px #fff,0 0 0 9px var(--leaf)}
+.who-head h2{all:unset;display:block;font:400 28px/1.12 var(--disp)}
+.who-head p{margin:6px 0 0;color:var(--mute);font-size:14.5px;line-height:1.45}
+.who-lead{margin:20px 0 0;font-size:15.5px;line-height:1.65;text-wrap:pretty}
+.who-nums{display:grid;grid-template-columns:repeat(auto-fit,minmax(96px,1fr));margin:20px 0 0;border-top:3px solid var(--sun);border-bottom:1px solid var(--ink)}
+.who-nums div{padding:10px 8px 10px 0;border-bottom:1px solid var(--hair)}
+.who-nums b{display:block;font:400 30px/1 var(--disp);color:var(--leafd)}.who-nums span{font-size:12.5px;color:var(--mute);line-height:1.3;display:block;margin-top:4px}
+.who h3{margin:24px 0 8px;padding-top:6px;border-top:2px solid var(--leaf);font-size:14.5px;font-weight:600;color:var(--leafd);font-variant-caps:all-small-caps;letter-spacing:.1em}
 .who ul.tl{list-style:none;margin:0;padding:0}
-.who ul.tl li{position:relative;padding:0 0 10px 18px;font-size:14.5px}
-.who ul.tl li::before{content:"";position:absolute;left:3px;top:8px;width:7px;height:7px;border-radius:50%;background:var(--acc)}
-.who ul.tl li small{display:block;color:var(--mut);font-size:12.5px}
-.chips{display:flex;flex-wrap:wrap;gap:6px}
-.chips span{padding:4px 10px;border-radius:999px;background:color-mix(in srgb,var(--acc) 12%,transparent);color:var(--ink);font-size:13px}
+.who ul.tl li{position:relative;padding:0 0 10px 20px;font-size:15px}
+.who ul.tl li::before{content:"";position:absolute;left:2px;top:9px;width:8px;height:8px;background:var(--sun);border:2px solid var(--ink);border-radius:50%}
+.who ul.tl li small{display:block;color:var(--mute);font-size:13px}
+.chips{display:flex;flex-wrap:wrap;gap:4px 16px}
+.chips span{font-size:14.5px}
+.chips span::before{content:"";display:inline-block;width:7px;height:7px;margin:0 7px 2px 0;background:var(--leaf)}
 .pubs{list-style:none;margin:0;padding:0}
-.pubs li{padding:8px 0;border-top:1px solid var(--line);font-size:14px;line-height:1.4}
+.pubs li{padding:9px 0;border-top:1px solid var(--hair);font-size:14.5px;line-height:1.42}
 .pubs li:first-child{border-top:0;padding-top:0}
-.pubs a{color:var(--ink);text-decoration:none}.pubs a:hover{color:var(--acc)}
-.pubs small{display:block;color:var(--mut);font-size:12.5px;margin-top:2px}
-.who details summary{cursor:pointer;color:var(--acc);font-size:14px;padding:8px 0 0;list-style:none}
+.pubs a{color:var(--ink);text-decoration:none;background:linear-gradient(transparent 70%,var(--sunlt) 70%)}
+.pubs a:hover{background:linear-gradient(transparent 55%,var(--sun) 55%)}
+.pubs small{display:block;color:var(--mute);font-size:13px;margin-top:2px;font-style:italic}
+.who details summary{cursor:pointer;color:var(--leafd);font-weight:600;font-size:14.5px;padding:8px 0 0;list-style:none}
 .who details summary::-webkit-details-marker{display:none}
 .who details[open] summary{display:none}
-.who-foot{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-top:22px;padding-top:16px;border-top:1px solid var(--line)}
-.who-foot a{color:var(--mut);font-size:13.5px;text-decoration:none}.who-foot a:hover{color:var(--acc)}
-.who-go{border:0;border-radius:999px;padding:10px 18px;background:var(--acc);color:#fff;font:inherit;font-size:14.5px;font-weight:600;cursor:pointer}
-@media (prefers-color-scheme:dark){.who-go{color:#0f1216}}
-@media (max-width:480px){.who-in{padding:22px 18px 18px}.who-head{flex-direction:column;align-items:flex-start;gap:12px}.who-head img{width:84px;height:84px}}
+.who-foot{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;margin-top:22px;padding-top:16px;border-top:3px double var(--ink)}
+.who-foot a{color:var(--mute);font-size:14px;text-decoration:none}.who-foot a:hover{color:var(--ink);text-decoration:underline}
+.who-go{border:2px solid var(--ink);border-radius:3px;padding:9px 18px 10px;background:var(--sun);color:var(--ink);font-size:15px;font-weight:600;cursor:pointer;box-shadow:3px 3px 0 var(--leaf)}
+.who-go:hover{box-shadow:5px 5px 0 var(--leaf)}
+@media (max-width:480px){.who-in{padding:20px 18px 18px}.who-head{flex-direction:column;align-items:flex-start;gap:14px}.who-head img{width:86px;height:86px}}
 </style>
 </head>
 <body>
+<div class="strip" aria-hidden="true"></div>
+<div class="page">
+<header>
+  <div class="kicker"><a class="brand" href="/"><img src="/img/logo-kalp.webp" alt="" width="26" height="30">emindoktor.com</a><span>Aile Hekimliği · Trabzon</span></div>
+  <div class="hero">
+    <div>
+      <p class="ttl">Dr. Öğr. Üyesi</p>
+      <h1>Muhammed Emin <span class="mk">Göktepe</span></h1>
+      <p class="sub">Aile hekimliği uzmanı. Trabzon Üniversitesi Tıp Fakültesi, Aile Hekimliği Anabilim Dalı.</p>
+      <button type="button" class="who-btn" id="whoOpen" aria-haspopup="dialog">Ben kimim? <span aria-hidden="true">→</span></button>
+    </div>
+    <button type="button" class="portre" id="whoOpen2" aria-haspopup="dialog" aria-label="Ben kimim?"><img src="/img/portre-sari.webp" alt="" width="176" height="176"></button>
+  </div>
+</header>
 <main>
-  <h1>Dr. Öğr. Üyesi Muhammed Emin Göktepe</h1>
-  <div class="sub">Trabzon Üniversitesi Tıp Fakültesi · Aile Hekimliği Anabilim Dalı</div>
-  <button type="button" class="who-btn" id="whoOpen" aria-haspopup="dialog"><img src="/img/emin-goktepe.webp" alt="" width="26" height="26">Ben kimim?</button>
-  <h2>Klinik araçlar</h2>
-  <a class="card" href="/ahurapor/">
-    <b>AHU Rapor →</b>
-    <p>Aile hekimliği uzmanlarının rapor çıkarabildiği ilaçlar ve tıbbi malzemeler — etken madde, ticari ad ve tanı ile arama.</p>
-  </a>
-  <a class="card" href="/dokuntulu-hastaliklar/" style="margin-top:10px">
-    <b>Çocukluk Çağı Döküntülü Hastalıklar – Aile Hekimliği Başvuru Rehberi →</b>
-    <p>Çocukluk çağında döküntüyle seyreden hastalıklar için aile hekimlerine yönelik başvuru rehberi.</p>
-  </a>
-  <h2>Tıbbi hipnoz eğitimi</h2>
-  <div class="grid">
-    <a class="card sm" href="https://www.youtube.com/playlist?list=PLTcyWLFRDMfc" target="_blank" rel="noopener"><b>▶ Hipnoz eğitimi videoları</b><p>Hafta hafta eğitim kayıtları (YouTube)</p></a>
-    <a class="card sm" href="https://www.youtube.com/playlist?list=PLV5lYZpj3PKw" target="_blank" rel="noopener"><b>🎧 Hipnoz podcast</b><p>Arabada da dinlenebilir (YouTube)</p></a>
-  </div>
-  <h2>Sosyal medya</h2>
-  <div class="grid">
-    <a class="card sm" href="https://www.youtube.com/@emindoktorcom" target="_blank" rel="noopener me"><b>YouTube</b><p>@emindoktorcom</p></a>
-    <a class="card sm" href="https://www.instagram.com/emindoktorcom" target="_blank" rel="noopener me"><b>Instagram</b><p>@emindoktorcom</p></a>
-    <a class="card sm" href="https://linktr.ee/emindoktor" target="_blank" rel="noopener me"><b>Linktree</b><p>Tüm bağlantılarım</p></a>
-  </div>
-  <footer>Bu sitedeki bilgiler hap bilgidir; güncel SUT ve Medula ile doğrulayınız.</footer>
+  <section class="sec">
+    <h2><span class="no">01</span>Klinik araçlar</h2>
+    <a class="item" href="/ahurapor/">
+      <span class="ar" aria-hidden="true">→</span><span class="it"><span>AHU Rapor</span></span>
+      <p>Aile hekimliği uzmanlarının rapor çıkarabildiği ilaçlar ve tıbbi malzemeler. Etken madde, ticari ad ve tanı ile arama.</p>
+    </a>
+    <a class="item" href="/dokuntulu-hastaliklar/">
+      <span class="ar" aria-hidden="true">→</span><span class="it"><span>Çocukluk Çağı Döküntülü Hastalıklar</span></span>
+      <p>Çocukluk çağında döküntüyle seyreden hastalıklar için aile hekimlerine yönelik başvuru rehberi.</p>
+    </a>
+  </section>
+  <section class="sec">
+    <h2><span class="no">02</span>Tıbbi hipnoz eğitimi</h2>
+    <div class="pair">
+      <a class="item" href="https://www.youtube.com/playlist?list=PLTcyWLFRDMfc" target="_blank" rel="noopener">
+        <span class="ar" aria-hidden="true">↗</span><span class="it"><span>Eğitim videoları</span></span>
+        <p><span class="lbl">YouTube</span> · Hafta hafta eğitim kayıtları</p>
+      </a>
+      <a class="item" href="https://www.youtube.com/playlist?list=PLV5lYZpj3PKw" target="_blank" rel="noopener">
+        <span class="ar" aria-hidden="true">↗</span><span class="it"><span>Hipnoz podcast</span></span>
+        <p><span class="lbl">YouTube</span> · Arabada da dinlenebilir</p>
+      </a>
+    </div>
+  </section>
+  <section class="sec">
+    <h2><span class="no">03</span>Sosyal medya</h2>
+    <div class="kanal">
+      <img src="/img/logo-kalp.webp" alt="emindoktor logosu" width="84" height="96">
+      <div><h3>@emindoktorcom</h3><p class="q">Abone ol, bilimle kal.</p></div>
+      <ul>
+        <li><a href="https://www.youtube.com/@emindoktorcom" target="_blank" rel="noopener me"><b>YouTube</b><span>@emindoktorcom ↗</span></a></li>
+        <li><a href="https://www.instagram.com/emindoktorcom" target="_blank" rel="noopener me"><b>Instagram</b><span>@emindoktorcom ↗</span></a></li>
+        <li><a href="https://linktr.ee/emindoktor" target="_blank" rel="noopener me"><b>Linktree</b><span>Tüm bağlantılarım ↗</span></a></li>
+      </ul>
+    </div>
+  </section>
 </main>
+<footer><span>Bu sitedeki bilgiler hap bilgidir; güncel SUT ve Medula ile doğrulayınız.</span><span>emindoktor.com</span></footer>
+</div>
 <dialog class="who" id="who" aria-labelledby="whoName">
   <button type="button" class="who-x" id="whoX" aria-label="Kapat">×</button>
   <div class="who-in">
     <div class="who-head">
-      <img src="/img/emin-goktepe.webp" alt="Dr. Muhammed Emin Göktepe" width="96" height="96">
+      <img src="/img/portre-sari.webp" alt="Dr. Muhammed Emin Göktepe" width="100" height="100">
       <div>
         <h2 id="whoName">Muhammed Emin Göktepe</h2>
         <p>Dr. Öğr. Üyesi · Aile Hekimliği Uzmanı<br>Trabzon Üniversitesi Tıp Fakültesi</p>
@@ -156,6 +242,7 @@ body:has(dialog.who[open]){overflow:hidden}
   function open(){if(!d.open)d.showModal()}
   function close(){if(d.open)d.close()}
   document.getElementById('whoOpen').addEventListener('click',open);
+  document.getElementById('whoOpen2').addEventListener('click',open);
   document.getElementById('whoX').addEventListener('click',close);
   document.getElementById('whoGo').addEventListener('click',close);
   d.addEventListener('click',function(e){if(e.target===d)close()});

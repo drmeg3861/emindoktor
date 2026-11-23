@@ -33,6 +33,12 @@ Cloudflare Pages GitHub uygulaması yalnızca bu depoya yetkili.
 - Sağlık kurulu: yetişkin enteral beslenme (SUT 4.2.8.A) branş şartı yok → 3 AH uzmanı kurulu ✓ (malnütrisyon: 3 ay, ≤1200 kcal; kanser/tüple beslenen: 6 ay). Kıvam artırıcı, hepatik formül, çocuk enteral AH ✕.
 - Mümessil formu: Google Form (Drive'da "AHU Rapor – Form Betiği"); gelen öneriler doğrudan uygulamaya yazılmaz, önce Medula'da doğrulanır.
 
+## Tema (23.11.2026)
+- Renkler YouTube kanalından: sarı `#f9ba27`, yeşil `#7abe4a` (yalnız süs/zemin; yeşil metin için `#3a7220`), logo laciverti `#1c1f4a` (metin), kâğıt `#fffbf0`, açık sarı `#fff3cf`.
+- Yazı: Libre Caslon Display (başlık) + Literata (metin). Açık tema; şablon/AI görünümü yok.
+- Logo: `img/logo-kalp.webp` (lacivert aile + yeşil kalp, açık zemin için); favicon `favicon.ico`, `favicon-32.png`, `apple-touch-icon.png`. Portre: `img/portre-sari.webp`.
+- Döküntülü rehberde hastalık başına renkler içerik kodudur, korunur.
+
 ## Güncelleme akışı
 1. Yeni SKRS e-reçete listesi (xlsx) gelince `tools/build.py` ile `ahurapor/skrs.json` yeniden üret.
    - Girdiler (`rows.json`, `names.json`, `etkin.json`) varsayılan olarak `tools/in/` klasöründe aranır; başka klasör için `--girdi YOL`.

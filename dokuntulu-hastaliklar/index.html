@@ -12,13 +12,17 @@
 <meta property="og:url" content="https://emindoktor.com/dokuntulu-hastaliklar/">
 <meta property="og:locale" content="tr_TR">
 <meta name="color-scheme" content="light">
-<meta name="theme-color" content="#fffdf9">
+<meta name="theme-color" content="#f9ba27">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Display&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&display=swap" rel="stylesheet">
 <style>
-:root{color-scheme:light;--paper:#fffdf9;--paper2:#f6f2ea;--ink:#1c1d22;--mute:#5f6170;--rule:#c9c3b8;--hair:#e8e3da;--c:#d0442b;
---red:#e03131;--redbg:#fff0ef;--amb:#d97706;--ambt:#9a4f00;--ambbg:#fff6e3;--mark:#ffe066;
+:root{color-scheme:light;--paper:#fffbf0;--paper2:#fff3cf;--ink:#1c1f4a;--mute:#5a5c73;--rule:#d9cba3;--hair:#ede3c8;--c:#3a7220;
+--sun:#f9ba27;--sunlt:#ffe9a8;--leaf:#7abe4a;--leafd:#3a7220;
+--red:#e03131;--redbg:#fff0ef;--amb:#d97706;--ambt:#9a4f00;--ambbg:#fff6e3;--mark:#ffd766;
 --disp:"Libre Caslon Display","Iowan Old Style","Palatino Linotype",Georgia,serif;--text:Literata,"Iowan Old Style",Georgia,serif}
 *{box-sizing:border-box;--ct:color-mix(in srgb,var(--c) 9%,#fff)}
 html{-webkit-text-size-adjust:100%;background:var(--paper)}
@@ -31,14 +35,17 @@ button{font:inherit;color:inherit}
 .mast{padding:26px 0 0}
 .kicker{display:flex;flex-wrap:wrap;gap:4px 18px;justify-content:space-between;border-bottom:1px solid var(--ink);padding-bottom:8px;font-size:14px;color:var(--mute);font-variant-caps:all-small-caps;letter-spacing:.08em}
 .kicker a{color:var(--ink);text-decoration:none}
+.brand{display:inline-flex;align-items:center;gap:8px;font-variant-caps:normal;letter-spacing:0;font-size:15.5px}
+.brand img{width:22px;height:auto}
+.strip{height:10px;background:linear-gradient(90deg,var(--leaf) 0,var(--leaf) 34%,var(--sun) 34%,var(--sun) 100%)}
 .mast h1{font:400 clamp(38px,7.2vw,78px)/1.02 var(--disp);letter-spacing:-.01em;margin:34px 0 0;max-width:15ch;text-wrap:balance}
-.mast h1 .w{color:#d0442b}
+.mast h1 .w{color:var(--ink);background:linear-gradient(transparent 56%,var(--sun) 56%,var(--sun) 90%,transparent 90%);padding:0 .04em}
 .spectrum{height:10px;margin:24px 0 0;background:linear-gradient(90deg,#d0442b 0.0% 4.762%,#c2255c 4.762% 9.524%,#e8590c 9.524% 14.286%,#b8860b 14.286% 19.048%,#e64980 19.048% 23.81%,#9c36b5 23.81% 28.571%,#c92a2a 28.571% 33.333%,#e03131 33.333% 38.095%,#a61e4d 38.095% 42.857%,#862e9c 42.857% 47.619%,#d9480f 47.619% 52.381%,#b02525 52.381% 57.143%,#9a3412 57.143% 61.905%,#0c8599 61.905% 66.667%,#1971c2 66.667% 71.429%,#2f9e44 71.429% 76.19%,#5f3dc4 76.19% 80.952%,#c26a00 80.952% 85.714%,#3b5bdb 85.714% 90.476%,#087f5b 90.476% 95.238%,#5c940d 95.238% 100.0%)}
 .deck{font-size:clamp(18px,2.3vw,22px);line-height:1.4;font-style:italic;margin:18px 0 0;max-width:40ch}
 .method{margin:10px 0 0;font-size:14.5px;color:var(--mute);max-width:60ch}
-.credits{display:flex;flex-wrap:wrap;gap:10px 48px;margin:22px 0 0;padding:12px 0;border-top:3px double var(--ink);border-bottom:1px solid var(--ink)}
+.credits{background:var(--paper2);padding-left:14px!important;padding-right:14px!important;display:flex;flex-wrap:wrap;gap:10px 48px;margin:22px 0 0;padding:12px 0;border-top:3px double var(--ink);border-bottom:1px solid var(--ink)}
 .credits div{display:flex;flex-direction:column}
-.credits dt{font-size:13.5px;color:var(--mute);font-variant-caps:all-small-caps;letter-spacing:.08em}
+.credits dt{font-size:13.5px;color:var(--leafd);font-weight:600;font-variant-caps:all-small-caps;letter-spacing:.08em}
 .credits dd{margin:0;font-size:16px}
 
 /* Düzen */
@@ -136,7 +143,7 @@ td a{color:var(--ink)}
 /* Kaynak işaretleri ve notlar */
 .ref{font-size:.66em;line-height:0;vertical-align:.55em;color:var(--c);font-weight:600;text-decoration:none;font-variant-numeric:lining-nums;padding:0 .1em;cursor:pointer}
 .ref:hover{text-decoration:underline}
-.note{position:absolute;z-index:30;width:min(360px,calc(100vw - 32px));background:#fff;border:1px solid var(--ink);border-top:5px solid var(--c);box-shadow:6px 6px 0 var(--ct);padding:12px 14px 10px;font-size:14px;line-height:1.45}
+.note{position:absolute;z-index:30;width:min(360px,calc(100vw - 32px));background:var(--paper);border:1px solid var(--ink);border-top:5px solid var(--c);box-shadow:6px 6px 0 var(--ct);padding:12px 14px 10px;font-size:14px;line-height:1.45}
 .note[hidden]{display:none}
 .note .nb{padding-right:18px}
 .note .nb b{color:var(--c)}
@@ -178,7 +185,7 @@ figcaption small a{color:var(--mute)}
 /* Önceki / sonraki */
 .sh-row{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:12px;margin-top:8px}
 .sh-row h2{margin:0!important}
-.pn{width:44px;height:44px;flex:none;border:2px solid var(--c);background:#fff;color:var(--c);font:400 30px/1 var(--disp);cursor:pointer;display:grid;place-items:center;padding:0 0 4px;transition:background .15s,color .15s}
+.pn{width:44px;height:44px;flex:none;border:2px solid var(--c);background:var(--paper);color:var(--c);font:400 30px/1 var(--disp);cursor:pointer;display:grid;place-items:center;padding:0 0 4px;transition:background .15s,color .15s}
 .pn:hover,.pn:focus-visible{background:var(--c);color:#fff;outline:none}
 @media (max-width:520px){.pn{width:38px;height:38px;font-size:26px}}
 .cur{display:flex;align-items:center;gap:2px;min-width:0}
@@ -209,7 +216,7 @@ figcaption small a{color:var(--mute)}
 .hl{background:var(--mark);color:inherit;padding:0 1px}
 
 /* Kolofon */
-footer .colo{border-top:3px double var(--ink);margin-top:20px;padding:16px 0 40px;color:var(--mute);font-size:14px;line-height:1.55}
+footer .colo{border-top:3px double var(--ink);border-bottom:10px solid var(--sun);margin-top:20px;padding:16px 0 40px;color:var(--mute);font-size:14px;line-height:1.55}
 footer p{margin:0 0 8px;max-width:78ch}
 footer b{color:var(--ink);font-weight:600}
 @media (min-width:960px){footer .colo{margin-left:308px}}
@@ -219,8 +226,9 @@ footer b{color:var(--ink);font-weight:600}
 </style>
 </head>
 <body>
+<div class="strip" aria-hidden="true"></div>
 <header class="mast"><div class="page">
-<div class="kicker"><a href="/">emindoktor.com</a><span>Aile Hekimliği Başvuru Rehberi</span><span>Literatür taraması · Kasım 2026</span></div>
+<div class="kicker"><a class="brand" href="/"><img src="/img/logo-kalp.webp" alt="" width="22" height="25">emindoktor.com</a><span>Aile Hekimliği Başvuru Rehberi</span><span>Literatür taraması · Kasım 2026</span></div>
 <h1>Çocukluk Çağının <span class="w">Döküntülü</span> Hastalıkları</h1>
 <div class="spectrum" aria-hidden="true"></div>
 <p class="deck">Aile Hekimliği Uzmanları için kanıta dayalı birinci basamak başvuru rehberi</p>
@@ -238,6 +246,7 @@ footer b{color:var(--ink);font-weight:600}
 <div class="lb" id="lb"><img alt=""><p></p></div>
 <footer class="page"><div class="colo">
 <p><b>Uyarı:</b> Bu sayfa klinik karar desteği amaçlıdır; hastanın bireysel değerlendirmesinin, güncel ulusal rehberlerin ve ilaç prospektüslerinin yerini tutmaz. Dozları uygulamadan önce kilo ve böbrek fonksiyonuna göre kontrol ediniz.</p>
+<p><a class="brand" href="/" style="color:var(--ink);text-decoration:none"><img src="/img/logo-kalp.webp" alt="" width="22" height="25">emindoktor.com</a></p>
 <p>Fikir babası: Uzm. Dr. Ensar Erdoğan · Proje: Dr. Öğr. Üyesi Muhammed Emin Göktepe · Trabzon Üniversitesi Tıp Fakültesi Aile Hekimliği AD · Literatür taraması: Kasım 2026</p>
 </div></footer>
 <script>
@@ -249,7 +258,7 @@ const TOOLS=[["algoritma","Döküntü tipine göre ara","A"],["karsilastirma","K
 const GROUPS=["Klasik ekzantem","Acil/ciddi","Sık görülen diğer"];
 const ROMAN=["I","II","III","IV"];
 const COL={"kizamik": "#d0442b", "kizamikcik": "#c2255c", "kizil": "#e8590c", "sucicegi": "#b8860b", "eritema": "#e64980", "roseola": "#9c36b5", "meningokoksemi": "#c92a2a", "kawasaki": "#e03131", "misc": "#a61e4d", "iga-vaskulit": "#862e9c", "ssss": "#d9480f", "ilac": "#b02525", "rickettsia": "#9a3412", "elayakagiz": "#0c8599", "mononukleoz": "#1971c2", "gianotti": "#2f9e44", "pitiriazis": "#5f3dc4", "impetigo": "#c26a00", "urtiker-em": "#3b5bdb", "mpox": "#087f5b", "skabiyes": "#5c940d", "algoritma": "#1864ab", "karsilastirma": "#0b7285", "acil": "#e03131", "turkiye": "#2b8a3e", "lezyon": "#7048e8"};
-const GCOL={"Araçlar":"#1c1d22","Klasik ekzantem":"#d0442b","Acil/ciddi":"#e03131","Sık görülen diğer":"#0c8599"};
+const GCOL={"Araçlar":"#1c1f4a","Klasik ekzantem":"#d0442b","Acil/ciddi":"#e03131","Sık görülen diğer":"#0c8599"};
 const col=id=>COL[id]||"#d0442b";
 const ORDER=[];GROUPS.forEach(g=>D.hastaliklar.filter(x=>(x.grup||"Sık görülen diğer")===g).forEach(x=>ORDER.push(x.id)));
 const numOf=id=>String(ORDER.indexOf(id)+1).padStart(2,"0");

@@ -33,6 +33,13 @@ Cloudflare Pages GitHub uygulaması yalnızca bu depoya yetkili.
 - Sağlık kurulu: yetişkin enteral beslenme (SUT 4.2.8.A) branş şartı yok → 3 AH uzmanı kurulu ✓ (malnütrisyon: 3 ay, ≤1200 kcal; kanser/tüple beslenen: 6 ay). Kıvam artırıcı, hepatik formül, çocuk enteral AH ✕.
 - Mümessil formu: Google Form (Drive'da "AHU Rapor – Form Betiği"); gelen öneriler doğrudan uygulamaya yazılmaz, önce Medula'da doğrulanır.
 
+## Tema (23.11.2026, v2 "klinik monitör")
+- Palet (kullanıcı): beyaz, sarı `#f9ba27`, yeşil `#7abe4a`, açık mavi `#d6f1fb`/`#eef9fd`, turkuaz `#14b8b0` (süs; metin için `#0a7470`). Metin `#0d1b2a`, ikincil `#44566a`.
+- Yazı: Unbounded (başlık) + Atkinson Hyperlegible Next (metin) + JetBrains Mono (etiket). Kaçınılacak: krem/serif "editoryal" görünüm, yuvarlak gölgeli kart, hap etiket, emoji ikon (kullanıcı v1'i "Claude yapmış belli" diye reddetti).
+- Motifler: EKG kâğıdı ızgarası, animasyonlu EKG çizgisi, monitör çerçeveli portre, köşeli modül satırları; animasyonlar `prefers-reduced-motion`'da kapanır.
+- Logo: `img/logo-kalp.webp`; favicon `favicon.ico`, `favicon-32.png`, `apple-touch-icon.png`. Portre: `img/portre-sari.webp`.
+- Döküntülü rehberde hastalık başına renkler içerik kodudur, korunur.
+
 ## Güncelleme akışı
 1. Yeni SKRS e-reçete listesi (xlsx) gelince `tools/build.py` ile `ahurapor/skrs.json` yeniden üret.
    - Girdiler (`rows.json`, `names.json`, `etkin.json`) varsayılan olarak `tools/in/` klasöründe aranır; başka klasör için `--girdi YOL`.

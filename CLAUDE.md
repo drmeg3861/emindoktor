@@ -33,10 +33,11 @@ Cloudflare Pages GitHub uygulaması yalnızca bu depoya yetkili.
 - Sağlık kurulu: yetişkin enteral beslenme (SUT 4.2.8.A) branş şartı yok → 3 AH uzmanı kurulu ✓ (malnütrisyon: 3 ay, ≤1200 kcal; kanser/tüple beslenen: 6 ay). Kıvam artırıcı, hepatik formül, çocuk enteral AH ✕.
 - Mümessil formu: Google Form (Drive'da "AHU Rapor – Form Betiği"); gelen öneriler doğrudan uygulamaya yazılmaz, önce Medula'da doğrulanır.
 
-## Tema (23.11.2026)
-- Renkler YouTube kanalından: sarı `#f9ba27`, yeşil `#7abe4a` (yalnız süs/zemin; yeşil metin için `#3a7220`), logo laciverti `#1c1f4a` (metin), kâğıt `#fffbf0`, açık sarı `#fff3cf`.
-- Yazı: Libre Caslon Display (başlık) + Literata (metin). Açık tema; şablon/AI görünümü yok.
-- Logo: `img/logo-kalp.webp` (lacivert aile + yeşil kalp, açık zemin için); favicon `favicon.ico`, `favicon-32.png`, `apple-touch-icon.png`. Portre: `img/portre-sari.webp`.
+## Tema (23.11.2026, v2 "klinik monitör")
+- Palet (kullanıcı): beyaz, sarı `#f9ba27`, yeşil `#7abe4a`, açık mavi `#d6f1fb`/`#eef9fd`, turkuaz `#14b8b0` (süs; metin için `#0a7470`). Metin `#0d1b2a`, ikincil `#44566a`.
+- Yazı: Unbounded (başlık) + Atkinson Hyperlegible Next (metin) + JetBrains Mono (etiket). Kaçınılacak: krem/serif "editoryal" görünüm, yuvarlak gölgeli kart, hap etiket, emoji ikon (kullanıcı v1'i "Claude yapmış belli" diye reddetti).
+- Motifler: EKG kâğıdı ızgarası, animasyonlu EKG çizgisi, monitör çerçeveli portre, köşeli modül satırları; animasyonlar `prefers-reduced-motion`'da kapanır.
+- Logo: `img/logo-kalp.webp`; favicon `favicon.ico`, `favicon-32.png`, `apple-touch-icon.png`. Portre: `img/portre-sari.webp`.
 - Döküntülü rehberde hastalık başına renkler içerik kodudur, korunur.
 
 ## Güncelleme akışı

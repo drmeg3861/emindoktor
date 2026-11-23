@@ -20,169 +20,287 @@
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Display&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800&family=Atkinson+Hyperlegible+Next:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
-/* emindoktor.com — kanal renkleri: sarı #F9BA27, yeşil #7ABE4A, logo laciverti #1C1F4A */
-:root{color-scheme:light;--paper:#fffbf0;--paper2:#fff3cf;--sun:#f9ba27;--sunlt:#ffe9a8;--leaf:#7abe4a;--leafd:#3a7220;--ink:#1c1f4a;--mute:#5a5c73;--hair:#ede3c8;--rule:#d9cba3;
---disp:"Libre Caslon Display","Iowan Old Style","Palatino Linotype",Georgia,serif;--text:Literata,"Iowan Old Style",Georgia,serif}
+:root{
+  --ink:#0d1b2a;--mute:#44566a;--white:#fff;--bg:#f7fcfe;
+  --sun:#f9ba27;--leaf:#7abe4a;--sky:#d6f1fb;--sky2:#eef9fd;--tq:#14b8b0;--tqd:#0a7470;
+  --grid:rgba(20,150,190,.13);--grid2:rgba(20,150,190,.22);
+  --disp:"Unbounded",system-ui,sans-serif;--body:"Atkinson Hyperlegible Next","Atkinson Hyperlegible",system-ui,sans-serif;--mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+}
 *{box-sizing:border-box}
-html{background:var(--paper);-webkit-text-size-adjust:100%}
-body{margin:0;background:var(--paper);color:var(--ink);font:400 17px/1.6 var(--text);text-rendering:optimizeLegibility}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--white);color:var(--ink);font:400 17px/1.6 var(--body)}
 a{color:inherit}
-button{font:inherit;color:inherit}
-.strip{height:10px;background:linear-gradient(90deg,var(--leaf) 0,var(--leaf) 34%,var(--sun) 34%,var(--sun) 100%)}
-.page{max-width:780px;margin:0 auto;padding:0 22px}
+img{display:block;max-width:100%}
+.wrap{max-width:1240px;margin:0 auto;padding:0 40px}
+.mono{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase}
+:focus-visible{outline:3px solid var(--tq);outline-offset:3px}
 
-/* Künye */
-.kicker{display:flex;flex-wrap:wrap;gap:6px 18px;justify-content:space-between;align-items:center;border-bottom:1px solid var(--ink);padding:18px 0 9px;font-size:14px;color:var(--mute);font-variant-caps:all-small-caps;letter-spacing:.08em}
-.brand{display:inline-flex;align-items:center;gap:9px;color:var(--ink);text-decoration:none;font-variant-caps:normal;letter-spacing:0;font-size:16px}
-.brand img{width:26px;height:auto}
-.hero{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:22px 34px;align-items:center;padding:38px 0 34px}
-.hero .ttl{margin:0;font-size:15px;color:var(--leafd);font-weight:600;font-variant-caps:all-small-caps;letter-spacing:.1em}
-.hero h1{font:400 clamp(40px,7.4vw,70px)/1.02 var(--disp);letter-spacing:-.01em;margin:6px 0 0;text-wrap:balance}
-.mk{background:linear-gradient(transparent 58%,var(--sun) 58%,var(--sun) 90%,transparent 90%);padding:0 .04em}
-.hero .sub{margin:16px 0 0;font-size:17.5px;line-height:1.5;font-style:italic;max-width:36ch}
-.who-btn{display:inline-block;-webkit-appearance:none;appearance:none;margin-top:20px;padding:9px 16px 10px;border:2px solid var(--ink);border-radius:3px;background:var(--sun);color:var(--ink);font-size:15.5px;font-weight:600;cursor:pointer;box-shadow:4px 4px 0 var(--leaf);transition:transform .12s,box-shadow .12s}
-.who-btn:hover,.who-btn:focus-visible{transform:translate(-1px,-1px);box-shadow:6px 6px 0 var(--leaf);outline:none}
-.who-btn:active{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--leaf)}
-.portre{display:block;-webkit-appearance:none;appearance:none;width:176px;height:176px;margin:13px;padding:0;border:0;border-radius:50%;background:var(--sun);cursor:pointer;box-shadow:0 0 0 5px #fff,0 0 0 13px var(--leaf)}
-.portre img{display:block;width:100%;height:100%;border-radius:50%;object-fit:cover}
-.portre:focus-visible{outline:3px solid var(--ink);outline-offset:16px}
-@media (max-width:620px){.hero{grid-template-columns:1fr;padding-top:28px}.portre{grid-row:1;width:124px;height:124px}}
+/* üst şerit */
+.bar{border-bottom:1px solid var(--grid2);background:var(--white)}
+.bar .wrap{display:flex;align-items:center;justify-content:space-between;height:56px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font:700 15px/1 var(--disp);letter-spacing:-.01em}
+.brand img{width:24px;height:auto}
+.bar .meta{color:var(--mute)}
+.live{white-space:nowrap;display:inline-flex;align-items:center;gap:8px;color:var(--tqd)}
+.live i{display:inline-block;width:8px;height:8px;background:var(--leaf);border-radius:50%;box-shadow:0 0 0 0 rgba(122,190,74,.6);animation:pulse 2s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(122,190,74,.6)}70%{box-shadow:0 0 0 9px rgba(122,190,74,0)}100%{box-shadow:0 0 0 0 rgba(122,190,74,0)}}
 
-/* Bölümler */
-.sec{margin:0 0 42px}
-.sec>h2{display:flex;align-items:baseline;gap:12px;margin:0;padding:9px 0 6px;border-top:3px solid var(--ink);font-size:15px;font-weight:600;font-variant-caps:all-small-caps;letter-spacing:.1em}
-.sec>h2 .no{font:400 22px/1 var(--disp);color:var(--leafd);letter-spacing:0;font-variant-caps:normal}
-.item{display:block;padding:16px 0 17px;border-bottom:1px solid var(--rule);text-decoration:none;color:var(--ink)}
-.item .it{display:block;padding-right:46px;font:400 clamp(23px,3.4vw,29px)/1.18 var(--disp);text-wrap:balance}
-.item .it span{background:linear-gradient(transparent 62%,var(--sunlt) 62%,var(--sunlt) 92%,transparent 92%);transition:background .2s}
-.item:hover .it span,.item:focus-visible .it span{background:linear-gradient(transparent 52%,var(--sun) 52%,var(--sun) 94%,transparent 94%)}
-.item:focus-visible{outline:2px solid var(--ink);outline-offset:4px}
-.item .ar{float:right;margin-top:2px;font:400 30px/1 var(--disp);color:var(--leafd);transition:transform .15s}
-.item:hover .ar{transform:translateX(5px)}
-.item p{margin:6px 0 0;font-size:15.5px;line-height:1.5;color:var(--mute);max-width:60ch}
-.item .lbl{font-size:13.5px;color:var(--leafd);font-weight:600;font-variant-caps:all-small-caps;letter-spacing:.08em}
-.pair{display:grid;grid-template-columns:1fr;gap:0 30px}
-@media (min-width:640px){.pair{grid-template-columns:1fr 1fr}}
+/* hero: EKG kâğıdı */
+.hero{position:relative;background-color:var(--white);
+  background-image:linear-gradient(var(--grid2) 1px,transparent 1px),linear-gradient(90deg,var(--grid2) 1px,transparent 1px),linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:40px 40px,40px 40px,8px 8px,8px 8px;border-bottom:1px solid var(--grid2)}
+.hero .wrap{display:grid;grid-template-columns:7fr 5fr;gap:48px;padding-top:56px;padding-bottom:0}
+.tag{display:inline-block;background:var(--ink);color:var(--sun);padding:6px 10px}
+.hero h1{font:800 74px/.98 var(--disp);letter-spacing:-.035em;margin:22px 0 0}
+.hero h1 .l2{display:inline-block;background:var(--sun);padding:2px 14px 8px 10px;margin-left:-10px;margin-top:8px;box-shadow:10px 10px 0 var(--leaf)}
+.lede{max-width:520px;margin:34px 0 0;font-size:19px;color:var(--ink)}
+.lede b{font-weight:700}
+.acts{display:flex;gap:14px;align-items:center;margin-top:30px;flex-wrap:wrap}
+.btn{white-space:nowrap;appearance:none;border:0;cursor:pointer;display:inline-flex;align-items:center;gap:14px;background:var(--ink);color:var(--white);font:700 16px/1 var(--disp);padding:18px 22px;text-decoration:none;transition:background .2s,color .2s}
+.btn span{color:var(--sun);transition:transform .2s}
+.btn:hover{background:var(--tqd)}
+.btn:hover span{transform:translateX(5px)}
+.acts .mono{color:var(--mute)}
 
-/* Sosyal medya: kanal kartı */
-.kanal{display:flow-root;background:var(--sun);color:var(--ink);padding:24px 24px 22px;border-bottom:10px solid var(--leaf)}
-.kanal img{float:left;width:84px;height:auto;margin:0 22px 18px 0}
-.kanal h3{margin:0;padding-top:16px;font:400 clamp(26px,4vw,34px)/1.1 var(--disp)}
-.kanal .q{margin:4px 0 0;font-style:italic;font-size:16px}
-.kanal ul{clear:both;list-style:none;margin:0;padding:0;border-top:2px solid var(--ink)}
-.kanal li a{display:block;padding:10px 0;border-bottom:1px solid rgba(28,31,74,.28);text-decoration:none;font-size:17px}
-.kanal li:last-child a{border-bottom:0}
-.kanal li a b{font-weight:600}
-.kanal li a span{float:right;font-size:15px;margin-left:12px}
-.kanal li a:hover b,.kanal li a:focus-visible b{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:4px}
-@media (max-width:520px){.kanal img{width:60px;margin-right:16px}}
+/* sağ: monitör */
+.mon{position:relative;align-self:end;background:var(--white);border:1px solid var(--ink);margin-bottom:-1px}
+.mon-h{display:flex;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--ink);background:var(--sky)}
+.bpm i{display:inline-block;font-style:normal;color:#4f9a2a;animation:beat 1s ease-in-out infinite}
+@keyframes beat{0%,100%{transform:scale(1)}15%{transform:scale(1.35)}30%{transform:scale(.95)}45%{transform:scale(1.15)}}
+.mon-p{appearance:none;border:0;padding:0;cursor:pointer;display:block;width:100%;background:var(--sun);position:relative}
+.mon-p img{width:100%;height:auto;aspect-ratio:1}
+.mon-p::before,.mon-p::after{content:"";position:absolute;width:26px;height:26px;border:0 solid var(--ink)}
+.mon-p::before{top:14px;left:14px;border-top-width:3px;border-left-width:3px}
+.mon-p::after{bottom:14px;right:14px;border-bottom-width:3px;border-right-width:3px}
+.vit{display:grid;grid-template-columns:1fr 1fr 1fr;border-top:1px solid var(--ink)}
+.vit div{padding:12px 14px 14px;border-left:1px solid var(--ink)}
+.vit div:first-child{border-left:0}
+.vit b{display:block;font:800 34px/1 var(--disp);letter-spacing:-.03em}
+.vit .mono{font-size:11px;color:var(--mute)}
+.vit div:nth-child(1){box-shadow:inset 0 5px 0 var(--sun)}
+.vit div:nth-child(2){box-shadow:inset 0 5px 0 var(--leaf)}
+.vit div:nth-child(3){box-shadow:inset 0 5px 0 var(--tq)}
 
-footer{border-top:3px double var(--ink);margin:10px 0 0;padding:16px 0 44px;font-size:14px;color:var(--mute);display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 20px}
+.ekg{display:block;width:100%;height:110px;margin-top:40px}
+.ekg path{stroke-dasharray:1000;animation:draw 7s linear infinite}
+.ekg .dot{fill:var(--tq)}
+@keyframes draw{0%{stroke-dashoffset:1000}55%{stroke-dashoffset:0}100%{stroke-dashoffset:-1000}}
+
+/* bölümler */
+.sec{padding:88px 0}
+.sec-h{display:grid;grid-template-columns:3fr 9fr;gap:48px;align-items:baseline;margin-bottom:36px}
+.idx{font:800 18px/1 var(--mono);color:var(--tqd)}
+.idx span{display:block;margin-top:10px;color:var(--mute);font-weight:400}
+.sec h2{font:700 44px/1.05 var(--disp);letter-spacing:-.03em;margin:0}
+.list{border-top:2px solid var(--ink)}
+.row{position:relative;display:flex;gap:48px;align-items:center;padding:30px 0;border-bottom:1px solid var(--ink);text-decoration:none;overflow:hidden;isolation:isolate}
+.row::before{content:"";position:absolute;inset:0;background:var(--c,var(--sky));transform:scaleX(0);transform-origin:left;transition:transform .35s cubic-bezier(.2,.7,.2,1);z-index:-1}
+.row:hover::before,.row:focus-visible::before{transform:scaleX(1)}
+.row .m{color:var(--mute);flex:0 0 22%}
+.row .t{flex:1 1 auto}
+.row .m b{display:block;font:800 13px/1 var(--mono);color:var(--ink);margin-bottom:8px}
+.row .m b::before{content:"";display:inline-block;width:10px;height:10px;background:var(--k,var(--tq));margin-right:8px;vertical-align:-1px}
+.row h3{font:700 28px/1.15 var(--disp);letter-spacing:-.02em;margin:0 0 8px}
+.row p{margin:0;color:var(--ink);max-width:620px}
+.go{flex:0 0 56px;margin-left:auto;width:56px;height:56px;border:2px solid var(--ink);display:flex;align-items:center;justify-content:center;font:700 22px/1 var(--mono);transition:background .2s,transform .2s}
+.row:hover .go{background:var(--ink);color:var(--sun);transform:rotate(-45deg)}
+.row.ext:hover .go{transform:none}
+
+/* hipnoz bandı */
+.band{background:var(--sky);border-top:1px solid var(--ink);border-bottom:1px solid var(--ink);position:relative;overflow:hidden}
+.wave{position:absolute;left:0;right:0;bottom:0;height:110px;width:100%;pointer-events:none}
+.wave path{animation:drift 9s linear infinite}
+.wave path+path{animation-duration:13s}
+@keyframes drift{from{transform:translateX(0)}to{transform:translateX(-400px)}}
+.band .sec{position:relative;padding-bottom:150px}
+.band .list{border-top-color:var(--ink)}
+.band .row{--c:var(--white)}
+
+/* sosyal */
+.social{background:var(--leaf);border-bottom:1px solid var(--ink)}
+.social .wrap{display:grid;grid-template-columns:7fr 5fr;gap:48px;padding-top:88px;padding-bottom:88px;align-items:end}
+.social .idx{color:var(--ink)}
+.social .idx span{color:var(--ink)}
+.handle{font:800 64px/1 var(--disp);letter-spacing:-.04em;margin:22px 0 14px;word-break:break-word}
+.slog{font:700 20px/1.3 var(--disp);margin:0;display:inline-block;background:var(--white);padding:8px 12px}
+.links{list-style:none;margin:0;padding:0;border-top:2px solid var(--ink)}
+.links li{border-bottom:1px solid var(--ink)}
+.links a{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:18px 4px;text-decoration:none;transition:background .2s,padding .2s}
+.links a b{font:700 20px/1 var(--disp)}
+.links a span{font:400 14px/1 var(--mono)}
+.links a:hover{background:var(--sun);padding-left:14px;padding-right:14px}
+
+footer{background:var(--white)}
+footer .wrap{display:flex;justify-content:space-between;gap:24px;padding-top:26px;padding-bottom:30px;color:var(--mute)}
+footer .wrap span:first-child{text-transform:none;letter-spacing:0;font-size:13px}
+
+@media (max-width:900px){
+  .wrap{padding:0 20px}
+  .bar .meta{display:none}
+  .hero .wrap{grid-template-columns:1fr;gap:34px;padding-top:34px}
+  .hero h1{font-size:44px}
+  .hero h1 .l2{box-shadow:7px 7px 0 var(--leaf)}
+  .lede{font-size:17px;margin-top:26px}
+  .mon{max-width:420px}
+  .ekg{height:70px;margin-top:24px}
+  .sec{padding:56px 0}
+  .sec-h{grid-template-columns:1fr;gap:12px}
+  .sec h2{font-size:30px}
+  .row{flex-wrap:wrap;gap:10px 16px;padding:22px 0}
+  .row .m{flex:0 0 100%}
+  .row .t{flex:1 1 0;min-width:0}
+  .row h3{font-size:21px}
+  .go{flex-basis:44px;width:44px;height:44px;font-size:18px}
+  .social .wrap{grid-template-columns:1fr;padding-top:56px;padding-bottom:56px;gap:30px}
+  .handle{font-size:28px}
+  .social .wrap>*{min-width:0}
+  footer .wrap{flex-direction:column;gap:8px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
 
 /* Ben kimim */
-dialog.who{width:min(580px,calc(100vw - 24px));max-height:calc(100dvh - 24px);padding:0;border:2px solid var(--ink);border-radius:4px;background:var(--paper);color:var(--ink);box-shadow:10px 10px 0 var(--leaf);overflow:auto;overscroll-behavior:contain}
-dialog.who::before{content:"";display:block;height:10px;background:linear-gradient(90deg,var(--leaf) 0,var(--leaf) 34%,var(--sun) 34%,var(--sun) 100%)}
-dialog.who[open]{animation:whoIn .35s ease-out}
-dialog.who::backdrop{background:rgba(28,31,74,.5);-webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px)}
-dialog.who[open]::backdrop{animation:whoFade .35s ease-out}
-@keyframes whoIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-@keyframes whoFade{from{opacity:0}to{opacity:1}}
-@media (prefers-reduced-motion:reduce){dialog.who[open],dialog.who[open]::backdrop{animation:none}*{transition:none!important}}
-body:has(dialog.who[open]){overflow:hidden}
-.who-x{position:sticky;top:10px;float:right;margin:10px 10px 0 0;width:38px;height:38px;border:2px solid var(--ink);border-radius:50%;background:var(--paper);color:var(--ink);font-size:22px;line-height:1;cursor:pointer;z-index:1}
-.who-x:hover{background:var(--sun)}
-.who-in{padding:24px 26px 22px}
-.who-head{display:flex;gap:26px;align-items:center}
-.who-head img{width:100px;height:100px;flex:none;margin:9px;border-radius:50%;object-fit:cover;background:var(--sun);box-shadow:0 0 0 4px #fff,0 0 0 9px var(--leaf)}
-.who-head h2{all:unset;display:block;font:400 28px/1.12 var(--disp)}
-.who-head p{margin:6px 0 0;color:var(--mute);font-size:14.5px;line-height:1.45}
-.who-lead{margin:20px 0 0;font-size:15.5px;line-height:1.65;text-wrap:pretty}
-.who-nums{display:grid;grid-template-columns:repeat(auto-fit,minmax(96px,1fr));margin:20px 0 0;border-top:3px solid var(--sun);border-bottom:1px solid var(--ink)}
-.who-nums div{padding:10px 8px 10px 0;border-bottom:1px solid var(--hair)}
-.who-nums b{display:block;font:400 30px/1 var(--disp);color:var(--leafd)}.who-nums span{font-size:12.5px;color:var(--mute);line-height:1.3;display:block;margin-top:4px}
-.who h3{margin:24px 0 8px;padding-top:6px;border-top:2px solid var(--leaf);font-size:14.5px;font-weight:600;color:var(--leafd);font-variant-caps:all-small-caps;letter-spacing:.1em}
-.who ul.tl{list-style:none;margin:0;padding:0}
-.who ul.tl li{position:relative;padding:0 0 10px 20px;font-size:15px}
-.who ul.tl li::before{content:"";position:absolute;left:2px;top:9px;width:8px;height:8px;background:var(--sun);border:2px solid var(--ink);border-radius:50%}
-.who ul.tl li small{display:block;color:var(--mute);font-size:13px}
-.chips{display:flex;flex-wrap:wrap;gap:4px 16px}
-.chips span{font-size:14.5px}
-.chips span::before{content:"";display:inline-block;width:7px;height:7px;margin:0 7px 2px 0;background:var(--leaf)}
-.pubs{list-style:none;margin:0;padding:0}
-.pubs li{padding:9px 0;border-top:1px solid var(--hair);font-size:14.5px;line-height:1.42}
-.pubs li:first-child{border-top:0;padding-top:0}
-.pubs a{color:var(--ink);text-decoration:none;background:linear-gradient(transparent 70%,var(--sunlt) 70%)}
-.pubs a:hover{background:linear-gradient(transparent 55%,var(--sun) 55%)}
-.pubs small{display:block;color:var(--mute);font-size:13px;margin-top:2px;font-style:italic}
-.who details summary{cursor:pointer;color:var(--leafd);font-weight:600;font-size:14.5px;padding:8px 0 0;list-style:none}
-.who details summary::-webkit-details-marker{display:none}
-.who details[open] summary{display:none}
-.who-foot{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;margin-top:22px;padding-top:16px;border-top:3px double var(--ink)}
-.who-foot a{color:var(--mute);font-size:14px;text-decoration:none}.who-foot a:hover{color:var(--ink);text-decoration:underline}
-.who-go{border:2px solid var(--ink);border-radius:3px;padding:9px 18px 10px;background:var(--sun);color:var(--ink);font-size:15px;font-weight:600;cursor:pointer;box-shadow:3px 3px 0 var(--leaf)}
-.who-go:hover{box-shadow:5px 5px 0 var(--leaf)}
-@media (max-width:480px){.who-in{padding:20px 18px 18px}.who-head{flex-direction:column;align-items:flex-start;gap:14px}.who-head img{width:86px;height:86px}}
+.who{width:min(980px,calc(100% - 24px));max-height:calc(100% - 24px);padding:0;border:2px solid var(--ink);border-radius:0;background:var(--white);color:var(--ink);box-shadow:14px 14px 0 var(--sun)}
+.who::backdrop{background:rgba(13,27,42,.55)}
+.who-top{display:flex;justify-content:space-between;align-items:center;background:var(--ink);color:var(--sky);padding:10px 14px 10px 20px;position:sticky;top:0;z-index:2}
+.who-x{appearance:none;border:0;background:var(--sun);color:var(--ink);width:36px;height:36px;font:700 20px/1 var(--mono);cursor:pointer}
+.who-in{padding:30px 34px 34px}
+.who-head{display:grid;grid-template-columns:120px 1fr;gap:24px;align-items:center;padding-bottom:22px;border-bottom:2px solid var(--ink)}
+.who-head img{width:120px;height:120px;background:var(--sun)}
+.who-head h2{font:800 34px/1.05 var(--disp);letter-spacing:-.03em;margin:0 0 8px}
+.who-head p{margin:0;color:var(--mute)}
+.who-lead{font-size:18px;margin:22px 0 26px}
+.who-nums{display:grid;grid-template-columns:repeat(5,1fr);border:1px solid var(--ink);margin-bottom:8px}
+.who-nums div{padding:14px 14px 16px;border-left:1px solid var(--ink)}
+.who-nums div:first-child{border-left:0}
+.who-nums div:nth-child(1){box-shadow:inset 0 5px 0 var(--sun)}
+.who-nums div:nth-child(2){box-shadow:inset 0 5px 0 var(--leaf)}
+.who-nums div:nth-child(3){box-shadow:inset 0 5px 0 var(--tq)}
+.who-nums div:nth-child(4){box-shadow:inset 0 5px 0 #8fd3ee}
+.who-nums div:nth-child(5){box-shadow:inset 0 5px 0 var(--ink)}
+.who-nums b{display:block;font:800 36px/1 var(--disp);letter-spacing:-.03em;margin-bottom:8px}
+.who-nums span{display:block;font:400 11.5px/1.35 var(--mono);text-transform:uppercase;letter-spacing:.03em;color:var(--mute)}
+.who h3{font:600 12px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--tqd);margin:30px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--grid2)}
+.tl{list-style:none;margin:0;padding:0}
+.tl li{position:relative;padding:0 0 14px 24px;font-weight:700}
+.tl li::before{content:"";position:absolute;left:0;top:7px;width:10px;height:10px;background:var(--tq)}
+.tl li::after{content:"";position:absolute;left:4px;top:19px;bottom:2px;width:2px;background:var(--sky)}
+.tl li:last-child::after{display:none}
+.tl small{display:block;font-weight:400;color:var(--mute);font-size:15px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips span{font:400 13px/1 var(--mono);padding:8px 10px;background:var(--sky2);border:1px solid var(--sky)}
+.chips span::before{content:"#";color:var(--tqd);margin-right:2px}
+.pubs{list-style:none;margin:0;padding:0;counter-reset:p}
+.pubs li{counter-increment:p;display:grid;grid-template-columns:40px 1fr;padding:12px 0;border-bottom:1px solid var(--grid2)}
+.pubs li::before{content:counter(p,decimal-leading-zero);font:600 13px/1.6 var(--mono);color:var(--tqd)}
+.pubs a{font-weight:700;text-decoration-color:var(--tq);text-underline-offset:3px}
+.pubs small{grid-column:2;color:var(--mute);font-size:14px}
+details summary{cursor:pointer;font:600 13px/1 var(--mono);letter-spacing:.04em;padding:14px 0;color:var(--tqd)}
+details .pubs{counter-reset:p 3}
+.who-foot{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-top:28px;padding-top:20px;border-top:2px solid var(--ink)}
+.who-foot a{font:400 13px/1 var(--mono)}
+.who-go{appearance:none;border:0;cursor:pointer;background:var(--sun);color:var(--ink);font:700 16px/1 var(--disp);padding:16px 22px;box-shadow:5px 5px 0 var(--ink)}
+.who-go:hover{background:var(--leaf)}
+@media (max-width:900px){
+  .who{box-shadow:8px 8px 0 var(--sun)}
+  .who-in{padding:22px 18px 24px}
+  .who-head{grid-template-columns:76px 1fr;gap:16px}
+  .who-head img{width:76px;height:76px}
+  .who-head h2{font-size:22px}
+  .who-nums{grid-template-columns:1fr 1fr}
+  .who-nums div{border-left:0;border-top:1px solid var(--ink)}
+  .who-nums div:nth-child(-n+2){border-top:0}
+  .who-nums div:nth-child(even){border-left:1px solid var(--ink)}
+  .who-nums div:nth-child(5){grid-column:1/-1}
+}
 </style>
 </head>
 <body>
-<div class="strip" aria-hidden="true"></div>
-<div class="page">
-<header>
-  <div class="kicker"><a class="brand" href="/"><img src="/img/logo-kalp.webp" alt="" width="26" height="30">emindoktor.com</a><span>Aile Hekimliği · Trabzon</span></div>
-  <div class="hero">
+<div class="bar"><div class="wrap">
+  <a class="brand" href="/"><img src="/img/logo-kalp.webp" alt="" width="24" height="27">emindoktor</a>
+  <span class="meta mono">41°00′ K · 39°43′ D — Trabzon</span>
+  <span class="live mono"><i aria-hidden="true"></i>Aile hekimliği</span>
+</div></div>
+
+<header class="hero">
+  <div class="wrap">
     <div>
-      <p class="ttl">Dr. Öğr. Üyesi</p>
-      <h1>Muhammed Emin <span class="mk">Göktepe</span></h1>
-      <p class="sub">Aile hekimliği uzmanı. Trabzon Üniversitesi Tıp Fakültesi, Aile Hekimliği Anabilim Dalı.</p>
-      <button type="button" class="who-btn" id="whoOpen" aria-haspopup="dialog">Ben kimim? <span aria-hidden="true">→</span></button>
+      <span class="tag mono">Dr. Öğr. Üyesi</span>
+      <h1>Muhammed Emin<br><span class="l2">Göktepe</span></h1>
+      <p class="lede">Aile hekimliği uzmanı. <b>Trabzon Üniversitesi Tıp Fakültesi</b>, Aile Hekimliği Anabilim Dalı.</p>
+      <div class="acts">
+        <button type="button" class="btn" id="whoOpen" aria-haspopup="dialog">Ben kimim? <span aria-hidden="true">→</span></button>
+        <span class="mono">ORCID 0000-0001-9587-4496</span>
+      </div>
     </div>
-    <button type="button" class="portre" id="whoOpen2" aria-haspopup="dialog" aria-label="Ben kimim?"><img src="/img/portre-sari.webp" alt="" width="176" height="176"></button>
+    <div class="mon">
+      <div class="mon-h mono"><span>Profil · Trabzon</span><span class="bpm"><i aria-hidden="true">♥</i> 72 bpm</span></div>
+      <button type="button" class="mon-p" id="whoOpen2" aria-haspopup="dialog" aria-label="Ben kimim?"><img src="/img/portre-sari.webp" alt="" width="480" height="480"></button>
+      <div class="vit">
+        <div><b>12</b><span class="mono">Uluslararası makale</span></div>
+        <div><b>27</b><span class="mono">Bildiri</span></div>
+        <div><b>6</b><span class="mono">Kitap bölümü</span></div>
+      </div>
+    </div>
   </div>
+  <svg class="ekg" viewBox="0 0 1400 100" preserveAspectRatio="none" aria-hidden="true"><path fill="none" stroke="#14b8b0" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" pathLength="1000" d="M0 64 L30 64 Q40 52 50 64 L70 64 L76 72 L84 10 L92 92 L98 64 L120 64 Q138 44 156 64 L200 64 L230 64 Q240 52 250 64 L270 64 L276 72 L284 10 L292 92 L298 64 L320 64 Q338 44 356 64 L400 64 L430 64 Q440 52 450 64 L470 64 L476 72 L484 10 L492 92 L498 64 L520 64 Q538 44 556 64 L600 64 L630 64 Q640 52 650 64 L670 64 L676 72 L684 10 L692 92 L698 64 L720 64 Q738 44 756 64 L800 64 L830 64 Q840 52 850 64 L870 64 L876 72 L884 10 L892 92 L898 64 L920 64 Q938 44 956 64 L1000 64 L1030 64 Q1040 52 1050 64 L1070 64 L1076 72 L1084 10 L1092 92 L1098 64 L1120 64 Q1138 44 1156 64 L1200 64 L1230 64 Q1240 52 1250 64 L1270 64 L1276 72 L1284 10 L1292 92 L1298 64 L1320 64 Q1338 44 1356 64 L1400 64"/></svg>
 </header>
+
 <main>
-  <section class="sec">
-    <h2><span class="no">01</span>Klinik araçlar</h2>
-    <a class="item" href="/ahurapor/">
-      <span class="ar" aria-hidden="true">→</span><span class="it"><span>AHU Rapor</span></span>
-      <p>Aile hekimliği uzmanlarının rapor çıkarabildiği ilaçlar ve tıbbi malzemeler. Etken madde, ticari ad ve tanı ile arama.</p>
-    </a>
-    <a class="item" href="/dokuntulu-hastaliklar/">
-      <span class="ar" aria-hidden="true">→</span><span class="it"><span>Çocukluk Çağı Döküntülü Hastalıklar</span></span>
-      <p>Çocukluk çağında döküntüyle seyreden hastalıklar için aile hekimlerine yönelik başvuru rehberi.</p>
-    </a>
-  </section>
-  <section class="sec">
-    <h2><span class="no">02</span>Tıbbi hipnoz eğitimi</h2>
-    <div class="pair">
-      <a class="item" href="https://www.youtube.com/playlist?list=PLTcyWLFRDMfc" target="_blank" rel="noopener">
-        <span class="ar" aria-hidden="true">↗</span><span class="it"><span>Eğitim videoları</span></span>
-        <p><span class="lbl">YouTube</span> · Hafta hafta eğitim kayıtları</p>
+  <section class="sec"><div class="wrap">
+    <div class="sec-h"><p class="idx">[01]<span>2 araç</span></p><h2>Klinik araçlar</h2></div>
+    <div class="list">
+      <a class="row" href="/ahurapor/" style="--k:var(--sun);--c:#fff3cf">
+        <div class="m mono"><b>Rapor</b>İlaç · tıbbi malzeme</div>
+        <div class="t"><h3>AHU Rapor</h3><p>Aile hekimliği uzmanlarının rapor çıkarabildiği ilaçlar ve tıbbi malzemeler. Etken madde, ticari ad ve tanı ile arama.</p></div>
+        <span class="go" aria-hidden="true">→</span>
       </a>
-      <a class="item" href="https://www.youtube.com/playlist?list=PLV5lYZpj3PKw" target="_blank" rel="noopener">
-        <span class="ar" aria-hidden="true">↗</span><span class="it"><span>Hipnoz podcast</span></span>
-        <p><span class="lbl">YouTube</span> · Arabada da dinlenebilir</p>
+      <a class="row" href="/dokuntulu-hastaliklar/" style="--k:var(--tq);--c:var(--sky)">
+        <div class="m mono"><b>Rehber</b>Pediatri · döküntü</div>
+        <div class="t"><h3>Çocukluk Çağı Döküntülü Hastalıklar</h3><p>Çocukluk çağında döküntüyle seyreden hastalıklar için aile hekimlerine yönelik başvuru rehberi.</p></div>
+        <span class="go" aria-hidden="true">→</span>
       </a>
     </div>
-  </section>
-  <section class="sec">
-    <h2><span class="no">03</span>Sosyal medya</h2>
-    <div class="kanal">
-      <img src="/img/logo-kalp.webp" alt="emindoktor logosu" width="84" height="96">
-      <div><h3>@emindoktorcom</h3><p class="q">Abone ol, bilimle kal.</p></div>
-      <ul>
-        <li><a href="https://www.youtube.com/@emindoktorcom" target="_blank" rel="noopener me"><b>YouTube</b><span>@emindoktorcom ↗</span></a></li>
-        <li><a href="https://www.instagram.com/emindoktorcom" target="_blank" rel="noopener me"><b>Instagram</b><span>@emindoktorcom ↗</span></a></li>
-        <li><a href="https://linktr.ee/emindoktor" target="_blank" rel="noopener me"><b>Linktree</b><span>Tüm bağlantılarım ↗</span></a></li>
-      </ul>
+  </div></section>
+
+  <div class="band">
+    <svg class="wave" viewBox="0 0 2000 120" preserveAspectRatio="none" aria-hidden="true"><path fill="none" stroke="#14b8b0" stroke-width="2" vector-effect="non-scaling-stroke" d="M0 60 C100 10 100 10 200 60 S300 110 400 60 S500 10 600 60 S700 110 800 60 S900 10 1000 60 S1100 110 1200 60 S1300 10 1400 60 S1500 110 1600 60 S1700 10 1800 60 S1900 110 2000 60 S2100 10 2200 60 S2300 110 2400 60"/><path fill="none" stroke="#ffffff" stroke-width="2" vector-effect="non-scaling-stroke" d="M0 70 C100 40 100 40 200 70 S300 100 400 70 S500 40 600 70 S700 100 800 70 S900 40 1000 70 S1100 100 1200 70 S1300 40 1400 70 S1500 100 1600 70 S1700 40 1800 70 S1900 100 2000 70 S2100 40 2200 70 S2300 100 2400 70"/></svg>
+    <section class="sec"><div class="wrap">
+      <div class="sec-h"><p class="idx">[02]<span>2 liste</span></p><h2>Tıbbi hipnoz eğitimi</h2></div>
+      <div class="list">
+        <a class="row ext" href="https://www.youtube.com/playlist?list=PLTcyWLFRDMfc" target="_blank" rel="noopener" style="--k:var(--sun)">
+          <div class="m mono"><b>YouTube</b>Oynatma listesi</div>
+          <div class="t"><h3>Eğitim videoları</h3><p>Hafta hafta eğitim kayıtları.</p></div>
+          <span class="go" aria-hidden="true">↗</span>
+        </a>
+        <a class="row ext" href="https://www.youtube.com/playlist?list=PLV5lYZpj3PKw" target="_blank" rel="noopener" style="--k:var(--leaf)">
+          <div class="m mono"><b>YouTube</b>Podcast</div>
+          <div class="t"><h3>Hipnoz podcast</h3><p>Arabada da dinlenebilir.</p></div>
+          <span class="go" aria-hidden="true">↗</span>
+        </a>
+      </div>
+    </div></section>
+  </div>
+
+  <section class="social"><div class="wrap">
+    <div>
+      <p class="idx">[03]<span>Sosyal medya</span></p>
+      <p class="handle">@emindoktorcom</p>
+      <p class="slog">Abone ol, bilimle kal.</p>
     </div>
-  </section>
+    <ul class="links">
+      <li><a href="https://www.youtube.com/@emindoktorcom" target="_blank" rel="noopener me"><b>YouTube</b><span>@emindoktorcom ↗</span></a></li>
+      <li><a href="https://www.instagram.com/emindoktorcom" target="_blank" rel="noopener me"><b>Instagram</b><span>@emindoktorcom ↗</span></a></li>
+      <li><a href="https://linktr.ee/emindoktor" target="_blank" rel="noopener me"><b>Linktree</b><span>Tüm bağlantılarım ↗</span></a></li>
+    </ul>
+  </div></section>
 </main>
-<footer><span>Bu sitedeki bilgiler hap bilgidir; güncel SUT ve Medula ile doğrulayınız.</span><span>emindoktor.com</span></footer>
-</div>
+<footer><div class="wrap mono"><span>Bu sitedeki bilgiler hap bilgidir; güncel SUT ve Medula ile doğrulayınız.</span><span>emindoktor.com</span></div></footer>
 <dialog class="who" id="who" aria-labelledby="whoName">
-  <button type="button" class="who-x" id="whoX" aria-label="Kapat">×</button>
+  <div class="who-top mono"><span>Ben kimim · emindoktor.com</span><button type="button" class="who-x" id="whoX" aria-label="Kapat">×</button></div>
   <div class="who-in">
     <div class="who-head">
       <img src="/img/portre-sari.webp" alt="Dr. Muhammed Emin Göktepe" width="100" height="100">

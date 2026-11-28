@@ -193,6 +193,7 @@ footer{padding:70px var(--gut) 22px}
   .mark img{width:18px}
   .cta{padding:11px 12px;font-size:12px}
   .hero{height:max(520px,calc(100svh - var(--hh) - 40px))}
+  .hero>img{object-position:0% 30%}
   .cells{grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr 1.5fr}
   .cell{padding:14px}
   .cell .lb{font-size:12px}
@@ -203,7 +204,8 @@ footer{padding:70px var(--gut) 22px}
   .cell.h h1{font-size:clamp(40px,12vw,64px)}
   .cloud{height:200vh}
   .chip{font-size:11px;padding:5px 8px}
-  .chip:nth-child(n+12){display:none}
+  .chip{left:min(max(var(--x),74px),calc(100% - 74px))}
+  .chip:nth-child(n+12),.chip:nth-child(6){display:none}
   .stmt h2{font-size:clamp(34px,10.5vw,60px);padding:0 10px}
   .ladder{grid-template-columns:1fr;justify-items:center;text-align:center;padding:70px 18px;gap:14px}
   .ladder h2,.ladder h2:last-child{text-align:center}
